@@ -1,6 +1,16 @@
 package org.imdc.ewon;
 
-import java.io.IOException;
+import com.inductiveautomation.ignition.common.Base64;
+import com.inductiveautomation.ignition.common.sqltags.model.types.DataQuality;
+import com.inductiveautomation.ignition.common.sqltags.model.types.DataType;
+import org.apache.commons.lang3.StringUtils;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.HttpURLConnection;
@@ -13,24 +23,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
-
-import org.apache.commons.lang3.StringUtils;
-import org.python.core.Py;
-import org.python.core.PyDictionary;
-import org.python.core.PyObject;
-
-import com.inductiveautomation.ignition.common.Base64;
-import com.inductiveautomation.ignition.common.script.builtin.AbstractNetUtilities;
-import com.inductiveautomation.ignition.common.script.builtin.PyArgumentMap;
-import com.inductiveautomation.ignition.common.sqltags.model.types.DataQuality;
-import com.inductiveautomation.ignition.common.sqltags.model.types.DataType;
 
 public class EwonUtil {
 	private static final int defaultConnectTimeout = 10000;
@@ -52,7 +44,7 @@ public class EwonUtil {
 				return DataQuality.OPC_UNCERTAIN;
 			default:
 					return DataQuality.OPC_BAD_DATA;
-		}		
+		}
 	}
 
 	/** Converts an ISO 8601 to a string **/
@@ -79,7 +71,7 @@ public class EwonUtil {
 
 	/**
 	 * Converts a date to an ISO 8601 string.
-	 * 
+	 *
 	 * @param value
 	 * @return
 	 */

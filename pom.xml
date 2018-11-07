@@ -13,30 +13,30 @@
     <description>eWonConnector Ignition Module</description>
 
     <properties>
-        <ignition-sdk-version>7.9.0</ignition-sdk-version>
+        <ignition-sdk-version>8.0.0-SNAPSHOT</ignition-sdk-version>
     </properties>
 
     <modules>
-        <module>eWonConnector-build</module>        
+        <module>eWonConnector-build</module>
         <module>eWonConnector-gateway</module>
     </modules>
 
     <pluginRepositories>
         <pluginRepository>
             <id>releases</id>
-            <url>http://nexus.inductiveautomation.com:8081/nexus/content/repositories/inductiveautomation-releases</url>
+            <url>http://nexus.inductiveautomation.com/repository/inductiveautomation-releases</url>
         </pluginRepository>
     </pluginRepositories>
 
     <repositories>
         <repository>
             <id>releases</id>
-            <url>http://nexus.inductiveautomation.com:8081/nexus/content/repositories/inductiveautomation-releases</url>
+            <url>http://nexus.inductiveautomation.com/repository/inductiveautomation-releases</url>
         </repository>
 
         <repository>
             <id>snapshots</id>
-            <url>http://nexus.inductiveautomation.com:8081/nexus/content/repositories/inductiveautomation-snapshots</url>
+            <url>http://nexus.inductiveautomation.com/repository/inductiveautomation-snapshots</url>
             <snapshots>
                 <enabled>true</enabled>
                 <updatePolicy>always</updatePolicy>
@@ -45,7 +45,7 @@
 
         <repository>
             <id>thirdparty</id>
-            <url>http://nexus.inductiveautomation.com:8081/nexus/content/repositories/inductiveautomation-thirdparty
+            <url>http://nexus.inductiveautomation.com/repository/inductiveautomation-thirdparty
             </url>
         </repository>
     </repositories>
