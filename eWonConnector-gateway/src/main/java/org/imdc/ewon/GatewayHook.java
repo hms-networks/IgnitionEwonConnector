@@ -18,8 +18,6 @@ import java.util.Arrays;
 import java.util.List;
 
 public class GatewayHook extends AbstractGatewayModuleHook {
-
-
     private final Logger logger = LoggerFactory.getLogger("Ewon.ModuleManager");
     private GatewayContext gatewayContext;
     private ManagedTagProvider realtime;
@@ -29,8 +27,6 @@ public class GatewayHook extends AbstractGatewayModuleHook {
         public void recordUpdated(EwonConnectorSettings record) {
             updateSettings(record);
         }
-
-        ;
     };
 
     @Override

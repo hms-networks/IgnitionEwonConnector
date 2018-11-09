@@ -1,8 +1,11 @@
 package org.imdc.ewon.config;
 
+import java.util.List;
+
 import com.inductiveautomation.ignition.gateway.history.HistoryFlavor;
 import com.inductiveautomation.ignition.gateway.localdb.persistence.FormMeta;
 import com.inductiveautomation.ignition.gateway.model.GatewayContext;
+import com.inductiveautomation.ignition.gateway.model.IgnitionWebApp;
 import com.inductiveautomation.ignition.gateway.web.components.RecordEditMode;
 import com.inductiveautomation.ignition.gateway.web.components.editors.AbstractEditor;
 import com.inductiveautomation.ignition.gateway.web.models.IRecordFieldComponent;
@@ -11,8 +14,6 @@ import org.apache.wicket.Application;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import simpleorm.dataset.SFieldMeta;
 import simpleorm.dataset.SRecordInstance;
-
-import java.util.List;
 
 public class TagHistorySourceEditor extends AbstractEditor {
 
@@ -36,7 +37,7 @@ public class TagHistorySourceEditor extends AbstractEditor {
         public TagHistoryDropdownChoice(String id, SRecordInstance record) {
             super(id);
 
-            GatewayContext context = (GatewayContext) Application.get();
+            GatewayContext context = ((IgnitionWebApp) Application.get()).getContext();
 
             List<String> stores = context.getHistoryManager().getStores(HistoryFlavor.SQLTAG);
             setChoices(stores);
