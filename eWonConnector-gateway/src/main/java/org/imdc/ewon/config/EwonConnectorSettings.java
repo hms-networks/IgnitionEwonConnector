@@ -1,7 +1,5 @@
 package org.imdc.ewon.config;
 
-import org.imdc.ewon.comm.AuthInfo;
-
 import com.inductiveautomation.ignition.common.util.TimeUnits;
 import com.inductiveautomation.ignition.gateway.localdb.persistence.BooleanField;
 import com.inductiveautomation.ignition.gateway.localdb.persistence.Category;
@@ -9,12 +7,11 @@ import com.inductiveautomation.ignition.gateway.localdb.persistence.EncodedStrin
 import com.inductiveautomation.ignition.gateway.localdb.persistence.EnumField;
 import com.inductiveautomation.ignition.gateway.localdb.persistence.IdentityField;
 import com.inductiveautomation.ignition.gateway.localdb.persistence.IntField;
-import com.inductiveautomation.ignition.gateway.localdb.persistence.LongField;
 import com.inductiveautomation.ignition.gateway.localdb.persistence.PersistentRecord;
 import com.inductiveautomation.ignition.gateway.localdb.persistence.RecordMeta;
 import com.inductiveautomation.ignition.gateway.localdb.persistence.StringField;
 import com.inductiveautomation.ignition.gateway.web.components.editors.PasswordEditorSource;
-
+import org.imdc.ewon.comm.AuthInfo;
 import simpleorm.dataset.SFieldFlags;
 
 /**

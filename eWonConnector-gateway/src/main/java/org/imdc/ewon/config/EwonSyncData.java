@@ -2,16 +2,10 @@ package org.imdc.ewon.config;
 
 import java.util.Date;
 
-import com.inductiveautomation.ignition.gateway.localdb.persistence.BooleanField;
-import com.inductiveautomation.ignition.gateway.localdb.persistence.DateField;
 import com.inductiveautomation.ignition.gateway.localdb.persistence.IdentityField;
-import com.inductiveautomation.ignition.gateway.localdb.persistence.IntField;
 import com.inductiveautomation.ignition.gateway.localdb.persistence.LongField;
 import com.inductiveautomation.ignition.gateway.localdb.persistence.PersistentRecord;
 import com.inductiveautomation.ignition.gateway.localdb.persistence.RecordMeta;
-import com.inductiveautomation.ignition.gateway.localdb.persistence.StringField;
-
-import simpleorm.dataset.SFieldFlags;
 
 /**
  * This is a persistent record to keep track of the last transaction id synchronzed, along with a few other stats.
