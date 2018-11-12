@@ -50,7 +50,10 @@ public class EwonUtil {
 	/** Converts an ISO 8601 to a string **/
 	public static Date toDate(String value) {
 		// http://stackoverflow.com/questions/2201925/converting-iso-8601-compliant-string-to-java-util-date
-		return javax.xml.bind.DatatypeConverter.parseDateTime(value).getTime();
+		// return javax.xml.bind.DatatypeConverter.parseDateTime(value).getTime();
+
+		// updated to now work in Java 11
+		return Date.from(java.time.Instant.parse(value));
 	}
 
 	public static DataType toDataType(String value) {
