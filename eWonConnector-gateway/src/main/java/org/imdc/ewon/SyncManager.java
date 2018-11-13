@@ -322,6 +322,10 @@ public class SyncManager {
 
                     // Update realtime
                     TagValue v = buildTagValue(t.getValue(), EwonUtil.toQuality(t.getQuality()), deviceDate, dType);
+
+                    // provider.updateValue does not seem to set the right data type
+                    // using configureTag to force the correct data type
+                    provider.configureTag(p, dType);
                     provider.updateValue(p, v.getValue(), v.getQuality(), v.getTimestamp());
                     logger.trace("Updated realtime value for '{}' [id={}] to {}", p, t.getId(), v);
                 } catch (Exception e) {
