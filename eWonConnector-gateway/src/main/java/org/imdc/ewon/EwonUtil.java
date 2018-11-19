@@ -18,11 +18,12 @@ import java.net.ProtocolException;
 import java.net.URL;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
-import java.util.Calendar;
+import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.TimeZone;
+import java.text.DateFormat;
 
 public class EwonUtil {
 	private static final int defaultConnectTimeout = 10000;
@@ -47,7 +48,7 @@ public class EwonUtil {
 		}
 	}
 
-	/** Converts an ISO 8601 to a string **/
+	/** Converts a string to an ISO 8601 Date **/
 	public static Date toDate(String value) {
 		// http://stackoverflow.com/questions/2201925/converting-iso-8601-compliant-string-to-java-util-date
 		// return javax.xml.bind.DatatypeConverter.parseDateTime(value).getTime();
@@ -79,9 +80,14 @@ public class EwonUtil {
 	 * @return
 	 */
 	public static String toString(Date value) {
-		Calendar c = GregorianCalendar.getInstance();
-		c.setTime(value);
-		return javax.xml.bind.DatatypeConverter.printDateTime(c);
+		//Calendar c = GregorianCalendar.getInstance();
+		//c.setTime(value);
+		//return javax.xml.bind.DatatypeConverter.printDateTime(c);
+		
+		TimeZone tz = TimeZone.getTimeZone("UTC");
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'");
+		df.setTimeZone(tz);
+		return df.format(value);
 	}
 
 	public static String httpGet(String url) throws Exception {
