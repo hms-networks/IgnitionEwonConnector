@@ -17,7 +17,7 @@ public class EwonConfigPage extends RecordEditForm {
 			.page(EwonConfigPage.class)
 			.terms("ewon", "data mailbox", "dm")
 			.build();
-	
+
 	public EwonConfigPage(IConfigPage configPage) {
 		super(
 			configPage,

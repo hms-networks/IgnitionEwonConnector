@@ -9,7 +9,7 @@ public class EwonData extends DMResult {
 	String name;
 	String lastSynchroDate;
 	Tag[] tags;
-	
+
 	public int getId() {
 		return id;
 	}
@@ -21,11 +21,11 @@ public class EwonData extends DMResult {
 	public String getLastSync() {
 		return lastSynchroDate;
 	}
-	
+
 	public Date getLastSync_Date(){
 		return EwonUtil.toDate(getLastSync());
 	}
-	
+
 	public Tag[] getTags() {
 		return tags;
 	}
