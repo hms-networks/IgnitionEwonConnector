@@ -7,11 +7,11 @@ public class EwonsData extends DMResult {
 	public EwonData[] getEwons() {
 		return ewons;
 	}
-	
+
 	public boolean isMoreDataAvailable() {
 		return moreDataAvailable;
 	}
-	
+
 	public Long getTransactionId(){
 		return transactionId;
 	}
