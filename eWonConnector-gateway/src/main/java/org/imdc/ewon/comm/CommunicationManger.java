@@ -31,8 +31,8 @@ public class CommunicationManger {
 		this.authInfo = info;
 	}
 
-	protected String buildCall(String function, String... params) {
-		StringBuilder sb = new StringBuilder(EwonConsts.URL_DM);
+	protected String buildCall(String type, String function, String... params) {
+		StringBuilder sb = new StringBuilder(type);
 		sb.append(function).append("?");
 		sb.append(authInfo.toGetString());
 		if (params != null) {
@@ -48,6 +48,10 @@ public class CommunicationManger {
 		return ret;
 	}
 
+	protected String buildDMCall(String function, String... params) {
+		return buildCall(EwonConsts.URL_DM, function, params);
+	}
+
 	protected void logResults(long start, String call, String body){
 		logger.debug("[{}] Call finished in {}", call, FormatUtil.formatDurationSince(start));
 		logger.trace("[{}] Results: {}", call, body);
@@ -55,14 +59,14 @@ public class CommunicationManger {
 
 	public EwonsData queryEwonDevices() throws Exception {
 		long start = System.currentTimeMillis();
-		String body = EwonUtil.httpGet(buildCall(EwonConsts.DM_CALL_GETEWONS));
+		String body = EwonUtil.httpGet(buildDMCall(EwonConsts.DM_CALL_GETEWONS));
 		logResults(start, EwonConsts.DM_CALL_GETEWONS, body);
 		return gson.fromJson(body, EwonsData.class);
 	}
 
 	public EwonData queryEwon(Integer id) throws Exception {
 		long start = System.currentTimeMillis();
-		String body = EwonUtil.httpGet(buildCall(EwonConsts.DM_CALL_GETEWON, EwonConsts.DM_PARAM_ID, id.toString()));
+		String body = EwonUtil.httpGet(buildDMCall(EwonConsts.DM_CALL_GETEWON, EwonConsts.DM_PARAM_ID, id.toString()));
 		logResults(start, EwonConsts.DM_CALL_GETEWON, body);
 		return gson.fromJson(body, EwonData.class);
 	}
@@ -92,7 +96,7 @@ public class CommunicationManger {
 		}
 
 		String body = EwonUtil
-		        .httpGet(buildCall(EwonConsts.DM_CALL_GETDATA, params.size()>0 ? params.toArray(new String[params.size()]) : null));
+		        .httpGet(buildDMCall(EwonConsts.DM_CALL_GETDATA, params.size()>0 ? params.toArray(new String[params.size()]) : null));
 
 		logResults(start, EwonConsts.DM_CALL_GETDATA, body);
 		return gson.fromJson(body, EwonsData.class);
@@ -101,8 +105,8 @@ public class CommunicationManger {
 	public EwonsData syncData(Long transactionId) throws Exception {
 		long start = System.currentTimeMillis();
 		String body = EwonUtil.httpGet(transactionId == null
-		        ? buildCall(EwonConsts.DM_CALL_SYNCDATA, EwonConsts.DM_PARAM_CREATE_TRANSACTION, null)
-		        : buildCall(EwonConsts.DM_CALL_SYNCDATA, EwonConsts.DM_PARAM_CREATE_TRANSACTION, null,
+		        ? buildDMCall(EwonConsts.DM_CALL_SYNCDATA, EwonConsts.DM_PARAM_CREATE_TRANSACTION, null)
+		        : buildDMCall(EwonConsts.DM_CALL_SYNCDATA, EwonConsts.DM_PARAM_CREATE_TRANSACTION, null,
 		                EwonConsts.DM_PARAM_LAST_TID, transactionId.toString()));
 		logResults(start, EwonConsts.DM_CALL_SYNCDATA, body);
 		return gson.fromJson(body, EwonsData.class);
