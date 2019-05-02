@@ -24,6 +24,7 @@ public class EwonConnectorSettings extends PersistentRecord {
 	public static final IdentityField ID = new IdentityField(META);
 	public static final StringField Name= new StringField(META, "name", SFieldFlags.SMANDATORY).setDefault("eWon");
 	public static final BooleanField Enabled = new BooleanField(META, "enabled");
+	public static final BooleanField ReplaceUnderscore = new BooleanField(META, "replaceUnderscore");
 	public static final StringField Account = new StringField(META, "account");
 	public static final StringField UserName = new StringField(META, "username");
 	public static final EncodedStringField Password = new EncodedStringField(META, "password");
@@ -36,7 +37,7 @@ public class EwonConnectorSettings extends PersistentRecord {
 	public static final BooleanField HistoryEnabled = new BooleanField(META, "historyEnabled");
 	public static final StringField HistoryProvider = new StringField(META, "historyProvider");
 
-	public static final Category MainCategory = new Category("EwonConnectorSettings.Category.Main", 10).include(Name, Enabled, PollRate, PollRateUnits);
+	public static final Category MainCategory = new Category("EwonConnectorSettings.Category.Main", 10).include(Name, Enabled, ReplaceUnderscore, PollRate, PollRateUnits);
 	public static final Category AccountCategory = new Category("EwonConnectorSettings.Category.Account", 50).include(Account, UserName, Password, APIKey);
 	public static final Category DeviceCategory = new Category("EwonConnectorSettings.Category.Device", 75).include(EwonUserName, EwonPassword);
 	public static final Category HistoryCategory = new Category("EwonConnectorSettings.Category.History", 100).include(HistoryEnabled, HistoryProvider);
@@ -86,6 +87,10 @@ public class EwonConnectorSettings extends PersistentRecord {
 
 	public boolean isEnabled(){
 		return getBoolean(Enabled);
+	}
+
+	public boolean isReplaceUnderscore(){
+		return getBoolean(ReplaceUnderscore);
 	}
 
 	public String getAPIKey(){
