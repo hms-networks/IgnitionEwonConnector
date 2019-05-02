@@ -60,6 +60,7 @@ public class SyncManager {
     // Key = ewonId, value = lastSynchroDate
     Map<Integer, Date> lastSyncCache = new HashMap<>();
     boolean historyEnabled = false;
+    boolean replaceUnderscore = false;
     EwonSyncData syncData = null;
 
     long successCount = 0;
@@ -77,6 +78,8 @@ public class SyncManager {
 
         comm = new CommunicationManger();
         comm.setAuthInfo(settings.getAuthInfo());
+
+        replaceUnderscore = settings.isReplaceUnderscore();
 
         historyEnabled = settings.isHistoryEnabled();
         tagHistoryStore = settings.getHistoryProvider();
@@ -328,7 +331,8 @@ public class SyncManager {
                         provider.registerWriteHandler(p, new WriteHandler() {
                             public QualityCode write(TagPath tagPath, Object o) {
                                 try {
-                                    comm.writeTag(tagPath.getParentPath().getItemName(), tagPath.getItemName(), o.toString());
+                                    String tagName = replaceUnderscore ? unSanitizeName(tagPath.getItemName()) : tagPath.getItemName();
+                                    comm.writeTag(tagPath.getParentPath().getItemName(), tagName, o.toString());
                                     provider.updateValue(p, o, QualityCode.Good);
                                 } catch (Exception e) {
                                     logger.error("Writing tag to eWON via Talk2M API Failed");
@@ -371,6 +375,10 @@ public class SyncManager {
 
     protected String sanitizeName(String name) {
         return name.replaceAll("[\\.]", "_");
+    }
+
+    protected String unSanitizeName(String name) {
+        return name.replaceAll("[\\_]", ".");
     }
 
     protected String buildTagPath(String tagName) {
