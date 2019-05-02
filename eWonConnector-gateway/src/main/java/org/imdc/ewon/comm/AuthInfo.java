@@ -1,5 +1,8 @@
 package org.imdc.ewon.comm;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.io.UnsupportedEncodingException;
 import org.apache.commons.lang3.StringUtils;
 import org.imdc.ewon.EwonConsts;
 
@@ -20,10 +23,10 @@ public class AuthInfo {
      * @param devKey
      */
     public AuthInfo(String account, String username, String password, String devKey) {
-        this.account = account;
-        this.username = username;
-        this.password = password;
-        this.devKey = devKey;
+        this.account = urlEncodeValue(account);
+        this.username = urlEncodeValue(username);
+        this.password = urlEncodeValue(password);
+        this.devKey = urlEncodeValue(devKey);
     }
 
     /**
@@ -38,8 +41,8 @@ public class AuthInfo {
      */
     public AuthInfo(String account, String username, String password, String devKey, String ewonUsername, String ewonPassword) {
         this(account, username, password, devKey);
-        this.ewonUsername = ewonUsername;
-        this.ewonPassword = ewonPassword;
+        this.ewonUsername = urlEncodeValue(ewonUsername);
+        this.ewonPassword = urlEncodeValue(ewonPassword);
     }
 
     public String getAccount() {
@@ -72,5 +75,20 @@ public class AuthInfo {
             ret += String.format("&%s=%s&%s=%s", EwonConsts.T2M_DEVICE_USERNAME, ewonUsername, EwonConsts.T2M_DEVICE_PASSWORD, ewonPassword);
         }
         return ret;
+    }
+
+    /**
+     * Creates a URL safe string from the passed in value
+     *
+     * @param value input string to be made url safe
+     * @return      The URL safe string
+     */
+    private String urlEncodeValue(String value) {
+        try {
+            return URLEncoder.encode(value, StandardCharsets.UTF_8.toString());
+        } catch (UnsupportedEncodingException e) {
+            //Return the passed in string, the string could not be encoded
+            return value;
+        }
     }
 }
