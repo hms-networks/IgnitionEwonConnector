@@ -32,6 +32,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -48,6 +49,7 @@ public class SyncManager {
     private static final String STATUS_SUCCESSCOUNT = "_Status/SuccessfulSyncCount";
     private static final String STATUS_FAILURECOUNT = "_Status/FailedSyncCount";
     private static final String STATUS_HIST_POINT_CNT = "_Status/HistoricalPointsProcessed";
+    private static HashSet<String> registeredTags = new HashSet<String>();
 
     GatewayContext gatewayContext;
     Logger logger = LoggerFactory.getLogger("Ewon.SyncManager");
@@ -318,6 +320,22 @@ public class SyncManager {
                             historySet.add(htv);
                             histPoints++;
                         }
+                    }
+
+                    // Register write callback
+                    if(!registeredTags.contains(p)) {
+                        registeredTags.add(p);
+                        provider.registerWriteHandler(p, new WriteHandler() {
+                            public QualityCode write(TagPath tagPath, Object o) {
+                                try {
+                                    comm.writeTag(tagPath.getParentPath().getItemName(), tagPath.getItemName(), o.toString());
+                                    provider.updateValue(p, o, QualityCode.Good);
+                                } catch (Exception e) {
+                                    logger.error("Writing tag to eWON via Talk2M API Failed");
+                                }
+                                return QualityCode.Good;
+                            }
+                        });
                     }
 
                     // Update realtime
