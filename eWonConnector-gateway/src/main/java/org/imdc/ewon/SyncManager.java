@@ -17,6 +17,7 @@ import com.inductiveautomation.ignition.gateway.history.HistoricalTagValue;
 import com.inductiveautomation.ignition.gateway.history.PackedHistoricalTagValue;
 import com.inductiveautomation.ignition.gateway.model.GatewayContext;
 import com.inductiveautomation.ignition.gateway.sqltags.model.BasicScanclassHistorySet;
+import com.inductiveautomation.ignition.gateway.tags.managed.DeletionHandler;
 import com.inductiveautomation.ignition.gateway.tags.managed.ManagedTagProvider;
 import com.inductiveautomation.ignition.gateway.tags.managed.WriteHandler;
 import org.apache.commons.lang3.StringUtils;
@@ -78,6 +79,13 @@ public class SyncManager {
 
         comm = new CommunicationManger();
         comm.setAuthInfo(settings.getAuthInfo());
+
+        //Enable deletion of this tag provider's tags
+        provider.setDeletionHandler(new DeletionHandler() {
+            public DeletionResponse process(TagPath t) {
+                return DeletionResponse.Allowed;
+            }
+        });
 
         replaceUnderscore = settings.isReplaceUnderscore();
 
