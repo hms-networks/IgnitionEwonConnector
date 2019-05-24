@@ -132,6 +132,19 @@ public class CommunicationManger {
 		EwonUtil.httpGet(buildT2MCall(directory, EwonConsts.T2M_CALL_UPDATETAGFORM, params.toArray(new String[params.size()])));
 	}
 
+	public String getLiveData(String device) throws Exception {
+		List<String> params = new ArrayList<>();
+		String directory = EwonConsts.T2M_DIR_GET + device + "/" + EwonConsts.T2M_DIR_RCGI;
+
+		params.add(EwonConsts.T2M_M2W_DEVKEY);
+		params.add(authInfo.getDevKey());
+
+		params.add(EwonConsts.T2M_PARAM_EXPORTBLOCK);
+		params.add(EwonConsts.T2M_PARAM_TAGVALUES);
+
+		return EwonUtil.httpGet(buildT2MCall(directory, EwonConsts.T2M_CALL_PARAMFORM, params.toArray(new String[params.size()])));
+	}
+
 	public EwonsData sync(Object token) throws Exception {
 		if (mode == SyncMode.GetData) {
 			return getData(null, null, null, (Date)token);

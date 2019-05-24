@@ -2,6 +2,9 @@ package org.imdc.ewon;
 
 import com.inductiveautomation.ignition.common.FormatUtil;
 import com.inductiveautomation.ignition.common.TypeUtilities;
+import com.inductiveautomation.ignition.common.config.BasicBoundPropertySet;
+import com.inductiveautomation.ignition.common.config.PropertyValue;
+import com.inductiveautomation.ignition.common.model.values.QualifiedValue;
 import com.inductiveautomation.ignition.common.model.values.QualityCode;
 import com.inductiveautomation.ignition.common.sqltags.BasicTagValue;
 import com.inductiveautomation.ignition.common.sqltags.history.InterpolationMode;
@@ -11,7 +14,9 @@ import com.inductiveautomation.ignition.common.sqltags.model.types.DataTypeClass
 import com.inductiveautomation.ignition.common.sqltags.model.types.TagValue;
 import com.inductiveautomation.ignition.common.sqltags.model.types.TimestampSource;
 import com.inductiveautomation.ignition.common.sqltags.parser.TagPathParser;
+import com.inductiveautomation.ignition.common.config.BasicProperty;
 import com.inductiveautomation.ignition.common.tags.model.TagPath;
+import com.inductiveautomation.ignition.common.tags.paths.BasicTagPath;
 import com.inductiveautomation.ignition.common.util.TimeUnits;
 import com.inductiveautomation.ignition.gateway.history.HistoricalTagValue;
 import com.inductiveautomation.ignition.gateway.history.PackedHistoricalTagValue;
@@ -27,17 +32,21 @@ import org.imdc.ewon.config.EwonSyncData;
 import org.imdc.ewon.data.DataPoint;
 import org.imdc.ewon.data.EwonData;
 import org.imdc.ewon.data.EwonsData;
+import org.imdc.ewon.data.TMResult;
 import org.imdc.ewon.data.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 public class SyncManager {
     private static final String STATUS_LASTSYNCTIME = "_Status/LastSyncTime";
@@ -110,6 +119,12 @@ public class SyncManager {
             gatewayContext.getExecutionManager().register("ewon", "syncpoll", this::run, (int) pollRateMS);
         }
 
+        long livePollRateMS = TimeUnits.toMillis(settings.getLivePollRate().doubleValue(), TimeUnits.SEC);
+        logger.debug("Configuring live polling for {} ms", livePollRateMS);
+        if (pollRateMS > 0) {
+            gatewayContext.getExecutionManager().register("ewon", "synclive", this::runLive, (int) livePollRateMS);
+        }
+
         provider.configureTag(buildTagPath(STATUS_LASTSYNCTIME), DataType.DateTime);
         provider.configureTag(buildTagPath(STATUS_LAST_H_SYNCTIME), DataType.DateTime);
         provider.configureTag(buildTagPath(STATUS_LASTSYNCID), DataType.Int4);
@@ -166,6 +181,81 @@ public class SyncManager {
             logger.debug("Poll completed in {}", FormatUtil.formatDurationSince(start));
         } catch (Exception e) {
             logger.error("Error polling eWon data.", e);
+        }
+    }
+
+    protected void runLive() {
+        updateLive();
+    }
+
+    protected void updateLive() {
+        logger.info("Updating Live Values");
+
+        HashMap<String, ArrayList<String>> liveEwonNames = new HashMap<String, ArrayList<String>>();
+
+        BasicProperty<Boolean> prop = new BasicProperty<Boolean>("Realtime", boolean.class);
+        ArrayList<TagPath> tagList = new ArrayList<TagPath>();
+
+        for (String tagPath : registeredTags) {
+            List<String> pathParts = Arrays.asList(tagPath.split("/", 0));
+            BasicTagPath p = new BasicTagPath(providerName, pathParts, prop);
+            tagList.add(p);
+        }
+
+        //Compile a list of the tags that should be read in "Realtime"
+        CompletableFuture<java.util.List<QualifiedValue>> cf = gatewayContext.getTagManager().readAsync(tagList);
+        List<QualifiedValue> values;
+        try {
+            values = cf.get();
+            for (int i = 0; i < tagList.size(); i++) {
+                if ((boolean) values.get(i).getValue()) {
+
+                    final int EWON_NAME_INDEX = 0;
+                    final int TAG_NAME_INDEX  = 1;
+
+                    String eWonName = tagList.get(i).getPathComponent(EWON_NAME_INDEX);
+                    if (liveEwonNames.containsKey(eWonName)) {
+                        liveEwonNames.get(eWonName).add(tagList.get(i).getPathComponent(TAG_NAME_INDEX));
+                    } else {
+                        ArrayList<String> tags = new ArrayList<String>();
+                        tags.add(tagList.get(i).getPathComponent(TAG_NAME_INDEX));
+                        liveEwonNames.put(eWonName, tags);
+                    }
+                }
+            }
+        } catch (InterruptedException e) {
+            logger.error("Error while reading tag parameters. InterruptedException.");
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            logger.error("Error while reading tag parameters. ExecutionException.");
+            e.printStackTrace();
+        }
+
+        //Make the Talk2M calls and popultate the "Realtime" values into ignition
+        for (String key : liveEwonNames.keySet()) {
+            try {
+                TMResult tagData = new TMResult(comm.getLiveData(key));
+
+                for (String tag : liveEwonNames.get(key)) {
+                    Object value;
+                    String valueString = tagData.getTagValue(unSanitizeName(tag));
+
+                    //Value is a string
+                    if(valueString.charAt(0) == '\"') {
+                        //Strip the "s from the string
+                        //TODO: Consider the case where the string value has "s
+                        value = valueString.replaceAll("\"", "");
+                    }
+                    //Value is a number
+                    else{
+                        value = Float.parseFloat(valueString);
+                    }
+
+                    provider.updateValue((key+"/"+tag), value, QualityCode.Good, new Date());
+                }
+            } catch (Exception e) {
+                logger.error("Error while parsing live data");
+            }
         }
     }
 
@@ -336,6 +426,11 @@ public class SyncManager {
                     // Register write callback
                     if(!registeredTags.contains(p)) {
                         registeredTags.add(p);
+
+                        //Create a "Realtime" property for the tag, default state is false
+                        BasicBoundPropertySet readtimeProperty = new BasicBoundPropertySet(new PropertyValue(new BasicProperty<Boolean>("Realtime", boolean.class), "false"));
+                        provider.configureTag(p, readtimeProperty);
+
                         provider.registerWriteHandler(p, new WriteHandler() {
                             public QualityCode write(TagPath tagPath, Object o) {
                                 try {
