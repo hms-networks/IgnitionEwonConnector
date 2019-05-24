@@ -32,11 +32,12 @@ public class EwonConnectorSettings extends PersistentRecord {
 	public static final EncodedStringField EwonPassword = new EncodedStringField(META, "ewonPassword");
 	public static final StringField APIKey = new StringField(META, "apikey");
 	public static final IntField PollRate = new IntField(META, "pollrate").setDefault(1);
+	public static final IntField LivePollRate = new IntField(META, "livepollrate").setDefault(10);
 
 	public static final BooleanField HistoryEnabled = new BooleanField(META, "historyEnabled");
 	public static final StringField HistoryProvider = new StringField(META, "historyProvider");
 
-	public static final Category MainCategory = new Category("EwonConnectorSettings.Category.Main", 10).include(Name, Enabled, ReplaceUnderscore, PollRate);
+	public static final Category MainCategory = new Category("EwonConnectorSettings.Category.Main", 10).include(Name, Enabled, ReplaceUnderscore, PollRate, LivePollRate);
 	public static final Category AccountCategory = new Category("EwonConnectorSettings.Category.Account", 50).include(Account, UserName, Password, APIKey);
 	public static final Category DeviceCategory = new Category("EwonConnectorSettings.Category.Device", 75).include(EwonUserName, EwonPassword);
 	public static final Category HistoryCategory = new Category("EwonConnectorSettings.Category.History", 100).include(HistoryEnabled, HistoryProvider);
@@ -78,6 +79,10 @@ public class EwonConnectorSettings extends PersistentRecord {
 
 	public Integer getPollRate(){
 		return getInt(PollRate);
+	}
+
+	public Integer getLivePollRate(){
+		return getInt(LivePollRate);
 	}
 
 	public boolean isEnabled(){
