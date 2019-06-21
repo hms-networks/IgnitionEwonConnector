@@ -229,6 +229,9 @@ public class SyncManager {
         } catch (ExecutionException e) {
             logger.error("Error while reading tag parameters. ExecutionException.");
             e.printStackTrace();
+        } catch (NullPointerException e) {
+            logger.error("Error while reading tag parameters. Realtime property does not exist or is the wrong datatype.");
+            e.printStackTrace();
         }
 
         //Make the Talk2M calls and popultate the "Realtime" values into ignition
