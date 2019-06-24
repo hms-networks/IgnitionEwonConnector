@@ -36,7 +36,6 @@ import org.imdc.ewon.data.TMResult;
 import org.imdc.ewon.data.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -89,7 +88,7 @@ public class SyncManager {
         comm = new CommunicationManger();
         comm.setAuthInfo(settings.getAuthInfo());
 
-        //Enable deletion of this tag provider's tags
+        // Enable deletion of this tag provider's tags
         provider.setDeletionHandler(new DeletionHandler() {
             public DeletionResponse process(TagPath t) {
                 return DeletionResponse.Allowed;
@@ -102,7 +101,9 @@ public class SyncManager {
         tagHistoryStore = settings.getHistoryProvider();
 
         if (historyEnabled && StringUtils.isBlank(tagHistoryStore)) {
-            logger.warn("History sync is enable, but no history provider has been specified for storage. No data will be stored.");
+            logger.warn(
+                    "History sync is enable, but no history provider has been specified for storage."
+                            + "No data will be stored.");
         }
 
         syncData = gatewayContext.getPersistenceInterface().find(EwonSyncData.META, 1L);
@@ -116,13 +117,16 @@ public class SyncManager {
         long pollRateMS = TimeUnits.toMillis(settings.getPollRate().doubleValue(), TimeUnits.MIN);
         logger.debug("Configuring polling for {} ms", pollRateMS);
         if (pollRateMS > 0) {
-            gatewayContext.getExecutionManager().register("ewon", "syncpoll", this::run, (int) pollRateMS);
+            gatewayContext.getExecutionManager().register("ewon", "syncpoll", this::run,
+                    (int) pollRateMS);
         }
 
-        long livePollRateMS = TimeUnits.toMillis(settings.getLivePollRate().doubleValue(), TimeUnits.SEC);
+        long livePollRateMS =
+                TimeUnits.toMillis(settings.getLivePollRate().doubleValue(), TimeUnits.SEC);
         logger.debug("Configuring live polling for {} ms", livePollRateMS);
         if (pollRateMS > 0) {
-            gatewayContext.getExecutionManager().register("ewon", "synclive", this::runLive, (int) livePollRateMS);
+            gatewayContext.getExecutionManager().register("ewon", "synclive", this::runLive,
+                    (int) livePollRateMS);
         }
 
         provider.configureTag(buildTagPath(STATUS_LASTSYNCTIME), DataType.DateTime);
@@ -131,8 +135,10 @@ public class SyncManager {
         provider.configureTag(buildTagPath(STATUS_RESETSYNC), DataType.Boolean);
         provider.configureTag(buildTagPath(STATUS_FORCE_HSYNC), DataType.Boolean);
 
-        provider.updateValue(buildTagPath(STATUS_LAST_H_SYNCTIME), syncData.getLastLocalSync(), QualityCode.Good);
-        provider.updateValue(buildTagPath(STATUS_LASTSYNCID), syncData.getTransactionId(), QualityCode.Good);
+        provider.updateValue(buildTagPath(STATUS_LAST_H_SYNCTIME), syncData.getLastLocalSync(),
+                QualityCode.Good);
+        provider.updateValue(buildTagPath(STATUS_LASTSYNCID), syncData.getTransactionId(),
+                QualityCode.Good);
         provider.updateValue(buildTagPath(STATUS_RESETSYNC), Boolean.FALSE, QualityCode.Good);
         provider.updateValue(buildTagPath(STATUS_FORCE_HSYNC), Boolean.FALSE, QualityCode.Good);
         provider.updateValue(buildTagPath(STATUS_SUCCESSCOUNT), successCount, QualityCode.Good);
@@ -202,8 +208,9 @@ public class SyncManager {
             tagList.add(p);
         }
 
-        //Compile a list of the tags that should be read in "Realtime"
-        CompletableFuture<java.util.List<QualifiedValue>> cf = gatewayContext.getTagManager().readAsync(tagList);
+        // Compile a list of the tags that should be read in "Realtime"
+        CompletableFuture<java.util.List<QualifiedValue>> cf =
+                gatewayContext.getTagManager().readAsync(tagList);
         List<QualifiedValue> values;
         try {
             values = cf.get();
@@ -211,11 +218,12 @@ public class SyncManager {
                 if ((boolean) values.get(i).getValue()) {
 
                     final int EWON_NAME_INDEX = 0;
-                    final int TAG_NAME_INDEX  = 1;
+                    final int TAG_NAME_INDEX = 1;
 
                     String eWonName = tagList.get(i).getPathComponent(EWON_NAME_INDEX);
                     if (liveEwonNames.containsKey(eWonName)) {
-                        liveEwonNames.get(eWonName).add(tagList.get(i).getPathComponent(TAG_NAME_INDEX));
+                        liveEwonNames.get(eWonName)
+                                .add(tagList.get(i).getPathComponent(TAG_NAME_INDEX));
                     } else {
                         ArrayList<String> tags = new ArrayList<String>();
                         tags.add(tagList.get(i).getPathComponent(TAG_NAME_INDEX));
@@ -230,11 +238,12 @@ public class SyncManager {
             logger.error("Error while reading tag parameters. ExecutionException.");
             e.printStackTrace();
         } catch (NullPointerException e) {
-            logger.error("Error while reading tag parameters. Realtime property does not exist or is the wrong datatype.");
+            logger.error("Error while reading tag parameters. Realtime property does not exist or"
+                    + "is the wrong datatype.");
             e.printStackTrace();
         }
 
-        //Make the Talk2M calls and popultate the "Realtime" values into ignition
+        // Make the Talk2M calls and popultate the "Realtime" values into ignition
         for (String key : liveEwonNames.keySet()) {
             try {
                 TMResult tagData = new TMResult(comm.getLiveData(key));
@@ -243,18 +252,18 @@ public class SyncManager {
                     Object value;
                     String valueString = tagData.getTagValue(unSanitizeName(tag));
 
-                    //Value is a string
-                    if(valueString.charAt(0) == '\"') {
-                        //Strip the "s from the string
-                        //TODO: Consider the case where the string value has "s
+                    // Value is a string
+                    if (valueString.charAt(0) == '\"') {
+                        // Strip the "s from the string
+                        // TODO: Consider the case where the string value has "s
                         value = valueString.replaceAll("\"", "");
                     }
-                    //Value is a number
-                    else{
+                    // Value is a number
+                    else {
                         value = Float.parseFloat(valueString);
                     }
 
-                    provider.updateValue((key+"/"+tag), value, QualityCode.Good, new Date());
+                    provider.updateValue((key + "/" + tag), value, QualityCode.Good, new Date());
                 }
             } catch (Exception e) {
                 logger.error("Error while parsing live data");
@@ -265,19 +274,22 @@ public class SyncManager {
     protected void executeSync() {
         long start = System.currentTimeMillis();
         try {
-            // If history is enabled, we use syncData. Otherwise, we use a lighter weight method to just get the current
+            // If history is enabled, we use syncData. Otherwise, we use a lighter weight method to
+            // just get the current
             // values from each device.
             if (isHistoryEnabled()) {
                 syncHistoricalData();
             }
 
-            // Even though history *might* include the realtime values, it doesn't if the current transaction is the latest.
+            // Even though history *might* include the realtime values, it doesn't if the current
+            // transaction is the latest.
             // Therefore, we still need to check the realtime values, I think.
             syncLatestValues();
 
-            provider.updateValue(buildTagPath(STATUS_LASTSYNCTIME), new Date(start), QualityCode.Good);
-            provider.updateValue(buildTagPath(STATUS_LASTSYNCDURATION), System.currentTimeMillis() - start,
+            provider.updateValue(buildTagPath(STATUS_LASTSYNCTIME), new Date(start),
                     QualityCode.Good);
+            provider.updateValue(buildTagPath(STATUS_LASTSYNCDURATION),
+                    System.currentTimeMillis() - start, QualityCode.Good);
             successCount++;
 
         } catch (Exception e) {
@@ -302,8 +314,9 @@ public class SyncManager {
                 Date lastSync = lastSyncCache.get(id);
                 if (lastSync == null || lastSync.before(ewon.getLastSync_Date())) {
                     toSync.add(ewon);
-                    logger.debug("Will mark '{}' for update, device sync time={} vs local sync time={}", ewon.getName(),
-                            ewon.getLastSync_Date(), lastSync);
+                    logger.debug(
+                            "Will mark '{}' for update, device sync time={} vs local sync time={}",
+                            ewon.getName(), ewon.getLastSync_Date(), lastSync);
                 }
             }
         }
@@ -338,8 +351,9 @@ public class SyncManager {
                 logger.debug("Data retrieved and processed in {}. New txid: {}, hasMore: {}",
                         FormatUtil.formatDurationSince(start), newTXID, hasMore);
 
-                // Update the internal database for next time, in order to not lose our spot after a reboot.
-                // However, if the txid hasn't changed, don't update- each time we update, we trigger the internal db to autobackup.
+                // Update the internal database for next time, in order to not lose our spot after a
+                // reboot. However, if the txid hasn't changed, don't update- each time we update,
+                // we trigger the internal db to autobackup.
                 if (lastTX != newTXID) {
                     syncData.setTransactionId(newTXID);
                     syncData.setLastLocalSync(new Date(start));
@@ -356,7 +370,8 @@ public class SyncManager {
             gatewayContext.getPersistenceInterface().save(syncData);
             provider.updateValue(buildTagPath(STATUS_LAST_H_SYNCTIME), syncData.getLastLocalSync(),
                     QualityCode.Good);
-            provider.updateValue(buildTagPath(STATUS_LASTSYNCID), syncData.getTransactionId(), QualityCode.Good);
+            provider.updateValue(buildTagPath(STATUS_LASTSYNCID), syncData.getTransactionId(),
+                    QualityCode.Good);
         } catch (Exception e) {
             logger.error("Error saving and updating sync information.", e);
         }
@@ -375,7 +390,8 @@ public class SyncManager {
     protected BasicTagValue buildTagValue(Object v, DataQuality quality, Date ts, DataType dtype) {
         Object vToUse = v;
         if (v != null) {
-            // A lot of values come in as BigDecimal, BigInteger, that Ignition doesn't really deal with well. We'll
+            // A lot of values come in as BigDecimal, BigInteger, that Ignition doesn't really deal
+            // with well. We'll
             // convert them to what we know they should be first.
             if (v instanceof Number) {
                 Number bd = (Number) v;
@@ -392,12 +408,14 @@ public class SyncManager {
                 }
             }
         }
-        return new BasicTagValue(TypeUtilities.coerceNullSafe(vToUse, dtype.getJavaType()), quality, ts);
+        return new BasicTagValue(TypeUtilities.coerceNullSafe(vToUse, dtype.getJavaType()), quality,
+                ts);
     }
 
     protected HistoricalTagValue buildHTV(String path, DataTypeClass dtc, BasicTagValue v) {
         return new PackedHistoricalTagValue(TagPathParser.parseSafe(providerName, path), dtc,
-                dtc == DataTypeClass.Float ? InterpolationMode.Analog_Compressed : InterpolationMode.Discrete,
+                dtc == DataTypeClass.Float ? InterpolationMode.Analog_Compressed
+                        : InterpolationMode.Discrete,
                 TimestampSource.Value, v);
     }
 
@@ -409,36 +427,45 @@ public class SyncManager {
         Date deviceDate = data.getLastSync_Date();
         Date latestValueTS = null;
         if (data.getTags() != null) {
-            BasicScanclassHistorySet historySet = new BasicScanclassHistorySet(providerName, "_exempt_", -1);
+            BasicScanclassHistorySet historySet =
+                    new BasicScanclassHistorySet(providerName, "_exempt_", -1);
             for (Tag t : data.getTags()) {
                 try {
                     String p = buildTagPath(device, t.getName());
                     DataType dType = EwonUtil.toDataType(t.getDataType());
                     DataTypeClass dtc = dType.getTypeClass();
-                    // Note: we don't check history enabled here, because even if history is not "enabled", it can be
+                    // Note: we don't check history enabled here, because even if history is not
+                    // "enabled", it can be
                     // manually triggered.
                     if (!StringUtils.isBlank(tagHistoryStore) && t.getHistory() != null) {
                         for (DataPoint d : t.getHistory()) {
-                            HistoricalTagValue htv = buildHTV(p, dtc, buildTagValue(d.getValue(),
-                                    EwonUtil.toQuality(d.getQuality()), EwonUtil.toDate(d.getDate()), dType));
+                            HistoricalTagValue htv = buildHTV(p, dtc,
+                                    buildTagValue(d.getValue(), EwonUtil.toQuality(d.getQuality()),
+                                            EwonUtil.toDate(d.getDate()), dType));
                             historySet.add(htv);
                             histPoints++;
                         }
                     }
 
                     // Register write callback
-                    if(!registeredTags.contains(p)) {
+                    if (!registeredTags.contains(p)) {
                         registeredTags.add(p);
 
-                        //Create a "Realtime" property for the tag, default state is false
-                        BasicBoundPropertySet readtimeProperty = new BasicBoundPropertySet(new PropertyValue(new BasicProperty<Boolean>("Realtime", boolean.class), "false"));
+                        // Create a "Realtime" property for the tag, default state is false
+                        BasicBoundPropertySet readtimeProperty =
+                                new BasicBoundPropertySet(new PropertyValue(
+                                        new BasicProperty<Boolean>("Realtime", boolean.class),
+                                        "false"));
                         provider.configureTag(p, readtimeProperty);
 
                         provider.registerWriteHandler(p, new WriteHandler() {
                             public QualityCode write(TagPath tagPath, Object o) {
                                 try {
-                                    String tagName = replaceUnderscore ? unSanitizeName(tagPath.getItemName()) : tagPath.getItemName();
-                                    comm.writeTag(tagPath.getParentPath().getItemName(), tagName, o.toString());
+                                    String tagName = replaceUnderscore
+                                            ? unSanitizeName(tagPath.getItemName())
+                                            : tagPath.getItemName();
+                                    comm.writeTag(tagPath.getParentPath().getItemName(), tagName,
+                                            o.toString());
                                     provider.updateValue(p, o, QualityCode.Good);
                                 } catch (Exception e) {
                                     logger.error("Writing tag to eWON via Talk2M API Failed");
@@ -449,7 +476,8 @@ public class SyncManager {
                     }
 
                     // Update realtime
-                    TagValue v = buildTagValue(t.getValue(), EwonUtil.toQuality(t.getQuality()), deviceDate, dType);
+                    TagValue v = buildTagValue(t.getValue(), EwonUtil.toQuality(t.getQuality()),
+                            deviceDate, dType);
 
                     // provider.updateValue does not seem to set the right data type
                     // using configureTag to force the correct data type
@@ -457,7 +485,8 @@ public class SyncManager {
                     provider.updateValue(p, v.getValue(), v.getQuality(), v.getTimestamp());
                     logger.trace("Updated realtime value for '{}' [id={}] to {}", p, t.getId(), v);
                 } catch (Exception e) {
-                    logger.error("Unable to create dataset for tag '{}/{}'", device, t.getName(), e);
+                    logger.error("Unable to create dataset for tag '{}/{}'", device, t.getName(),
+                            e);
                 }
             }
             if (historySet.size() > 0) {
@@ -492,8 +521,8 @@ public class SyncManager {
     }
 
     /**
-     * This is what determines the path for a tag. Current, the device is the first folder, and then the rest of the
-     * path.
+     * This is what determines the path for a tag. Current, the device is the first folder, and then
+     * the rest of the path.
      **/
     protected String buildTagPath(String ewonName, String tagName) throws IOException {
         return sanitizeName(ewonName + "/" + tagName);

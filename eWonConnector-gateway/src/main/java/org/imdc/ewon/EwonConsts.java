@@ -1,8 +1,7 @@
 package org.imdc.ewon;
 
 /**
- * These are various constants for the talk2m service, mostly url parameter
- * keys.
+ * These are various constants for the talk2m service, mostly url parameter keys.
  *
  */
 public class EwonConsts {

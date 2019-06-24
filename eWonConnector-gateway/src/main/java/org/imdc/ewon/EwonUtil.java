@@ -4,7 +4,6 @@ import com.inductiveautomation.ignition.common.Base64;
 import com.inductiveautomation.ignition.common.sqltags.model.types.DataQuality;
 import com.inductiveautomation.ignition.common.sqltags.model.types.DataType;
 import org.apache.commons.lang3.StringUtils;
-
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
@@ -28,7 +27,8 @@ import java.text.DateFormat;
 public class EwonUtil {
    private static final int defaultConnectTimeout = 10000;
    private static final int defaultReadTimeout = 60000;
-   private final static TrustManager[] BYPASS_TRUST_MGR = new TrustManager[] { new TrustAllX509TrustManager() };
+   private final static TrustManager[] BYPASS_TRUST_MGR =
+         new TrustManager[] {new TrustAllX509TrustManager()};
    private final static HostnameVerifier BYPASS_HOSTNAME = new HostnameVerifier() {
 
       @Override
@@ -38,13 +38,13 @@ public class EwonUtil {
    };
 
    public static DataQuality toQuality(String value) {
-      switch(value){
+      switch (value) {
          case "good":
             return DataQuality.GOOD_DATA;
          case "unknown":
             return DataQuality.OPC_UNCERTAIN;
          default:
-               return DataQuality.OPC_BAD_DATA;
+            return DataQuality.OPC_BAD_DATA;
       }
    }
 
@@ -62,16 +62,16 @@ public class EwonUtil {
          return DataType.Int4;
       }
       switch (value.toLowerCase()) {
-      case "int":
-         return DataType.Int4;
-      case "float":
-         return DataType.Float8;
-      case "bool":
-         return DataType.Boolean;
-      case "string":
-         return DataType.String;
-      default:
-         return DataType.Int4;
+         case "int":
+            return DataType.Int4;
+         case "float":
+            return DataType.Float8;
+         case "bool":
+            return DataType.Boolean;
+         case "string":
+            return DataType.String;
+         default:
+            return DataType.Int4;
       }
    }
 
@@ -82,9 +82,9 @@ public class EwonUtil {
     * @return
     */
    public static String toString(Date value) {
-      //Calendar c = GregorianCalendar.getInstance();
-      //c.setTime(value);
-      //return javax.xml.bind.DatatypeConverter.printDateTime(c);
+      // Calendar c = GregorianCalendar.getInstance();
+      // c.setTime(value);
+      // return javax.xml.bind.DatatypeConverter.printDateTime(c);
 
       TimeZone tz = TimeZone.getTimeZone("UTC");
       DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'");
@@ -99,7 +99,8 @@ public class EwonUtil {
 
       HttpURLConnection con = null;
       try {
-         con = setupHttpConnection(url, "GET", connectTimeout, readTimeout, null, null, null, bypassCertValidation);
+         con = setupHttpConnection(url, "GET", connectTimeout, readTimeout, null, null, null,
+               bypassCertValidation);
 
          con.setDoOutput(false);
          con.setUseCaches(false);
@@ -125,9 +126,9 @@ public class EwonUtil {
       }
    }
 
-   private static HttpURLConnection setupHttpConnection(String url, String method, int connectTimeout, int readTimeout,
-           String username, String password, Map<String, String> headerValues, boolean bypassCertValidation)
-           throws Exception {
+   private static HttpURLConnection setupHttpConnection(String url, String method,
+         int connectTimeout, int readTimeout, String username, String password,
+         Map<String, String> headerValues, boolean bypassCertValidation) throws Exception {
 
       HttpURLConnection con = (HttpURLConnection) (new URL(url)).openConnection();
 
@@ -150,7 +151,8 @@ public class EwonUtil {
 
       // We support basic http auth if a username/password is specified.
       if (!StringUtils.isBlank(username)) {
-         String authToken = Base64.encodeBytes((username + ":" + password).getBytes()).replace("\n", "");
+         String authToken =
+               Base64.encodeBytes((username + ":" + password).getBytes()).replace("\n", "");
          con.setRequestProperty("Authorization", "Basic " + authToken);
       }
 
@@ -166,12 +168,14 @@ public class EwonUtil {
    protected static class TrustAllX509TrustManager implements X509TrustManager {
 
       @Override
-      public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+      public void checkClientTrusted(X509Certificate[] chain, String authType)
+            throws CertificateException {
 
       }
 
       @Override
-      public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+      public void checkServerTrusted(X509Certificate[] chain, String authType)
+            throws CertificateException {
 
       }
 

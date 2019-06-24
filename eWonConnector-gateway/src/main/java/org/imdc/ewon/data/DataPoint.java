@@ -22,7 +22,9 @@ public class DataPoint {
       return quality == null ? "good" : quality;
    }
 
-   public QualifiedValue toQVal(){
-      return new BasicQualifiedValue(value, "good".equals(getQuality()) ? DataQuality.GOOD_DATA : DataQuality.OPC_BAD_DATA, EwonUtil.toDate(date));
+   public QualifiedValue toQVal() {
+      return new BasicQualifiedValue(value,
+            "good".equals(getQuality()) ? DataQuality.GOOD_DATA : DataQuality.OPC_BAD_DATA,
+            EwonUtil.toDate(date));
    }
 }
