@@ -18,7 +18,8 @@ public class TagHistoryListEditorSource implements IEditorSource {
    }
 
    @Override
-   public Component newEditorComponent(String id, RecordEditMode editMode, SRecordInstance record, FormMeta formMeta) {
+   public Component newEditorComponent(String id, RecordEditMode editMode, SRecordInstance record,
+         FormMeta formMeta) {
       return new TagHistorySourceEditor(id, formMeta, editMode, record);
    }
 }

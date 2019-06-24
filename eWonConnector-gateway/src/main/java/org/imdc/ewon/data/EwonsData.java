@@ -4,6 +4,7 @@ public class EwonsData extends DMResult {
    EwonData[] ewons;
    boolean moreDataAvailable = false;
    Long transactionId = 0L;
+
    public EwonData[] getEwons() {
       return ewons;
    }
@@ -12,7 +13,7 @@ public class EwonsData extends DMResult {
       return moreDataAvailable;
    }
 
-   public Long getTransactionId(){
+   public Long getTransactionId() {
       return transactionId;
    }
 }

@@ -13,7 +13,6 @@ import org.imdc.ewon.config.EwonConnectorSettings;
 import org.imdc.ewon.config.EwonSyncData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.util.Arrays;
 import java.util.List;
 
@@ -23,11 +22,12 @@ public class GatewayHook extends AbstractGatewayModuleHook {
     private ManagedTagProvider realtime;
     private SyncManager mgr = null;
 
-    private RecordListenerAdapter<EwonConnectorSettings> settingsListener = new RecordListenerAdapter<EwonConnectorSettings>() {
-        public void recordUpdated(EwonConnectorSettings record) {
-            updateSettings(record);
-        }
-    };
+    private RecordListenerAdapter<EwonConnectorSettings> settingsListener =
+            new RecordListenerAdapter<EwonConnectorSettings>() {
+                public void recordUpdated(EwonConnectorSettings record) {
+                    updateSettings(record);
+                }
+            };
 
     @Override
     public void setup(GatewayContext gatewayContext) {
@@ -35,7 +35,8 @@ public class GatewayHook extends AbstractGatewayModuleHook {
         BundleUtil.get().addBundle("ewon", getClass().getClassLoader(), "ewon_gateway");
         try {
             // This creates the settings tables in the internal db if necessary.
-            gatewayContext.getSchemaUpdater().updatePersistentRecords(EwonConnectorSettings.META, EwonSyncData.META);
+            gatewayContext.getSchemaUpdater().updatePersistentRecords(EwonConnectorSettings.META,
+                    EwonSyncData.META);
 
             // For connector settings, we want to ensure that we have 1 row
             // defined, identified by id=0.
@@ -54,7 +55,8 @@ public class GatewayHook extends AbstractGatewayModuleHook {
 
     @Override
     public void startup(LicenseState licenseState) {
-        EwonConnectorSettings settings = gatewayContext.getPersistenceInterface().find(EwonConnectorSettings.META, 0L);
+        EwonConnectorSettings settings =
+                gatewayContext.getPersistenceInterface().find(EwonConnectorSettings.META, 0L);
         startupMgr(settings);
     }
 
@@ -79,7 +81,10 @@ public class GatewayHook extends AbstractGatewayModuleHook {
     protected void startupMgr(EwonConnectorSettings settings) {
         if (settings.isEnabled()) {
             try {
-                realtime = gatewayContext.getTagManager().getOrCreateManagedProvider(new ProviderConfiguration(settings.getName()).setAllowTagCustomization(true).setPersistTags(true).setPersistValues(true));
+                realtime = gatewayContext.getTagManager()
+                        .getOrCreateManagedProvider(new ProviderConfiguration(settings.getName())
+                                .setAllowTagCustomization(true).setPersistTags(true)
+                                .setPersistValues(true));
             } catch (Exception e) {
                 logger.error("Error starting up realtime tag provider", e);
                 realtime = null;

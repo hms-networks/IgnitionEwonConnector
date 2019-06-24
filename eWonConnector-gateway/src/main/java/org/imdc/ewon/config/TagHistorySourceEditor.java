@@ -1,7 +1,6 @@
 package org.imdc.ewon.config;
 
 import java.util.List;
-
 import com.inductiveautomation.ignition.gateway.history.HistoryFlavor;
 import com.inductiveautomation.ignition.gateway.localdb.persistence.FormMeta;
 import com.inductiveautomation.ignition.gateway.model.GatewayContext;
@@ -18,7 +17,8 @@ import simpleorm.dataset.SRecordInstance;
 public class TagHistorySourceEditor extends AbstractEditor {
 
     @SuppressWarnings("unchecked")
-    public TagHistorySourceEditor(String id, FormMeta formMeta, RecordEditMode editMode, SRecordInstance record) {
+    public TagHistorySourceEditor(String id, FormMeta formMeta, RecordEditMode editMode,
+            SRecordInstance record) {
         super(id, formMeta, editMode, record);
 
         TagHistoryDropdownChoice dropdown = new TagHistoryDropdownChoice("editor", record);
@@ -31,7 +31,8 @@ public class TagHistorySourceEditor extends AbstractEditor {
 
     }
 
-    private class TagHistoryDropdownChoice extends DropDownChoice<String> implements IRecordFieldComponent {
+    private class TagHistoryDropdownChoice extends DropDownChoice<String>
+            implements IRecordFieldComponent {
 
         @SuppressWarnings("unchecked")
         public TagHistoryDropdownChoice(String id, SRecordInstance record) {
