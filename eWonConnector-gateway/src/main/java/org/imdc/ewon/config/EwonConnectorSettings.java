@@ -19,93 +19,93 @@ import simpleorm.dataset.SFieldFlags;
  *
  */
 public class EwonConnectorSettings extends PersistentRecord {
-	public static RecordMeta<EwonConnectorSettings> META = new RecordMeta<>(EwonConnectorSettings.class, "ewonConnectorSettings");
+   public static RecordMeta<EwonConnectorSettings> META = new RecordMeta<>(EwonConnectorSettings.class, "ewonConnectorSettings");
 
-	public static final IdentityField ID = new IdentityField(META);
-	public static final StringField Name= new StringField(META, "name", SFieldFlags.SMANDATORY).setDefault("eWon");
-	public static final BooleanField Enabled = new BooleanField(META, "enabled");
-	public static final BooleanField ReplaceUnderscore = new BooleanField(META, "replaceUnderscore");
-	public static final StringField Account = new StringField(META, "account");
-	public static final StringField UserName = new StringField(META, "username");
-	public static final EncodedStringField Password = new EncodedStringField(META, "password");
-	public static final StringField EwonUserName = new StringField(META, "ewonUsername");
-	public static final EncodedStringField EwonPassword = new EncodedStringField(META, "ewonPassword");
-	public static final StringField APIKey = new StringField(META, "apikey");
-	public static final IntField PollRate = new IntField(META, "pollrate").setDefault(1);
-	public static final IntField LivePollRate = new IntField(META, "livepollrate").setDefault(10);
+   public static final IdentityField ID = new IdentityField(META);
+   public static final StringField Name= new StringField(META, "name", SFieldFlags.SMANDATORY).setDefault("eWon");
+   public static final BooleanField Enabled = new BooleanField(META, "enabled");
+   public static final BooleanField ReplaceUnderscore = new BooleanField(META, "replaceUnderscore");
+   public static final StringField Account = new StringField(META, "account");
+   public static final StringField UserName = new StringField(META, "username");
+   public static final EncodedStringField Password = new EncodedStringField(META, "password");
+   public static final StringField EwonUserName = new StringField(META, "ewonUsername");
+   public static final EncodedStringField EwonPassword = new EncodedStringField(META, "ewonPassword");
+   public static final StringField APIKey = new StringField(META, "apikey");
+   public static final IntField PollRate = new IntField(META, "pollrate").setDefault(1);
+   public static final IntField LivePollRate = new IntField(META, "livepollrate").setDefault(10);
 
-	public static final BooleanField HistoryEnabled = new BooleanField(META, "historyEnabled");
-	public static final StringField HistoryProvider = new StringField(META, "historyProvider");
+   public static final BooleanField HistoryEnabled = new BooleanField(META, "historyEnabled");
+   public static final StringField HistoryProvider = new StringField(META, "historyProvider");
 
-	public static final Category MainCategory = new Category("EwonConnectorSettings.Category.Main", 10).include(Name, Enabled, ReplaceUnderscore, PollRate, LivePollRate);
-	public static final Category AccountCategory = new Category("EwonConnectorSettings.Category.Account", 50).include(Account, UserName, Password, APIKey);
-	public static final Category DeviceCategory = new Category("EwonConnectorSettings.Category.Device", 75).include(EwonUserName, EwonPassword);
-	public static final Category HistoryCategory = new Category("EwonConnectorSettings.Category.History", 100).include(HistoryEnabled, HistoryProvider);
+   public static final Category MainCategory = new Category("EwonConnectorSettings.Category.Main", 10).include(Name, Enabled, ReplaceUnderscore, PollRate, LivePollRate);
+   public static final Category AccountCategory = new Category("EwonConnectorSettings.Category.Account", 50).include(Account, UserName, Password, APIKey);
+   public static final Category DeviceCategory = new Category("EwonConnectorSettings.Category.Device", 75).include(EwonUserName, EwonPassword);
+   public static final Category HistoryCategory = new Category("EwonConnectorSettings.Category.History", 100).include(HistoryEnabled, HistoryProvider);
 
-	static {
-		HistoryProvider.getFormMeta().setEditorSource(TagHistoryListEditorSource.getSharedInstance());
-		Password.getFormMeta().setEditorSource(PasswordEditorSource.getSharedInstance());
-		EwonPassword.getFormMeta().setEditorSource(PasswordEditorSource.getSharedInstance());
-	}
-
-	@Override
-	public RecordMeta<?> getMeta() {
-		return META;
-	}
-
-	public String getName(){
-		return getString(Name);
-	}
-
-	public String getAccount(){
-		return getString(Account);
-	}
-
-	public String getUserName(){
-		return getString(UserName);
-	}
-
-	public String getPassword(){
-		return getString(Password);
+   static {
+      HistoryProvider.getFormMeta().setEditorSource(TagHistoryListEditorSource.getSharedInstance());
+      Password.getFormMeta().setEditorSource(PasswordEditorSource.getSharedInstance());
+      EwonPassword.getFormMeta().setEditorSource(PasswordEditorSource.getSharedInstance());
    }
 
-	public String getEwonUserName(){
-		return getString(EwonUserName);
-	}
+   @Override
+   public RecordMeta<?> getMeta() {
+      return META;
+   }
 
-	public String getEwonPassword(){
-		return getString(EwonPassword);
-	}
+   public String getName(){
+      return getString(Name);
+   }
 
-	public Integer getPollRate(){
-		return getInt(PollRate);
-	}
+   public String getAccount(){
+      return getString(Account);
+   }
 
-	public Integer getLivePollRate(){
-		return getInt(LivePollRate);
-	}
+   public String getUserName(){
+      return getString(UserName);
+   }
 
-	public boolean isEnabled(){
-		return getBoolean(Enabled);
-	}
+   public String getPassword(){
+      return getString(Password);
+   }
 
-	public boolean isReplaceUnderscore(){
-		return getBoolean(ReplaceUnderscore);
-	}
+   public String getEwonUserName(){
+      return getString(EwonUserName);
+   }
 
-	public String getAPIKey(){
-		return getString(APIKey);
-	}
+   public String getEwonPassword(){
+      return getString(EwonPassword);
+   }
 
-	public AuthInfo getAuthInfo(){
-		return new AuthInfo(getAccount(), getUserName(), getPassword(), getAPIKey(), getEwonUserName(), getEwonPassword());
-	}
+   public Integer getPollRate(){
+      return getInt(PollRate);
+   }
 
-	public boolean isHistoryEnabled() {
-		return getBoolean(HistoryEnabled);
-	}
+   public Integer getLivePollRate(){
+      return getInt(LivePollRate);
+   }
 
-	public String getHistoryProvider(){
-		return getString(HistoryProvider);
-	}
+   public boolean isEnabled(){
+      return getBoolean(Enabled);
+   }
+
+   public boolean isReplaceUnderscore(){
+      return getBoolean(ReplaceUnderscore);
+   }
+
+   public String getAPIKey(){
+      return getString(APIKey);
+   }
+
+   public AuthInfo getAuthInfo(){
+      return new AuthInfo(getAccount(), getUserName(), getPassword(), getAPIKey(), getEwonUserName(), getEwonPassword());
+   }
+
+   public boolean isHistoryEnabled() {
+      return getBoolean(HistoryEnabled);
+   }
+
+   public String getHistoryProvider(){
+      return getString(HistoryProvider);
+   }
 }

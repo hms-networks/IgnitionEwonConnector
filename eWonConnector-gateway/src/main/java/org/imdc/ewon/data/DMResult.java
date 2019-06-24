@@ -1,9 +1,9 @@
 package org.imdc.ewon.data;
 
 public class DMResult {
-	boolean success;
+   boolean success;
 
-	public boolean isSuccess() {
-		return success;
-	}
+   public boolean isSuccess() {
+      return success;
+   }
 }
