@@ -199,12 +199,13 @@ public class SyncManager {
 
         HashMap<String, ArrayList<String>> liveEwonNames = new HashMap<String, ArrayList<String>>();
 
-        BasicProperty<Boolean> prop = new BasicProperty<Boolean>("Realtime", boolean.class);
+        BasicProperty<Boolean> realtimePropBoolean =
+                new BasicProperty<Boolean>("Realtime", boolean.class);
         ArrayList<TagPath> tagList = new ArrayList<TagPath>();
 
         for (String tagPath : registeredTags) {
             List<String> pathParts = Arrays.asList(tagPath.split("/", 0));
-            BasicTagPath p = new BasicTagPath(providerName, pathParts, prop);
+            BasicTagPath p = new BasicTagPath(providerName, pathParts, realtimePropBoolean);
             tagList.add(p);
         }
 
