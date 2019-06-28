@@ -201,11 +201,15 @@ public class SyncManager {
 
         BasicProperty<Boolean> realtimePropBoolean =
                 new BasicProperty<Boolean>("Realtime", boolean.class);
+        BasicProperty<String> realtimePropString =
+                new BasicProperty<String>("Realtime", String.class);
         ArrayList<TagPath> tagList = new ArrayList<TagPath>();
 
         for (String tagPath : registeredTags) {
             List<String> pathParts = Arrays.asList(tagPath.split("/", 0));
             BasicTagPath propPath = new BasicTagPath(providerName, pathParts, realtimePropBoolean);
+            tagList.add(propPath);
+            propPath = new BasicTagPath(providerName, pathParts, realtimePropString);
             tagList.add(propPath);
         }
 
@@ -216,7 +220,15 @@ public class SyncManager {
         try {
             values = cf.get();
             for (int i = 0; i < tagList.size(); i++) {
-                if ((boolean) values.get(i).getValue()) {
+                boolean isRealtime = false;
+                Object propValue = values.get(i).getValue();
+                if (propValue instanceof Boolean) {
+                    isRealtime = (boolean) propValue;
+                } else if (propValue instanceof String) {
+                    isRealtime = propValue.equals("true");
+                }
+
+                if (isRealtime) {
 
                     final int EWON_NAME_INDEX = 0;
                     final int TAG_NAME_INDEX = 1;
