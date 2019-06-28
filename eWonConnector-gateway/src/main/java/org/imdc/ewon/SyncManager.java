@@ -205,8 +205,8 @@ public class SyncManager {
 
         for (String tagPath : registeredTags) {
             List<String> pathParts = Arrays.asList(tagPath.split("/", 0));
-            BasicTagPath p = new BasicTagPath(providerName, pathParts, realtimePropBoolean);
-            tagList.add(p);
+            BasicTagPath propPath = new BasicTagPath(providerName, pathParts, realtimePropBoolean);
+            tagList.add(propPath);
         }
 
         // Compile a list of the tags that should be read in "Realtime"
