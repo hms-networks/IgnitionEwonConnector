@@ -18,54 +18,54 @@ import simpleorm.dataset.SFieldFlags;
  *
  */
 public class EwonSyncData extends PersistentRecord {
-	public static final RecordMeta<EwonSyncData> META = new RecordMeta<>(EwonSyncData.class, "ewonsyncdata");
+   public static final RecordMeta<EwonSyncData> META = new RecordMeta<>(EwonSyncData.class, "ewonsyncdata");
 
-	//This is our internal id
-	public static final IdentityField Id = new IdentityField(META);	//
-	//This is the "lastSyncro" field reported from eWon. We keep track of it so we know across restarts if we're up to date.
-	public static final LongField LastRemoteSync = new LongField(META, "lastremotesync");
-	//This is the last time we stored data locally from the DataMailbox/Talk2M.
-	public static final LongField LastLocalSync = new LongField(META, "lastlocalsync");
-	//The last timestamp stored by history.
-	public static final LongField LastHistoryTimestamp = new LongField(META, "lasthistorytimestamp");
+   //This is our internal id
+   public static final IdentityField Id = new IdentityField(META);	//
+   //This is the "lastSyncro" field reported from eWon. We keep track of it so we know across restarts if we're up to date.
+   public static final LongField LastRemoteSync = new LongField(META, "lastremotesync");
+   //This is the last time we stored data locally from the DataMailbox/Talk2M.
+   public static final LongField LastLocalSync = new LongField(META, "lastlocalsync");
+   //The last timestamp stored by history.
+   public static final LongField LastHistoryTimestamp = new LongField(META, "lasthistorytimestamp");
 
-	//The last TXID returned from syncdata.
-	public static final LongField LastTXID = new LongField(META, "lasttxid").setDefault(0L);
+   //The last TXID returned from syncdata.
+   public static final LongField LastTXID = new LongField(META, "lasttxid").setDefault(0L);
 
-	@Override
-	public RecordMeta<?> getMeta() {
-		return META;
-	}
+   @Override
+   public RecordMeta<?> getMeta() {
+      return META;
+   }
 
-	public Long getTransactionId(){
-		return isNull(LastTXID) ? 0L : getLong(LastTXID);
-	}
+   public Long getTransactionId(){
+      return isNull(LastTXID) ? 0L : getLong(LastTXID);
+   }
 
-	public void setTransactionId(Long value){
-		setLong(LastTXID, value == null ? 0L : value);
-	}
+   public void setTransactionId(Long value){
+      setLong(LastTXID, value == null ? 0L : value);
+   }
 
-	public Date getLastRemoteSync(){
-		return new Date(getLong(LastRemoteSync));
-	}
+   public Date getLastRemoteSync(){
+      return new Date(getLong(LastRemoteSync));
+   }
 
-	public void setLastRemoteSync(Date value){
-		setLong(LastRemoteSync, value.getTime());
-	}
+   public void setLastRemoteSync(Date value){
+      setLong(LastRemoteSync, value.getTime());
+   }
 
-	public Date getLastLocalSync(){
-		return new Date(getLong(LastLocalSync));
-	}
+   public Date getLastLocalSync(){
+      return new Date(getLong(LastLocalSync));
+   }
 
-	public void setLastLocalSync(Date value){
-		setLong(LastLocalSync, value.getTime());
-	}
+   public void setLastLocalSync(Date value){
+      setLong(LastLocalSync, value.getTime());
+   }
 
-	public Date getLastHistoryTimestamp(){
-		return new Date(getLong(LastHistoryTimestamp));
-	}
+   public Date getLastHistoryTimestamp(){
+      return new Date(getLong(LastHistoryTimestamp));
+   }
 
-	public void setLastHistoryTimestamp(Date value){
-		setLong(LastHistoryTimestamp, value.getTime());
-	}
+   public void setLastHistoryTimestamp(Date value){
+      setLong(LastHistoryTimestamp, value.getTime());
+   }
 }
