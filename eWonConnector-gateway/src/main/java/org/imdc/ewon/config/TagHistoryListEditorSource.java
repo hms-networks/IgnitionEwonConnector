@@ -7,18 +7,18 @@ import org.apache.wicket.Component;
 import simpleorm.dataset.SRecordInstance;
 
 public class TagHistoryListEditorSource implements IEditorSource {
-	static final TagHistoryListEditorSource _instance = new TagHistoryListEditorSource();
+   static final TagHistoryListEditorSource _instance = new TagHistoryListEditorSource();
 
-	public static TagHistoryListEditorSource getSharedInstance() {
-		return _instance;
-	}
+   public static TagHistoryListEditorSource getSharedInstance() {
+      return _instance;
+   }
 
-	public TagHistoryListEditorSource() {
+   public TagHistoryListEditorSource() {
 
-	}
+   }
 
-	@Override
-	public Component newEditorComponent(String id, RecordEditMode editMode, SRecordInstance record, FormMeta formMeta) {
-		return new TagHistorySourceEditor(id, formMeta, editMode, record);
-	}
+   @Override
+   public Component newEditorComponent(String id, RecordEditMode editMode, SRecordInstance record, FormMeta formMeta) {
+      return new TagHistorySourceEditor(id, formMeta, editMode, record);
+   }
 }

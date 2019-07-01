@@ -1,49 +1,49 @@
 package org.imdc.ewon.data;
 
 public class Tag {
-	int id;
-	String name;
-	String dataType;
-	String description;
-	String alarmHint;
-	Object value;
-	String quality;
-	int ewonTagId;
-	DataPoint[] history;
+   int id;
+   String name;
+   String dataType;
+   String description;
+   String alarmHint;
+   Object value;
+   String quality;
+   int ewonTagId;
+   DataPoint[] history;
 
-	public int getId() {
-		return id;
-	}
+   public int getId() {
+      return id;
+   }
 
-	public String getName() {
-		return name;
-	}
+   public String getName() {
+      return name;
+   }
 
-	public String getDataType() {
-		return dataType;
-	}
+   public String getDataType() {
+      return dataType;
+   }
 
-	public String getDescription() {
-		return description;
-	}
+   public String getDescription() {
+      return description;
+   }
 
-	public String getAlarmHint() {
-		return alarmHint;
-	}
+   public String getAlarmHint() {
+      return alarmHint;
+   }
 
-	public Object getValue() {
-		return value;
-	}
+   public Object getValue() {
+      return value;
+   }
 
-	public String getQuality() {
-		return quality;
-	}
+   public String getQuality() {
+      return quality;
+   }
 
-	public int getEwonTagId() {
-		return ewonTagId;
-	}
+   public int getEwonTagId() {
+      return ewonTagId;
+   }
 
-	public DataPoint[] getHistory() {
-		return history;
-	}
+   public DataPoint[] getHistory() {
+      return history;
+   }
 }

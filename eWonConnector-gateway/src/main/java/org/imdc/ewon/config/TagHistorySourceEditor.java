@@ -18,34 +18,34 @@ import java.util.List;
 
 public class TagHistorySourceEditor extends AbstractEditor {
 
-	@SuppressWarnings("unchecked")
-	public TagHistorySourceEditor(String id, FormMeta formMeta, RecordEditMode editMode, SRecordInstance record) {
-		super(id, formMeta, editMode, record);
+   @SuppressWarnings("unchecked")
+   public TagHistorySourceEditor(String id, FormMeta formMeta, RecordEditMode editMode, SRecordInstance record) {
+      super(id, formMeta, editMode, record);
 
-		TagHistoryDropdownChoice dropdown = new TagHistoryDropdownChoice("editor", record);
+      TagHistoryDropdownChoice dropdown = new TagHistoryDropdownChoice("editor", record);
 
-		formMeta.installValidators(dropdown);
+      formMeta.installValidators(dropdown);
 
-		dropdown.setLabel(new LenientResourceModel(formMeta.getFieldNameKey()));
+      dropdown.setLabel(new LenientResourceModel(formMeta.getFieldNameKey()));
 
-		add(dropdown);
+      add(dropdown);
 
-	}
+   }
 
-	private class TagHistoryDropdownChoice extends DropDownChoice<String> implements IRecordFieldComponent {
+   private class TagHistoryDropdownChoice extends DropDownChoice<String> implements IRecordFieldComponent {
 
-		@SuppressWarnings("unchecked")
-		public TagHistoryDropdownChoice(String id, SRecordInstance record) {
-			super(id);
+      @SuppressWarnings("unchecked")
+      public TagHistoryDropdownChoice(String id, SRecordInstance record) {
+         super(id);
 
-			GatewayContext context = (GatewayContext) Application.get();
+         GatewayContext context = (GatewayContext) Application.get();
 
-			List<String> stores = context.getHistoryManager().getStores(HistoryFlavor.SQLTAG);
-			setChoices(stores);
-		}
+         List<String> stores = context.getHistoryManager().getStores(HistoryFlavor.SQLTAG);
+         setChoices(stores);
+      }
 
-		public SFieldMeta getFieldMeta() {
-			return getFormMeta().getField();
-		}
-	}
+      public SFieldMeta getFieldMeta() {
+         return getFormMeta().getField();
+      }
+   }
 }
