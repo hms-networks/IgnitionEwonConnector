@@ -95,8 +95,7 @@ public class EwonUtil {
 	public static String httpGet(String url) throws Exception {
 		int connectTimeout = defaultConnectTimeout;
 		int readTimeout = defaultReadTimeout;
-		Boolean bypassCertValidation = true; // args.getBooleanArg("bypassCertValidation", Boolean.FALSE);
-
+		Boolean bypassCertValidation = false;
 		HttpURLConnection con = null;
 		try {
 			con = setupHttpConnection(url, "GET", connectTimeout, readTimeout, null, null, null, bypassCertValidation);
