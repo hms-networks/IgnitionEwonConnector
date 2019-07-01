@@ -72,6 +72,8 @@ public class EwonUtil {
 			return DataType.Float8;
 		case "bool":
 			return DataType.Boolean;
+		case "string":
+			return DataType.String;
 		default:
 			return DataType.Int4;
 		}
