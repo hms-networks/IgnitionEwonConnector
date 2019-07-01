@@ -53,7 +53,7 @@ public class EwonUtil {
 				return DataQuality.OPC_UNCERTAIN;
 			default:
 					return DataQuality.OPC_BAD_DATA;
-		}		
+		}
 	}
 
 	/** Converts a string to an ISO 8601 Date **/
@@ -81,7 +81,7 @@ public class EwonUtil {
 
 	/**
 	 * Converts a date to an ISO 8601 string.
-	 * 
+	 *
 	 * @param value
 	 * @return
 	 */
