@@ -47,7 +47,7 @@ public class CommunicationManger {
 		logger.debug("Generated call: {}", ret);
 		return ret;
 	}
-	
+
 	protected void logResults(long start, String call, String body){
 		logger.debug("[{}] Call finished in {}", call, FormatUtil.formatDurationSince(start));
 		logger.trace("[{}] Results: {}", call, body);
@@ -70,30 +70,30 @@ public class CommunicationManger {
 	public EwonsData getData(Integer ewonId, Integer tagId, Integer limit, Date fromTime) throws Exception {
 		long start = System.currentTimeMillis();
 		List<String> params = new ArrayList<>();
-				
+
 		if(ewonId != null){
 			params.add(EwonConsts.DM_PARAM_EWONID);
 			params.add(ewonId.toString());
 		}
-		
+
 		if(tagId != null){
 			params.add(EwonConsts.DM_PARAM_TAGID);
 			params.add(tagId.toString());
 		}
-		
+
 		if(limit != null){
 			params.add(EwonConsts.DM_PARAM_LIMIT);
 			params.add(limit.toString());
 		}
-		
+
 		if(fromTime != null){
 			params.add(EwonConsts.DM_PARAM_FROM);
 			params.add(EwonUtil.toString(fromTime).replace(":", "%3A"));
 		}
-		
+
 		String body = EwonUtil
 		        .httpGet(buildCall(EwonConsts.DM_CALL_GETDATA, params.size()>0 ? params.toArray(new String[params.size()]) : null));
-		
+
 		logResults(start, EwonConsts.DM_CALL_GETDATA, body);
 		return gson.fromJson(body, EwonsData.class);
 	}
@@ -115,5 +115,5 @@ public class CommunicationManger {
 			return syncData((Long)token);
 		}
 	}
-	
+
 }

@@ -18,7 +18,7 @@ public class EwonConfigPage extends RecordEditForm {
 			.page(EwonConfigPage.class)
 			.terms("ewon", "data mailbox", "dm")
 			.build();
-	
+
 	public EwonConfigPage(IConfigPage configPage) {
 		super(configPage, null, null, ((GatewayContext) Application.get()).getPersistenceInterface().find(
 				EwonConnectorSettings.META, 0L));

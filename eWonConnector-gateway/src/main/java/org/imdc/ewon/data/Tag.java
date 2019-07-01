@@ -42,7 +42,7 @@ public class Tag {
 	public int getEwonTagId() {
 		return ewonTagId;
 	}
-	
+
 	public DataPoint[] getHistory() {
 		return history;
 	}

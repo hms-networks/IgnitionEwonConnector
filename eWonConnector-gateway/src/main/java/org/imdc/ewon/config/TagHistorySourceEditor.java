@@ -40,7 +40,7 @@ public class TagHistorySourceEditor extends AbstractEditor {
 
 			GatewayContext context = (GatewayContext) Application.get();
 
-			List<String> stores = context.getHistoryManager().getStores(HistoryFlavor.SQLTAG);			
+			List<String> stores = context.getHistoryManager().getStores(HistoryFlavor.SQLTAG);
 			setChoices(stores);
 		}
 

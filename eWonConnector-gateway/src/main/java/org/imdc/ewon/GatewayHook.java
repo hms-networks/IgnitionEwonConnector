@@ -18,8 +18,8 @@ import com.inductiveautomation.ignition.gateway.sqltags.simple.SimpleTagProvider
 import com.inductiveautomation.ignition.gateway.web.models.IConfigTab;
 
 public class GatewayHook extends AbstractGatewayModuleHook {
-	
-	
+
+
 	private final Logger logger = LoggerFactory.getLogger("Ewon.ModuleManager");
 	private GatewayContext gatewayContext;
 	private SimpleTagProvider realtime;
@@ -56,28 +56,28 @@ public class GatewayHook extends AbstractGatewayModuleHook {
 
 	@Override
 	public void startup(LicenseState licenseState) {
-		EwonConnectorSettings settings = gatewayContext.getPersistenceInterface().find(EwonConnectorSettings.META, 0L);		
+		EwonConnectorSettings settings = gatewayContext.getPersistenceInterface().find(EwonConnectorSettings.META, 0L);
 		startupMgr(settings);
 	}
 
 	@Override
 	public void shutdown() {
 		EwonConnectorSettings.META.removeRecordListener(settingsListener);
-		
+
 	}
 
 	@Override
 	public List<? extends IConfigTab> getConfigPanels() {
 		return Arrays.asList(EwonConfigPage.CONFIG_TAB);
 	}
-	
+
 	protected void updateSettings(EwonConnectorSettings settings) {
 		logger.info("eWon connector settings changed, reconfiguring synchronization manager.");
 		shutdownManager();
 		startupMgr(settings);
 	}
 
-	
+
 	protected void startupMgr(EwonConnectorSettings settings) {
 		if (settings.isEnabled()) {
 			realtime = new SimpleTagProvider(settings.getName());
@@ -104,7 +104,7 @@ public class GatewayHook extends AbstractGatewayModuleHook {
 			realtime = null;
 		}
 	}
-	
+
 
 	@Override
 	public boolean isFreeModule() {

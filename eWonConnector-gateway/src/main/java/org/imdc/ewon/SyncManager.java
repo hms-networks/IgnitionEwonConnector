@@ -78,7 +78,7 @@ public class SyncManager {
 
 		historyEnabled = settings.isHistoryEnabled();
 		tagHistoryStore = settings.getHistoryProvider();
-		
+
 		if(historyEnabled && StringUtils.isBlank(tagHistoryStore)){
 			logger.warn("History sync is enable, but no history provider has been specified for storage. No data will be stored.");
 		}
@@ -173,7 +173,7 @@ public class SyncManager {
 		provider.updateValue(buildTagPath(STATUS_LASTSYNCDURATION), System.currentTimeMillis() - start,
 		        DataQuality.GOOD_DATA);
 		successCount++;
-		
+
 		}catch(Exception e){
 			logger.error("Error synchronizing eWon data.", e);
 			failureCount++;
@@ -226,8 +226,8 @@ public class SyncManager {
 			EwonsData data = comm.syncData(lastTX);
 
 			if (data != null) {
-				Long newTXID = data.getTransactionId();				
-				hasMore = data.isMoreDataAvailable();				
+				Long newTXID = data.getTransactionId();
+				hasMore = data.isMoreDataAvailable();
 				updateTagValues(data);
 				logger.debug("Data retrieved and processed in {}. New txid: {}, hasMore: {}",
 				        FormatUtil.formatDurationSince(start), newTXID, hasMore);
