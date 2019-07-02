@@ -91,6 +91,7 @@ public class SyncManager {
         // Enable deletion of this tag provider's tags
         provider.setDeletionHandler(new DeletionHandler() {
             public DeletionResponse process(TagPath t) {
+                registeredTags.remove(buildTagPathString(t));
                 return DeletionResponse.Allowed;
             }
         });
@@ -539,5 +540,15 @@ public class SyncManager {
      **/
     protected String buildTagPath(String ewonName, String tagName) throws IOException {
         return sanitizeName(ewonName + "/" + tagName);
+    }
+
+    /**
+    * Creates a string version of a TagPath
+    *
+    * @param TagPath tagPath
+    * @return String representation of tagPath
+    */
+    protected String buildTagPathString(TagPath tagPath){
+        return sanitizeName(tagPath.toStringPartial());
     }
 }
