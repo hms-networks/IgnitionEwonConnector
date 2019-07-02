@@ -195,7 +195,7 @@ public class SyncManager {
     }
 
     protected void updateLive() {
-        logger.info("Updating Live Values");
+        logger.trace("Updating Live Values");
 
         HashMap<String, ArrayList<String>> liveEwonNames = new HashMap<String, ArrayList<String>>();
 
