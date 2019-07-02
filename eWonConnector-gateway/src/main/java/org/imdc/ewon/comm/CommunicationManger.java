@@ -52,6 +52,10 @@ public class CommunicationManger {
       return buildCall(EwonConsts.URL_DM, function, params);
    }
 
+   protected String buildT2MCall(String directory, String function, String... params) {
+      return buildCall((EwonConsts.URL_T2M + directory), function, params);
+   }
+
    protected void logResults(long start, String call, String body){
       logger.debug("[{}] Call finished in {}", call, FormatUtil.formatDurationSince(start));
       logger.trace("[{}] Results: {}", call, body);
