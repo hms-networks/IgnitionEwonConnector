@@ -116,6 +116,23 @@ public class CommunicationManger {
       return gson.fromJson(body, EwonsData.class);
    }
 
+   public void writeTag(String device, String tagName, String tagValue) throws Exception {
+      List<String> params = new ArrayList<>();
+      String directory = EwonConsts.T2M_DIR_GET + device + "/" + EwonConsts.T2M_DIR_RCGI;
+
+      params.add(EwonConsts.T2M_PARAM_TAGNAME1);
+      params.add(tagName);
+
+      params.add(EwonConsts.T2M_PARAM_TAGVALUE1);
+      params.add(tagValue);
+
+      params.add(EwonConsts.T2M_M2W_DEVKEY);
+      params.add(authInfo.getDevKey());
+
+      EwonUtil.httpGet(buildT2MCall(directory, EwonConsts.T2M_CALL_UPDATETAGFORM, params.toArray(new String[params.size()])));
+   }
+
+
    public EwonsData sync(Object token) throws Exception {
       if (mode == SyncMode.GetData) {
          return getData(null, null, null, (Date)token);
