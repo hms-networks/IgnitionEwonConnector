@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -27,6 +28,7 @@ import com.inductiveautomation.ignition.common.sqltags.model.TagPath;
 import com.inductiveautomation.ignition.common.sqltags.model.types.DataQuality;
 import com.inductiveautomation.ignition.common.sqltags.model.types.DataType;
 import com.inductiveautomation.ignition.common.sqltags.model.types.DataTypeClass;
+import com.inductiveautomation.ignition.common.sqltags.model.types.TagQuality;
 import com.inductiveautomation.ignition.common.sqltags.model.types.TagType;
 import com.inductiveautomation.ignition.common.sqltags.model.types.TagValue;
 import com.inductiveautomation.ignition.common.sqltags.model.types.TimestampSource;
@@ -50,6 +52,8 @@ public class SyncManager {
    private static final String STATUS_SUCCESSCOUNT = "_Status/SuccessfulSyncCount";
    private static final String STATUS_FAILURECOUNT = "_Status/FailedSyncCount";
    private static final String STATUS_HIST_POINT_CNT = "_Status/HistoricalPointsProcessed";
+
+   private static HashSet<String> registeredTags = new HashSet<String>();
 
    GatewayContext gatewayContext;
    Logger logger = LoggerFactory.getLogger("Ewon.SyncManager");
@@ -319,6 +323,22 @@ public class SyncManager {
                      histPoints++;
                   }
                }
+
+               // Register write callback
+               if(!registeredTags.contains(p.toStringPartial())) {
+                  registeredTags.add(p.toStringPartial());
+                  provider.registerWriteHandler(p.toStringPartial(), new WriteHandler() {
+                      public Quality write(TagPath tagPath, Object o) {
+                          try {
+                              comm.writeTag(tagPath.getParentPath().getItemName(), tagPath.getItemName(), o.toString());
+                              provider.updateValue(p.toStringPartial(), o, TagQuality.GOOD);
+                          } catch (Exception e) {
+                              logger.error("Writing tag to eWON via Talk2M API Failed");
+                          }
+                          return TagQuality.GOOD;
+                      }
+                  });
+              }
 
                // Update realtime
                TagValue v = buildTagValue(t.getValue(), EwonUtil.toQuality(t.getQuality()), deviceDate, dType);
