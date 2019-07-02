@@ -95,7 +95,7 @@ public class SyncManager {
          gatewayContext.getLocalPersistenceInterface().save(syncData);
       }
 
-      long pollRateMS = TimeUnits.toMillis(settings.getPollRate().doubleValue(), settings.getPollRateUnits());
+      long pollRateMS = TimeUnits.toMillis(settings.getPollRate().doubleValue(), TimeUnits.MIN);
       logger.debug("Configuring polling for {} ms", pollRateMS);
       if (pollRateMS > 0) {
          gatewayContext.getExecutionManager().register("ewon", "syncpoll", this::run, (int) pollRateMS);
