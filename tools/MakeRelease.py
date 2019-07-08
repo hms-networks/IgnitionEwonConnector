@@ -16,12 +16,14 @@ RELEASE_PATH = "../releases/"
 
 #File names for release files
 README_FILENAME     = "README.md"
+CHANGELOG_FILENAME     = "CHANGELOG.md"
 MODL_FILENAME       = PROJECT_NAME + "-Ignition-Module-unsigned.modl"
 BUILD_XML_FILENAME  = "pom.xml"
 
 
 #Paths for release files
 README_PATH     = "../"
+CHANGELOG_PATH  = "../"
 MODL_PATH       = "../eWonConnector-build/target"
 BUILD_XML_PATH  = "../eWonConnector-build"
 
@@ -60,6 +62,7 @@ def CreateRelease():
 
    #Add all "release" files to the zip
    zf.write(os.path.abspath(os.path.join(README_PATH,README_FILENAME)), README_FILENAME)
+   zf.write(os.path.abspath(os.path.join(CHANGELOG_PATH,CHANGELOG_FILENAME)), CHANGELOG_FILENAME)
    zf.write(os.path.abspath(os.path.join(MODL_PATH,MODL_FILENAME)), MODL_FILENAME)
 
    #Close the release zip folder
