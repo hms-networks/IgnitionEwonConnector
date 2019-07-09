@@ -50,6 +50,7 @@ public class EwonConnectorSettings extends PersistentRecord {
    static {
       HistoryProvider.getFormMeta().setEditorSource(TagHistoryListEditorSource.getSharedInstance());
       Password.getFormMeta().setEditorSource(PasswordEditorSource.getSharedInstance());
+      EwonPassword.getFormMeta().setEditorSource(PasswordEditorSource.getSharedInstance());
    }
 
    @Override
