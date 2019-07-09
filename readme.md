@@ -36,7 +36,7 @@ wrapper.java.additional.2=-Ddata.dir=data
 wrapper.java.additional.3=-Dignition.allowunsignedmodules=true
 ```
 
-Once the ignition.conf file has been edited save and close the file, then restart igntion.
+Once the ignition.conf file has been edited save and close the file, then restart Ignition.
 
 The module can then be installed by navigating to the Ignition web server.  Once on the webserver go to the "Config" section then under the "System" category click the "Modules" page.  At the bottom of the "Modules" page click "Install or Upgrade a Module...".  Follow the prompts to install the module.
 
