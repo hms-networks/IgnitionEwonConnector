@@ -1,0 +1,16 @@
+#IntelliJ files
+.idea/
+*.iml
+
+#VS Code files
+.project
+.settings/
+.vscode/
+
+#Build Output
+.classpath
+*/target/
+*/bin/
+
+#Release
+releases/
