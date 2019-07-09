@@ -31,6 +31,9 @@ public class EwonConnectorSettings extends PersistentRecord {
    public static final StringField Account = new StringField(META, "account");
    public static final StringField UserName = new StringField(META, "username");
    public static final EncodedStringField Password = new EncodedStringField(META, "password");
+   public static final StringField EwonUserName = new StringField(META, "ewonUsername");
+   public static final EncodedStringField EwonPassword =
+         new EncodedStringField(META, "ewonPassword");
    public static final StringField APIKey = new StringField(META, "apikey");
    public static final IntField PollRate = new IntField(META, "pollrate").setDefault(1);
 
@@ -39,6 +42,9 @@ public class EwonConnectorSettings extends PersistentRecord {
 
    public static final Category MainCategory = new Category("EwonConnectorSettings.Category.Main", 10).include(Name, Enabled, ReplaceUnderscore, PollRate);
    public static final Category AccountCategory = new Category("EwonConnectorSettings.Category.Account", 50).include(Account, UserName, Password, APIKey);
+   public static final Category DeviceCategory =
+   new Category("EwonConnectorSettings.Category.Device", 75).include(EwonUserName,
+         EwonPassword);
    public static final Category HistoryCategory = new Category("EwonConnectorSettings.Category.History", 100).include(HistoryEnabled, HistoryProvider);
 
    static {
@@ -67,6 +73,14 @@ public class EwonConnectorSettings extends PersistentRecord {
       return getString(Password);
    }
 
+   public String getEwonUserName() {
+      return getString(EwonUserName);
+   }
+
+   public String getEwonPassword() {
+      return getString(EwonPassword);
+   }
+
    public Integer getPollRate(){
       return getInt(PollRate);
    }
@@ -84,7 +98,8 @@ public class EwonConnectorSettings extends PersistentRecord {
    }
 
    public AuthInfo getAuthInfo(){
-      return new AuthInfo(getAccount(), getUserName(), getPassword(), getAPIKey());
+      return new AuthInfo(getAccount(), getUserName(), getPassword(), getAPIKey(),
+            getEwonUserName(), getEwonPassword());
    }
 
    public boolean isHistoryEnabled() {
