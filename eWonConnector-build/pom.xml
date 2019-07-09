@@ -12,7 +12,7 @@
 
     <artifactId>eWonConnector-build</artifactId>
 
-    <dependencies>        
+    <dependencies>
         <dependency>
             <groupId>org.imdc.ewon</groupId>
             <artifactId>eWonConnector-gateway</artifactId>
@@ -37,7 +37,7 @@
                 </executions>
 
                 <configuration>
-                    <projectScopes>                      
+                    <projectScopes>
                         <projectScope>
                             <name>eWonConnector-gateway</name>
                             <scope>G</scope>
@@ -53,7 +53,7 @@
                     <licenseFile>license.html</licenseFile>
                     <freeModule>true</freeModule>
 
-                    <hooks>                        
+                    <hooks>
                         <hook>
                             <scope>G</scope>
                             <hookClass>org.imdc.ewon.GatewayHook</hookClass>
