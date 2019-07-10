@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-
 import org.apache.commons.lang3.StringUtils;
 import org.imdc.ewon.comm.CommunicationManger;
 import org.imdc.ewon.config.EwonConnectorSettings;
@@ -18,7 +17,6 @@ import org.imdc.ewon.data.EwonsData;
 import org.imdc.ewon.data.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import com.inductiveautomation.ignition.common.FormatUtil;
 import com.inductiveautomation.ignition.common.TypeUtilities;
 import com.inductiveautomation.ignition.common.model.values.Quality;
@@ -86,8 +84,9 @@ public class SyncManager {
       historyEnabled = settings.isHistoryEnabled();
       tagHistoryStore = settings.getHistoryProvider();
 
-      if(historyEnabled && StringUtils.isBlank(tagHistoryStore)){
-         logger.warn("History sync is enable, but no history provider has been specified for storage. No data will be stored.");
+      if (historyEnabled && StringUtils.isBlank(tagHistoryStore)) {
+         logger.warn(
+               "History sync is enable, but no history provider has been specified for storage. No data will be stored.");
       }
 
       syncData = gatewayContext.getPersistenceInterface().find(EwonSyncData.META, 1L);
@@ -101,17 +100,21 @@ public class SyncManager {
       long pollRateMS = TimeUnits.toMillis(settings.getPollRate().doubleValue(), TimeUnits.MIN);
       logger.debug("Configuring polling for {} ms", pollRateMS);
       if (pollRateMS > 0) {
-         gatewayContext.getExecutionManager().register("ewon", "syncpoll", this::run, (int) pollRateMS);
+         gatewayContext.getExecutionManager().register("ewon", "syncpoll", this::run,
+               (int) pollRateMS);
       }
 
       provider.configureTag(buildTagPath(STATUS_LASTSYNCTIME), DataType.DateTime, TagType.Custom);
-      provider.configureTag(buildTagPath(STATUS_LAST_H_SYNCTIME), DataType.DateTime, TagType.Custom);
+      provider.configureTag(buildTagPath(STATUS_LAST_H_SYNCTIME), DataType.DateTime,
+            TagType.Custom);
       provider.configureTag(buildTagPath(STATUS_LASTSYNCID), DataType.Int4, TagType.Custom);
       provider.configureTag(buildTagPath(STATUS_RESETSYNC), DataType.Boolean, TagType.Custom);
       provider.configureTag(buildTagPath(STATUS_FORCE_HSYNC), DataType.Boolean, TagType.Custom);
 
-      provider.updateValue(buildTagPath(STATUS_LAST_H_SYNCTIME), syncData.getLastLocalSync(), DataQuality.GOOD_DATA);
-      provider.updateValue(buildTagPath(STATUS_LASTSYNCID), syncData.getTransactionId(), DataQuality.GOOD_DATA);
+      provider.updateValue(buildTagPath(STATUS_LAST_H_SYNCTIME), syncData.getLastLocalSync(),
+            DataQuality.GOOD_DATA);
+      provider.updateValue(buildTagPath(STATUS_LASTSYNCID), syncData.getTransactionId(),
+            DataQuality.GOOD_DATA);
       provider.updateValue(buildTagPath(STATUS_RESETSYNC), Boolean.FALSE, DataQuality.GOOD_DATA);
       provider.updateValue(buildTagPath(STATUS_FORCE_HSYNC), Boolean.FALSE, DataQuality.GOOD_DATA);
       provider.updateValue(buildTagPath(STATUS_SUCCESSCOUNT), successCount, DataQuality.GOOD_DATA);
@@ -165,23 +168,26 @@ public class SyncManager {
 
    protected void executeSync() {
       long start = System.currentTimeMillis();
-      try{
-      // If history is enabled, we use syncData. Otherwise, we use a lighter weight method to just get the current
-      // values from each device.
-      if (isHistoryEnabled()) {
-         syncHistoricalData();
-      }
+      try {
+         // If history is enabled, we use syncData. Otherwise, we use a lighter weight method to
+         // just get the current
+         // values from each device.
+         if (isHistoryEnabled()) {
+            syncHistoricalData();
+         }
 
-      // Even though history *might* include the realtime values, it doesn't if the current transaction is the latest.
-      // Therefore, we still need to check the realtime values, I think.
-      syncLatestValues();
+         // Even though history *might* include the realtime values, it doesn't if the current
+         // transaction is the latest.
+         // Therefore, we still need to check the realtime values, I think.
+         syncLatestValues();
 
-      provider.updateValue(buildTagPath(STATUS_LASTSYNCTIME), new Date(start), DataQuality.GOOD_DATA);
-      provider.updateValue(buildTagPath(STATUS_LASTSYNCDURATION), System.currentTimeMillis() - start,
-              DataQuality.GOOD_DATA);
-      successCount++;
+         provider.updateValue(buildTagPath(STATUS_LASTSYNCTIME), new Date(start),
+               DataQuality.GOOD_DATA);
+         provider.updateValue(buildTagPath(STATUS_LASTSYNCDURATION),
+               System.currentTimeMillis() - start, DataQuality.GOOD_DATA);
+         successCount++;
 
-      }catch(Exception e){
+      } catch (Exception e) {
          logger.error("Error synchronizing eWon data.", e);
          failureCount++;
       }
@@ -203,8 +209,8 @@ public class SyncManager {
             Date lastSync = lastSyncCache.get(id);
             if (lastSync == null || lastSync.before(ewon.getLastSync_Date())) {
                toSync.add(ewon);
-               logger.debug("Will mark '{}' for update, device sync time={} vs local sync time={}", ewon.getName(),
-                       ewon.getLastSync_Date(), lastSync);
+               logger.debug("Will mark '{}' for update, device sync time={} vs local sync time={}",
+                     ewon.getName(), ewon.getLastSync_Date(), lastSync);
             }
          }
       }
@@ -214,7 +220,7 @@ public class SyncManager {
             long devstart = System.currentTimeMillis();
             updateTagValues(comm.queryEwon(ewon.getId()));
             logger.debug("Sync of eWon device '{}' finished in {}", ewon.getName(),
-                    FormatUtil.formatDurationSince(devstart));
+                  FormatUtil.formatDurationSince(devstart));
             lastSyncCache.put(ewon.getId(), ewon.getLastSync_Date());
          } catch (Exception e) {
             logger.error("Error syncing eWon device '{}/{}'", ewon.getName(), ewon.getId(), e);
@@ -237,11 +243,13 @@ public class SyncManager {
             hasMore = data.isMoreDataAvailable();
             updateTagValues(data);
             logger.debug("Data retrieved and processed in {}. New txid: {}, hasMore: {}",
-                    FormatUtil.formatDurationSince(start), newTXID, hasMore);
+                  FormatUtil.formatDurationSince(start), newTXID, hasMore);
 
-            // Update the internal database for next time, in order to not lose our spot after a reboot.
-            // However, if the txid hasn't changed, don't update- each time we update, we trigger the internal db to autobackup.
-            if(lastTX != newTXID){
+            // Update the internal database for next time, in order to not lose our spot after a
+            // reboot.
+            // However, if the txid hasn't changed, don't update- each time we update, we trigger
+            // the internal db to autobackup.
+            if (lastTX != newTXID) {
                syncData.setTransactionId(newTXID);
                syncData.setLastLocalSync(new Date(start));
                saveSyncData();
@@ -256,8 +264,9 @@ public class SyncManager {
       try {
          gatewayContext.getPersistenceInterface().save(syncData);
          provider.updateValue(buildTagPath(STATUS_LAST_H_SYNCTIME), syncData.getLastLocalSync(),
-                 DataQuality.GOOD_DATA);
-         provider.updateValue(buildTagPath(STATUS_LASTSYNCID), syncData.getTransactionId(), DataQuality.GOOD_DATA);
+               DataQuality.GOOD_DATA);
+         provider.updateValue(buildTagPath(STATUS_LASTSYNCID), syncData.getTransactionId(),
+               DataQuality.GOOD_DATA);
       } catch (Exception e) {
          logger.error("Error saving and updating sync information.", e);
       }
@@ -276,30 +285,33 @@ public class SyncManager {
    protected TagValue buildTagValue(Object v, DataQuality quality, Date ts, DataType dtype) {
       Object vToUse = v;
       if (v != null) {
-         // A lot of values come in as BigDecimal, BigInteger, that Ignition doesn't really deal with well. We'll
+         // A lot of values come in as BigDecimal, BigInteger, that Ignition doesn't really deal
+         // with well. We'll
          // convert them to what we know they should be first.
          if (v instanceof Number) {
             Number bd = (Number) v;
             switch (dtype.getTypeClass()) {
-            case String:
-               vToUse = bd.toString();
-               break;
-            case Float:
-               vToUse = bd.doubleValue();
-               break;
-            default:
-               vToUse = bd.longValue();
-               break;
+               case String:
+                  vToUse = bd.toString();
+                  break;
+               case Float:
+                  vToUse = bd.doubleValue();
+                  break;
+               default:
+                  vToUse = bd.longValue();
+                  break;
             }
          }
       }
-      return new BasicTagValue(TypeUtilities.coerceNullSafe(vToUse, dtype.getJavaType()), quality, ts);
+      return new BasicTagValue(TypeUtilities.coerceNullSafe(vToUse, dtype.getJavaType()), quality,
+            ts);
    }
 
    protected HistoricalTagValue buildHTV(TagPath path, DataTypeClass dtc, TagValue v) {
       return new PackedHistoricalTagValue(path, dtc,
-              dtc == DataTypeClass.Float ? InterpolationMode.Analog_Compressed : InterpolationMode.Discrete,
-              TimestampSource.Value, v);
+            dtc == DataTypeClass.Float ? InterpolationMode.Analog_Compressed
+                  : InterpolationMode.Discrete,
+            TimestampSource.Value, v);
    }
 
    protected void updateTagValues(EwonData data) {
@@ -310,42 +322,49 @@ public class SyncManager {
       Date deviceDate = data.getLastSync_Date();
       Date latestValueTS = null;
       if (data.getTags() != null) {
-         BasicScanclassHistorySet historySet = new BasicScanclassHistorySet(provider.getName(), "_exempt_", -1);
+         BasicScanclassHistorySet historySet =
+               new BasicScanclassHistorySet(provider.getName(), "_exempt_", -1);
          for (Tag t : data.getTags()) {
             try {
                TagPath p = buildTagPath(device, t.getName());
                DataType dType = EwonUtil.toDataType(t.getDataType());
                DataTypeClass dtc = dType.getTypeClass();
-               // Note: we don't check history enabled here, because even if history is not "enabled", it can be
+               // Note: we don't check history enabled here, because even if history is not
+               // "enabled", it can be
                // manually triggered.
                if (!StringUtils.isBlank(tagHistoryStore) && t.getHistory() != null) {
                   for (DataPoint d : t.getHistory()) {
-                     HistoricalTagValue htv = buildHTV(p, dtc, buildTagValue(d.getValue(),
-                             EwonUtil.toQuality(d.getQuality()), EwonUtil.toDate(d.getDate()), dType));
+                     HistoricalTagValue htv = buildHTV(p, dtc,
+                           buildTagValue(d.getValue(), EwonUtil.toQuality(d.getQuality()),
+                                 EwonUtil.toDate(d.getDate()), dType));
                      historySet.add(htv);
                      histPoints++;
                   }
                }
 
                // Register write callback
-               if(!registeredTags.contains(p.toStringPartial())) {
+               if (!registeredTags.contains(p.toStringPartial())) {
                   registeredTags.add(p.toStringPartial());
                   provider.registerWriteHandler(p.toStringPartial(), new WriteHandler() {
-                      public Quality write(TagPath tagPath, Object o) {
-                          try {
-                              String tagName = replaceUnderscore ? unSanitizeName(tagPath.getItemName()) : tagPath.getItemName();
-                              comm.writeTag(tagPath.getParentPath().getItemName(), tagName, o.toString());
-                              provider.updateValue(p.toStringPartial(), o, TagQuality.GOOD);
-                          } catch (Exception e) {
-                              logger.error("Writing tag to eWON via Talk2M API Failed");
-                          }
-                          return TagQuality.GOOD;
-                      }
+                     public Quality write(TagPath tagPath, Object o) {
+                        try {
+                           String tagName =
+                                 replaceUnderscore ? unSanitizeName(tagPath.getItemName())
+                                       : tagPath.getItemName();
+                           comm.writeTag(tagPath.getParentPath().getItemName(), tagName,
+                                 o.toString());
+                           provider.updateValue(p.toStringPartial(), o, TagQuality.GOOD);
+                        } catch (Exception e) {
+                           logger.error("Writing tag to eWON via Talk2M API Failed");
+                        }
+                        return TagQuality.GOOD;
+                     }
                   });
-              }
+               }
 
                // Update realtime
-               TagValue v = buildTagValue(t.getValue(), EwonUtil.toQuality(t.getQuality()), deviceDate, dType);
+               TagValue v = buildTagValue(t.getValue(), EwonUtil.toQuality(t.getQuality()),
+                     deviceDate, dType);
                provider.updateValue(p, v);
                logger.trace("Updated realtime value for '{}' [id={}] to {}", p, t.getId(), v);
             } catch (Exception e) {
@@ -377,15 +396,15 @@ public class SyncManager {
 
    protected String unSanitizeName(String name) {
       return name.replaceAll("[\\_]", ".");
-  }
+   }
 
    protected TagPath buildTagPath(String tagName) {
       return TagPathParser.parseSafe(provider.getName(), sanitizeName(tagName));
    }
 
    /**
-    * This is what determines the path for a tag. Current, the device is the first folder, and then the rest of the
-    * path.
+    * This is what determines the path for a tag. Current, the device is the first folder, and then
+    * the rest of the path.
     **/
    protected TagPath buildTagPath(String ewonName, String tagName) throws IOException {
       return TagPathParser.parse(provider.getName(), sanitizeName(ewonName + "/" + tagName));

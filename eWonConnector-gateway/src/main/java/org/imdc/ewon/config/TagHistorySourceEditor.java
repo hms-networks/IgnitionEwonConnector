@@ -12,14 +12,14 @@ import org.apache.wicket.Application;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import simpleorm.dataset.SFieldMeta;
 import simpleorm.dataset.SRecordInstance;
-
 import java.util.Iterator;
 import java.util.List;
 
 public class TagHistorySourceEditor extends AbstractEditor {
 
    @SuppressWarnings("unchecked")
-   public TagHistorySourceEditor(String id, FormMeta formMeta, RecordEditMode editMode, SRecordInstance record) {
+   public TagHistorySourceEditor(String id, FormMeta formMeta, RecordEditMode editMode,
+         SRecordInstance record) {
       super(id, formMeta, editMode, record);
 
       TagHistoryDropdownChoice dropdown = new TagHistoryDropdownChoice("editor", record);
@@ -32,7 +32,8 @@ public class TagHistorySourceEditor extends AbstractEditor {
 
    }
 
-   private class TagHistoryDropdownChoice extends DropDownChoice<String> implements IRecordFieldComponent {
+   private class TagHistoryDropdownChoice extends DropDownChoice<String>
+         implements IRecordFieldComponent {
 
       @SuppressWarnings("unchecked")
       public TagHistoryDropdownChoice(String id, SRecordInstance record) {

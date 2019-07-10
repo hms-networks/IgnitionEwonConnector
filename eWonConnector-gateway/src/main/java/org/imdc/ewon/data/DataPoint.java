@@ -1,7 +1,6 @@
 package org.imdc.ewon.data;
 
 import org.imdc.ewon.EwonUtil;
-
 import com.inductiveautomation.ignition.common.TypeUtilities;
 import com.inductiveautomation.ignition.common.model.values.BasicQualifiedValue;
 import com.inductiveautomation.ignition.common.model.values.QualifiedValue;
@@ -24,7 +23,9 @@ public class DataPoint {
       return quality == null ? "good" : quality;
    }
 
-   public QualifiedValue toQVal(){
-      return new BasicQualifiedValue(value, "good".equals(getQuality()) ? DataQuality.GOOD_DATA : DataQuality.OPC_BAD_DATA, EwonUtil.toDate(date));
+   public QualifiedValue toQVal() {
+      return new BasicQualifiedValue(value,
+            "good".equals(getQuality()) ? DataQuality.GOOD_DATA : DataQuality.OPC_BAD_DATA,
+            EwonUtil.toDate(date));
    }
 }

@@ -2,13 +2,11 @@ package org.imdc.ewon;
 
 import java.util.Arrays;
 import java.util.List;
-
 import org.imdc.ewon.config.EwonConfigPage;
 import org.imdc.ewon.config.EwonConnectorSettings;
 import org.imdc.ewon.config.EwonSyncData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import com.inductiveautomation.ignition.common.BundleUtil;
 import com.inductiveautomation.ignition.common.licensing.LicenseState;
 import com.inductiveautomation.ignition.gateway.localdb.persistence.RecordListenerAdapter;
@@ -25,11 +23,12 @@ public class GatewayHook extends AbstractGatewayModuleHook {
    private SimpleTagProvider realtime;
    private SyncManager mgr = null;
 
-   private RecordListenerAdapter<EwonConnectorSettings> settingsListener = new RecordListenerAdapter<EwonConnectorSettings>() {
-      public void recordUpdated(EwonConnectorSettings record) {
-         updateSettings(record);
-      };
-   };
+   private RecordListenerAdapter<EwonConnectorSettings> settingsListener =
+         new RecordListenerAdapter<EwonConnectorSettings>() {
+            public void recordUpdated(EwonConnectorSettings record) {
+               updateSettings(record);
+            };
+         };
 
    @Override
    public void setup(GatewayContext gatewayContext) {
@@ -37,13 +36,14 @@ public class GatewayHook extends AbstractGatewayModuleHook {
       BundleUtil.get().addBundle("ewon", getClass().getClassLoader(), "ewon_gateway");
       try {
          // This creates the settings tables in the internal db if necessary.
-         gatewayContext.getSchemaUpdater().updatePersistentRecords(EwonConnectorSettings.META, EwonSyncData.META);
+         gatewayContext.getSchemaUpdater().updatePersistentRecords(EwonConnectorSettings.META,
+               EwonSyncData.META);
 
          // For connector settings, we want to ensure that we have 1 row
          // defined, identified by id=0.
          // We'll load it in startup.
-         EwonConnectorSettings settings = gatewayContext.getLocalPersistenceInterface()
-                 .createNew(EwonConnectorSettings.META);
+         EwonConnectorSettings settings =
+               gatewayContext.getLocalPersistenceInterface().createNew(EwonConnectorSettings.META);
          settings.setLong(EwonConnectorSettings.ID, 0L);
          gatewayContext.getSchemaUpdater().ensureRecordExists(settings);
       } catch (Exception e) {
@@ -56,7 +56,8 @@ public class GatewayHook extends AbstractGatewayModuleHook {
 
    @Override
    public void startup(LicenseState licenseState) {
-      EwonConnectorSettings settings = gatewayContext.getPersistenceInterface().find(EwonConnectorSettings.META, 0L);
+      EwonConnectorSettings settings =
+            gatewayContext.getPersistenceInterface().find(EwonConnectorSettings.META, 0L);
       startupMgr(settings);
    }
 
@@ -99,7 +100,7 @@ public class GatewayHook extends AbstractGatewayModuleHook {
          mgr.shutdown();
          mgr = null;
       }
-      if(realtime != null){
+      if (realtime != null) {
          realtime.shutdown();
          realtime = null;
       }

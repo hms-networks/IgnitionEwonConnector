@@ -16,7 +16,9 @@ public class AuthInfo {
    private String ewonPassword;
 
    /**
-    * This constructor provides the information needed to access basic Talk2M features and DataMailbox.
+    * This constructor provides the information needed to access basic Talk2M features and
+    * DataMailbox.
+    * 
     * @param account
     * @param username
     * @param password
@@ -30,7 +32,9 @@ public class AuthInfo {
    }
 
    /**
-    * This constructor includes a username and password for a specific ewon device, to use the services of that device through Talk2M.
+    * This constructor includes a username and password for a specific ewon device, to use the
+    * services of that device through Talk2M.
+    * 
     * @param account
     * @param username
     * @param password
@@ -38,7 +42,8 @@ public class AuthInfo {
     * @param ewonUsername
     * @param ewonPassword
     */
-   public AuthInfo(String account, String username, String password, String devKey, String ewonUsername, String ewonPassword) {
+   public AuthInfo(String account, String username, String password, String devKey,
+         String ewonUsername, String ewonPassword) {
       this(account, username, password, devKey);
       this.ewonUsername = urlEncodeValue(ewonUsername);
       this.ewonPassword = urlEncodeValue(ewonPassword);
@@ -68,26 +73,29 @@ public class AuthInfo {
       return ewonPassword;
    }
 
-   public String toGetString(){
-      String ret = String.format("%s=%s&%s=%s&%s=%s&%s=%s", EwonConsts.T2M_ACCOUNT, account, EwonConsts.T2M_USERNAME, username, EwonConsts.T2M_PASSWORD, password, EwonConsts.T2M_DEVKEY, devKey);
-      if(!StringUtils.isBlank(ewonUsername) && !StringUtils.isBlank(ewonPassword)){
-         ret += String.format("&%s=%s&%s=%s", EwonConsts.T2M_DEVICE_USERNAME, ewonUsername, EwonConsts.T2M_DEVICE_PASSWORD, ewonPassword);
+   public String toGetString() {
+      String ret = String.format("%s=%s&%s=%s&%s=%s&%s=%s", EwonConsts.T2M_ACCOUNT, account,
+            EwonConsts.T2M_USERNAME, username, EwonConsts.T2M_PASSWORD, password,
+            EwonConsts.T2M_DEVKEY, devKey);
+      if (!StringUtils.isBlank(ewonUsername) && !StringUtils.isBlank(ewonPassword)) {
+         ret += String.format("&%s=%s&%s=%s", EwonConsts.T2M_DEVICE_USERNAME, ewonUsername,
+               EwonConsts.T2M_DEVICE_PASSWORD, ewonPassword);
       }
       return ret;
    }
 
    /**
-     * Creates a URL safe string from the passed in value
-     *
-     * @param value input string to be made url safe
-     * @return      The URL safe string
-     */
-    private String urlEncodeValue(String value) {
+    * Creates a URL safe string from the passed in value
+    *
+    * @param value input string to be made url safe
+    * @return The URL safe string
+    */
+   private String urlEncodeValue(String value) {
       try {
-          return URLEncoder.encode(value, StandardCharsets.UTF_8.toString());
+         return URLEncoder.encode(value, StandardCharsets.UTF_8.toString());
       } catch (UnsupportedEncodingException e) {
-          //Return the passed in string, the string could not be encoded
-          return value;
+         // Return the passed in string, the string could not be encoded
+         return value;
       }
-  }
+   }
 }
