@@ -18,7 +18,7 @@ public class AuthInfo {
    /**
     * This constructor provides the information needed to access basic Talk2M features and
     * DataMailbox.
-    * 
+    *
     * @param account
     * @param username
     * @param password
@@ -34,7 +34,7 @@ public class AuthInfo {
    /**
     * This constructor includes a username and password for a specific ewon device, to use the
     * services of that device through Talk2M.
-    * 
+    *
     * @param account
     * @param username
     * @param password
