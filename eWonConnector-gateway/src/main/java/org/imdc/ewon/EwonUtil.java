@@ -1,6 +1,5 @@
 package org.imdc.ewon;
 
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.HttpURLConnection;
@@ -21,12 +20,7 @@ import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 import org.apache.commons.lang3.StringUtils;
-import org.python.core.Py;
-import org.python.core.PyDictionary;
-import org.python.core.PyObject;
 import com.inductiveautomation.ignition.common.Base64;
-import com.inductiveautomation.ignition.common.script.builtin.AbstractNetUtilities;
-import com.inductiveautomation.ignition.common.script.builtin.PyArgumentMap;
 import com.inductiveautomation.ignition.common.sqltags.model.types.DataQuality;
 import com.inductiveautomation.ignition.common.sqltags.model.types.DataType;
 

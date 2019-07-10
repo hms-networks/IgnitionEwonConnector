@@ -1,7 +1,6 @@
 package org.imdc.ewon.data;
 
 import org.imdc.ewon.EwonUtil;
-import com.inductiveautomation.ignition.common.TypeUtilities;
 import com.inductiveautomation.ignition.common.model.values.BasicQualifiedValue;
 import com.inductiveautomation.ignition.common.model.values.QualifiedValue;
 import com.inductiveautomation.ignition.common.sqltags.model.types.DataQuality;

@@ -8,7 +8,6 @@ import com.inductiveautomation.ignition.gateway.localdb.persistence.EncodedStrin
 import com.inductiveautomation.ignition.gateway.localdb.persistence.EnumField;
 import com.inductiveautomation.ignition.gateway.localdb.persistence.IdentityField;
 import com.inductiveautomation.ignition.gateway.localdb.persistence.IntField;
-import com.inductiveautomation.ignition.gateway.localdb.persistence.LongField;
 import com.inductiveautomation.ignition.gateway.localdb.persistence.PersistentRecord;
 import com.inductiveautomation.ignition.gateway.localdb.persistence.RecordMeta;
 import com.inductiveautomation.ignition.gateway.localdb.persistence.StringField;

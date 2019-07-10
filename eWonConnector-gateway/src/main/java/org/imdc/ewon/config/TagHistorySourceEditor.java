@@ -3,7 +3,6 @@ package org.imdc.ewon.config;
 import com.inductiveautomation.ignition.gateway.history.HistoryFlavor;
 import com.inductiveautomation.ignition.gateway.localdb.persistence.FormMeta;
 import com.inductiveautomation.ignition.gateway.model.GatewayContext;
-import com.inductiveautomation.ignition.gateway.sqltags.config.SQLTagHistoryProviderRecord;
 import com.inductiveautomation.ignition.gateway.web.components.RecordEditMode;
 import com.inductiveautomation.ignition.gateway.web.components.editors.AbstractEditor;
 import com.inductiveautomation.ignition.gateway.web.models.IRecordFieldComponent;
@@ -12,7 +11,6 @@ import org.apache.wicket.Application;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import simpleorm.dataset.SFieldMeta;
 import simpleorm.dataset.SRecordInstance;
-import java.util.Iterator;
 import java.util.List;
 
 public class TagHistorySourceEditor extends AbstractEditor {
