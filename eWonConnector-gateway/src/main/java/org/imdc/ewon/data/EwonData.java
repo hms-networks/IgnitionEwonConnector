@@ -1,7 +1,6 @@
 package org.imdc.ewon.data;
 
 import java.util.Date;
-
 import org.imdc.ewon.EwonUtil;
 
 public class EwonData extends DMResult {
@@ -22,7 +21,7 @@ public class EwonData extends DMResult {
       return lastSynchroDate;
    }
 
-   public Date getLastSync_Date(){
+   public Date getLastSync_Date() {
       return EwonUtil.toDate(getLastSync());
    }
 

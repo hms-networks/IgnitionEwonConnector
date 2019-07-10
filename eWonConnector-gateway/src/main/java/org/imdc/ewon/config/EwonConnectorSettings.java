@@ -1,7 +1,6 @@
 package org.imdc.ewon.config;
 
 import org.imdc.ewon.comm.AuthInfo;
-
 import com.inductiveautomation.ignition.common.util.TimeUnits;
 import com.inductiveautomation.ignition.gateway.localdb.persistence.BooleanField;
 import com.inductiveautomation.ignition.gateway.localdb.persistence.Category;
@@ -14,18 +13,20 @@ import com.inductiveautomation.ignition.gateway.localdb.persistence.PersistentRe
 import com.inductiveautomation.ignition.gateway.localdb.persistence.RecordMeta;
 import com.inductiveautomation.ignition.gateway.localdb.persistence.StringField;
 import com.inductiveautomation.ignition.gateway.web.components.editors.PasswordEditorSource;
-
 import simpleorm.dataset.SFieldFlags;
 
 /**
- * The main settings for the eWon connector, containing auth data, and settings that dictate update rates, etc.
+ * The main settings for the eWon connector, containing auth data, and settings that dictate update
+ * rates, etc.
  *
  */
 public class EwonConnectorSettings extends PersistentRecord {
-   public static RecordMeta<EwonConnectorSettings> META = new RecordMeta<>(EwonConnectorSettings.class, "ewonConnectorSettings");
+   public static RecordMeta<EwonConnectorSettings> META =
+         new RecordMeta<>(EwonConnectorSettings.class, "ewonConnectorSettings");
 
    public static final IdentityField ID = new IdentityField(META);
-   public static final StringField Name= new StringField(META, "name", SFieldFlags.SMANDATORY).setDefault("eWon");
+   public static final StringField Name =
+         new StringField(META, "name", SFieldFlags.SMANDATORY).setDefault("eWon");
    public static final BooleanField Enabled = new BooleanField(META, "enabled");
    public static final BooleanField ReplaceUnderscore = new BooleanField(META, "replaceUnderscore");
    public static final StringField Account = new StringField(META, "account");
@@ -40,12 +41,18 @@ public class EwonConnectorSettings extends PersistentRecord {
    public static final BooleanField HistoryEnabled = new BooleanField(META, "historyEnabled");
    public static final StringField HistoryProvider = new StringField(META, "historyProvider");
 
-   public static final Category MainCategory = new Category("EwonConnectorSettings.Category.Main", 10).include(Name, Enabled, ReplaceUnderscore, PollRate);
-   public static final Category AccountCategory = new Category("EwonConnectorSettings.Category.Account", 50).include(Account, UserName, Password, APIKey);
+   public static final Category MainCategory =
+         new Category("EwonConnectorSettings.Category.Main", 10).include(Name, Enabled,
+               ReplaceUnderscore, PollRate);
+   public static final Category AccountCategory =
+         new Category("EwonConnectorSettings.Category.Account", 50).include(Account, UserName,
+               Password, APIKey);
    public static final Category DeviceCategory =
-   new Category("EwonConnectorSettings.Category.Device", 75).include(EwonUserName,
-         EwonPassword);
-   public static final Category HistoryCategory = new Category("EwonConnectorSettings.Category.History", 100).include(HistoryEnabled, HistoryProvider);
+         new Category("EwonConnectorSettings.Category.Device", 75).include(EwonUserName,
+               EwonPassword);
+   public static final Category HistoryCategory =
+         new Category("EwonConnectorSettings.Category.History", 100).include(HistoryEnabled,
+               HistoryProvider);
 
    static {
       HistoryProvider.getFormMeta().setEditorSource(TagHistoryListEditorSource.getSharedInstance());
@@ -58,19 +65,19 @@ public class EwonConnectorSettings extends PersistentRecord {
       return META;
    }
 
-   public String getName(){
+   public String getName() {
       return getString(Name);
    }
 
-   public String getAccount(){
+   public String getAccount() {
       return getString(Account);
    }
 
-   public String getUserName(){
+   public String getUserName() {
       return getString(UserName);
    }
 
-   public String getPassword(){
+   public String getPassword() {
       return getString(Password);
    }
 
@@ -82,23 +89,23 @@ public class EwonConnectorSettings extends PersistentRecord {
       return getString(EwonPassword);
    }
 
-   public Integer getPollRate(){
+   public Integer getPollRate() {
       return getInt(PollRate);
    }
 
-   public boolean isEnabled(){
+   public boolean isEnabled() {
       return getBoolean(Enabled);
    }
 
-   public boolean isReplaceUnderscore(){
+   public boolean isReplaceUnderscore() {
       return getBoolean(ReplaceUnderscore);
    }
 
-   public String getAPIKey(){
+   public String getAPIKey() {
       return getString(APIKey);
    }
 
-   public AuthInfo getAuthInfo(){
+   public AuthInfo getAuthInfo() {
       return new AuthInfo(getAccount(), getUserName(), getPassword(), getAPIKey(),
             getEwonUserName(), getEwonPassword());
    }
@@ -107,7 +114,7 @@ public class EwonConnectorSettings extends PersistentRecord {
       return getBoolean(HistoryEnabled);
    }
 
-   public String getHistoryProvider(){
+   public String getHistoryProvider() {
       return getString(HistoryProvider);
    }
 }
