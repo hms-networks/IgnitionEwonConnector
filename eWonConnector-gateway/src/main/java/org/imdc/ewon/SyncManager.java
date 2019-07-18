@@ -244,14 +244,14 @@ public class SyncManager {
                 }
             }
         } catch (InterruptedException e) {
-            logger.error("Error while reading tag parameters. InterruptedException.");
+            logger.error("Error while reading tag parameters. InterruptedException.", e);
             e.printStackTrace();
         } catch (ExecutionException e) {
-            logger.error("Error while reading tag parameters. ExecutionException.");
+            logger.error("Error while reading tag parameters. ExecutionException.", e);
             e.printStackTrace();
         } catch (NullPointerException e) {
             logger.error("Error while reading tag parameters. Realtime property does not exist or"
-                    + "is the wrong datatype.");
+                    + "is the wrong datatype.", e);
             e.printStackTrace();
         }
 
@@ -283,7 +283,7 @@ public class SyncManager {
                     provider.updateValue((key + "/" + tag), value, QualityCode.Good, new Date());
                 }
             } catch (Exception e) {
-                logger.error("Error while parsing live data");
+                logger.error("Error while parsing live data", e);
             }
         }
     }
