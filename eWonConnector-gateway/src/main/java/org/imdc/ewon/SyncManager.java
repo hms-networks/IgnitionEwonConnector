@@ -256,11 +256,11 @@ public class SyncManager {
         }
 
         // Make the Talk2M calls and popultate the "Realtime" values into ignition
-        for (String key : liveEwonNames.keySet()) {
+        for (String eWonName : liveEwonNames.keySet()) {
             try {
-                TMResult tagData = new TMResult(comm.getLiveData(key));
+                TMResult tagData = new TMResult(comm.getLiveData(eWonName));
 
-                for (String tag : liveEwonNames.get(key)) {
+                for (String tag : liveEwonNames.get(eWonName)) {
                     Object value;
                     String valueString = tagData.getTagValue(unSanitizeName(tag));
 
@@ -276,11 +276,11 @@ public class SyncManager {
                             value = Float.parseFloat(valueString);
                         }
                     } catch (NullPointerException e) {
-                        logger.error("Tag: " + tag + " does not exist on eWON: " + key, e);
+                        logger.error("Tag: " + tag + " does not exist on eWON: " + eWonName, e);
                         value = "";
                     }
 
-                    provider.updateValue((key + "/" + tag), value, QualityCode.Good, new Date());
+                    provider.updateValue((eWonName + "/" + tag), value, QualityCode.Good, new Date());
                 }
             } catch (Exception e) {
                 logger.error("Error while parsing live data", e);
