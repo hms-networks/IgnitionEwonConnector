@@ -267,9 +267,8 @@ public class SyncManager {
                     try {
                         // Value is a string
                         if (valueString.charAt(0) == '\"') {
-                            // Strip the "s from the string
-                            // TODO: Consider the case where the string value has "s
-                            value = valueString.replaceAll("\"", "");
+                            // Strip leading and trailing double quote chars
+                            value = valueString.substring(1, valueString.length() - 1);
                         }
                         // Value is a number
                         else {
