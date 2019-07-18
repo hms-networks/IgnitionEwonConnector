@@ -264,15 +264,20 @@ public class SyncManager {
                     Object value;
                     String valueString = tagData.getTagValue(unSanitizeName(tag));
 
-                    // Value is a string
-                    if (valueString.charAt(0) == '\"') {
-                        // Strip the "s from the string
-                        // TODO: Consider the case where the string value has "s
-                        value = valueString.replaceAll("\"", "");
-                    }
-                    // Value is a number
-                    else {
-                        value = Float.parseFloat(valueString);
+                    try {
+                        // Value is a string
+                        if (valueString.charAt(0) == '\"') {
+                            // Strip the "s from the string
+                            // TODO: Consider the case where the string value has "s
+                            value = valueString.replaceAll("\"", "");
+                        }
+                        // Value is a number
+                        else {
+                            value = Float.parseFloat(valueString);
+                        }
+                    } catch (NullPointerException e) {
+                        logger.error("Tag: " + tag + " does not exist on eWON: " + key, e);
+                        value = "";
                     }
 
                     provider.updateValue((key + "/" + tag), value, QualityCode.Good, new Date());
