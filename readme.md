@@ -19,26 +19,7 @@ The module can be downloaded from the [releases page](https://github.com/hms-net
 
 ## Installation
 
-The current version of the module is unsigned.  To allow unsigned modules to be installed the ignition.conf file must be modified.  The ignition.conf file can be found at YOUR_IGNITION_INSTALLATION_DIR/data.
-
-The line below must be added to the "Java Additional Parameters" section
-
-<pre>
-wrapper.java.additional.<b>X</b>=-Dignition.allowunsignedmodules=true
-</pre>
-Where the X is the next unused number in the list
-
-Example
-```
-# Java Additional Parameters
-wrapper.java.additional.1=-XX:+UseConcMarkSweepGC
-wrapper.java.additional.2=-Ddata.dir=data
-wrapper.java.additional.3=-Dignition.allowunsignedmodules=true
-```
-
-Once the ignition.conf file has been edited save and close the file, then restart Ignition.
-
-The module can then be installed by navigating to the Ignition web server.  Once on the webserver go to the "Config" section then under the "System" category click the "Modules" page.  At the bottom of the "Modules" page click "Install or Upgrade a Module...".  Follow the prompts to install the module.
+The module can be installed by navigating to the Ignition web server. Once on the webserver go to the "Config" section then under the "System" category click the "Modules" page. At the bottom of the "Modules" page click "Install or Upgrade a Module...". Follow the prompts to install the module.
 
 ## Configuration
 
