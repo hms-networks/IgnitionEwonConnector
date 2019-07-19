@@ -1,5 +1,16 @@
 # eWON Ignition 8 Connector Changelog
 
+## v1.1.6
+
+### Major Changes
+
+* Module is now signed
+
+### Minor Changes
+
+* Realtime string tags can handle " character
+* Module gracefully handles tags that dont exist on the ewon but exist in datamailbox
+
 ## v1.1.5
 
 ### Major Changes
