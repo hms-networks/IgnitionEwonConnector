@@ -1,5 +1,9 @@
 # eWON Ignition 7.9 Connector Changelog
 
+## v1.1.1
+### Major Changes
+* Module is now signed
+
 ## v1.1.0
 ### Major Changes
 * Ignition to Flexy writes
