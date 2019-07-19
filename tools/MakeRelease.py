@@ -10,6 +10,7 @@ import zipfile
 import xml.etree.ElementTree as ET
 
 PROJECT_NAME = "eWonConnector"
+IGNITION_VERSION = "8"
 
 #Path that the release file gets saved to
 RELEASE_PATH = "../releases/"
@@ -55,7 +56,7 @@ def CreateRelease():
    if not os.path.exists(RELEASE_PATH):
       os.makedirs(RELEASE_PATH)
 
-   releaseFilename = RELEASE_PATH + PROJECT_NAME + "-" + moduleVersion
+   releaseFilename = RELEASE_PATH + PROJECT_NAME + "-" + IGNITION_VERSION + "-" + moduleVersion
 
    #Create the release zip folder
    zf = zipfile.ZipFile("%s.zip" % releaseFilename, "w", zipfile.ZIP_DEFLATED)
