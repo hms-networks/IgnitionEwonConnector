@@ -10,6 +10,7 @@
 #Build Output
 */target/
 */bin/
+.classpath
 
 #Release
 releases/
