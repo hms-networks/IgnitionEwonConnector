@@ -70,6 +70,7 @@ public class SyncManager {
     Map<Integer, Date> lastSyncCache = new HashMap<>();
     boolean historyEnabled = false;
     boolean replaceUnderscore = false;
+    boolean readAllTagsRealtime = false;
     EwonSyncData syncData = null;
 
     long successCount = 0;
@@ -97,6 +98,8 @@ public class SyncManager {
         });
 
         replaceUnderscore = settings.isReplaceUnderscore();
+
+        readAllTagsRealtime = settings.isForceLive();
 
         historyEnabled = settings.isHistoryEnabled();
         tagHistoryStore = settings.getHistoryProvider();
@@ -221,7 +224,9 @@ public class SyncManager {
             for (int i = 0; i < tagList.size(); i++) {
                 boolean isRealtime = false;
                 Object propValue = values.get(i).getValue();
-                if (propValue instanceof Boolean) {
+                if (readAllTagsRealtime) {
+                    isRealtime = true;
+                } else if (propValue instanceof Boolean) {
                     isRealtime = (boolean) propValue;
                 } else if (propValue instanceof String) {
                     isRealtime = propValue.equals("true");
@@ -502,7 +507,9 @@ public class SyncManager {
                     // provider.updateValue does not seem to set the right data type
                     // using configureTag to force the correct data type
                     provider.configureTag(p, dType);
-                    provider.updateValue(p, v.getValue(), v.getQuality(), v.getTimestamp());
+                    if (!readAllTagsRealtime) {
+                        provider.updateValue(p, v.getValue(), v.getQuality(), v.getTimestamp());
+                    }
                     logger.trace("Updated realtime value for '{}' [id={}] to {}", p, t.getId(), v);
                 } catch (Exception e) {
                     logger.error("Unable to create dataset for tag '{}/{}'", device, t.getName(),
