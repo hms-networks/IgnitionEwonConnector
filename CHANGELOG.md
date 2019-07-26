@@ -1,5 +1,13 @@
 # eWON Ignition 8 Connector Changelog
 
+## v1.1.7
+
+### Major Changes
+
+### Minor Changes
+
+* Bugfix: Enabled writing to boolean tags on the eWON
+
 ## v1.1.6
 
 ### Major Changes
