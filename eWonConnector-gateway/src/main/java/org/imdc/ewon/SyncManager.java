@@ -58,6 +58,7 @@ public class SyncManager {
     private static final String STATUS_SUCCESSCOUNT = "_Status/SuccessfulSyncCount";
     private static final String STATUS_FAILURECOUNT = "_Status/FailedSyncCount";
     private static final String STATUS_HIST_POINT_CNT = "_Status/HistoricalPointsProcessed";
+
     private static HashSet<String> registeredTags = new HashSet<String>();
 
     GatewayContext gatewayContext;
