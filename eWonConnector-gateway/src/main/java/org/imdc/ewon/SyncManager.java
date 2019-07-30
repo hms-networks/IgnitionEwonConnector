@@ -291,6 +291,10 @@ public class SyncManager {
 
                     provider.updateValue((eWonName + "/" + tag), value, QualityCode.Good, new Date());
                 }
+            } catch (IOException e) {
+                logger.error(
+                        "Error connecting to eWON for live data, " + eWonName + " may be offline",
+                        e);
             } catch (Exception e) {
                 logger.error("Error while parsing live data", e);
             }
