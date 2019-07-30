@@ -271,8 +271,12 @@ public class SyncManager {
                     String valueString = tagData.getTagValue(unSanitizeName(tag));
 
                     try {
+                        // Value is an empty string
+                        if (valueString.length() == 0) {
+                            value = "";
+                        }
                         // Value is a string
-                        if (valueString.charAt(0) == '\"') {
+                        else if (valueString.charAt(0) == '\"') {
                             // Strip leading and trailing double quote chars
                             value = valueString.substring(1, valueString.length() - 1);
                         }
