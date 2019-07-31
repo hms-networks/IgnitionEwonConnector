@@ -1,4 +1,4 @@
-# eWON Connector
+# Ewon Connector
 
 Synchronize DataMailbox data to Ignition's Tag Historian
 
@@ -12,7 +12,7 @@ The module can be downloaded from the [releases page](https://github.com/hms-net
 
 ## Features
 
-* Data synchronization between eWON DataMail and Ignition
+* Data synchronization between Ewon DataMail and Ignition
    * Tag value updated up to once per minute
 * Realtime Read functionality
    * Faster tag value update rates via the Talk2M API
@@ -27,19 +27,19 @@ The module can be installed by navigating to the Ignition web server.  Once on t
 
 ## Configuration
 
-Once the module is installed navigate back to the "Config" page, then under the "Tags" category click the "eWon Connector" page.  On this page you will need to configure the connector.
+Once the module is installed navigate back to the "Config" page, then under the "Tags" category click the "Ewon Connector" page.  On this page you will need to configure the connector.
 
 ### Main
 
 These are the general setting for the connector and how it will appear in Ignition.
 
-### eWon Account Information
+### Ewon Account Information
 
 This is your Talk2M account details
 
-### eWon Device Information
+### Ewon Device Information
 
-This is your eWON local user name and password.  If more than one eWON is tied to your Talk2M account you will want to create a universal local username and password on each device.  This local login is needed for writing data from Ignition to your Flexy as well as using the "Realtime" functionality.
+This is your Ewon local user name and password.  If more than one Ewon is tied to your Talk2M account you will want to create a universal local username and password on each device.  This local login is needed for writing data from Ignition to your Flexy as well as using the "Realtime" functionality.
 
 ### Saving Changes
 
@@ -47,4 +47,4 @@ Once all the configuration information has been entered click "Save Changes" the
 
 ## Usage
 
-Tags will be populated automatically into Ignition on startup.  Tags will be visible under the provider name assigned during the configuration process.  Each eWON tied to the Talk2M account will be a unique tag directory.
+Tags will be populated automatically into Ignition on startup.  Tags will be visible under the provider name assigned during the configuration process.  Each Ewon tied to the Talk2M account will be a unique tag directory.

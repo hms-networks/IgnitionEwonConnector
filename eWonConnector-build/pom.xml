@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <artifactId>eWonConnector</artifactId>
+        <artifactId>EwonConnector</artifactId>
         <groupId>org.imdc.ewon</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
