@@ -85,7 +85,7 @@ public class SyncManager {
     }
 
     public void startup(EwonConnectorSettings settings) {
-        logger.info("Starting eWon sync manager.");
+        logger.info("Starting Ewon sync manager.");
 
         comm = new CommunicationManger();
         comm.setAuthInfo(settings.getAuthInfo());
@@ -113,7 +113,7 @@ public class SyncManager {
 
         syncData = gatewayContext.getPersistenceInterface().find(EwonSyncData.META, 1L);
         if (syncData == null) {
-            logger.info("eWon sync data not found, initializing.");
+            logger.info("Ewon sync data not found, initializing.");
             syncData = gatewayContext.getLocalPersistenceInterface().createNew(EwonSyncData.META);
             syncData.setLong(EwonSyncData.Id, 1L);
             gatewayContext.getLocalPersistenceInterface().save(syncData);
@@ -176,7 +176,7 @@ public class SyncManager {
     }
 
     public void shutdown() {
-        logger.info("Shutting down eWon sync manager.");
+        logger.info("Shutting down Ewon sync manager.");
         gatewayContext.getExecutionManager().unRegister("ewon", "syncpoll");
     }
 
@@ -191,7 +191,7 @@ public class SyncManager {
             executeSync();
             logger.debug("Poll completed in {}", FormatUtil.formatDurationSince(start));
         } catch (Exception e) {
-            logger.error("Error polling eWon data.", e);
+            logger.error("Error polling Ewon data.", e);
         }
     }
 
@@ -285,7 +285,7 @@ public class SyncManager {
                             value = Float.parseFloat(valueString);
                         }
                     } catch (NullPointerException e) {
-                        logger.error("Tag: " + tag + " does not exist on eWON: " + eWonName, e);
+                        logger.error("Tag: " + tag + " does not exist on Ewon: " + eWonName, e);
                         value = "";
                     }
 
@@ -323,7 +323,7 @@ public class SyncManager {
             successCount++;
 
         } catch (Exception e) {
-            logger.error("Error synchronizing eWon data.", e);
+            logger.error("Error synchronizing Ewon data.", e);
             failureCount++;
         }
         updateStatusTags();
@@ -355,11 +355,11 @@ public class SyncManager {
             try {
                 long devstart = System.currentTimeMillis();
                 updateTagValues(comm.queryEwon(ewon.getId()));
-                logger.debug("Sync of eWon device '{}' finished in {}", ewon.getName(),
+                logger.debug("Sync of Ewon device '{}' finished in {}", ewon.getName(),
                         FormatUtil.formatDurationSince(devstart));
                 lastSyncCache.put(ewon.getId(), ewon.getLastSync_Date());
             } catch (Exception e) {
-                logger.error("Error syncing eWon device '{}/{}'", ewon.getName(), ewon.getId(), e);
+                logger.error("Error syncing Ewon device '{}/{}'", ewon.getName(), ewon.getId(), e);
             }
         }
     }
@@ -502,7 +502,7 @@ public class SyncManager {
                                             writeValue);
                                     provider.updateValue(p, o, QualityCode.Good);
                                 } catch (Exception e) {
-                                    logger.error("Writing tag to eWON via Talk2M API Failed");
+                                    logger.error("Writing tag to Ewon via Talk2M API Failed");
                                 }
                                 return QualityCode.Good;
                             }
