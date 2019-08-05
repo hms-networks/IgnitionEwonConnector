@@ -200,6 +200,11 @@ public class SyncManager {
     }
 
     protected void updateLive() {
+        HashMap<String, ArrayList<String>> liveEwonNames = fetchRealtimeTags();
+        updateRealtimeTags(liveEwonNames);
+    }
+
+    private HashMap<String, ArrayList<String>> fetchRealtimeTags() {
         HashMap<String, ArrayList<String>> liveEwonNames = new HashMap<String, ArrayList<String>>();
 
         BasicProperty<Boolean> realtimePropBoolean =
@@ -261,6 +266,10 @@ public class SyncManager {
             e.printStackTrace();
         }
 
+        return liveEwonNames;
+    }
+
+    private void updateRealtimeTags(HashMap<String, ArrayList<String>> liveEwonNames) {
         // Make the Talk2M calls and populate the "Realtime" values into ignition
         for (String eWonName : liveEwonNames.keySet()) {
             try {
