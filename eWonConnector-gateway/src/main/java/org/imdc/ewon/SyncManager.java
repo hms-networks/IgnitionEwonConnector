@@ -291,7 +291,7 @@ public class SyncManager {
                         }
                         // Value is a number
                         else {
-                            value = Float.parseFloat(valueString);
+                            value = Double.parseDouble(valueString);
                         }
                     } catch (NullPointerException e) {
                         logger.error("Tag: " + tag + " does not exist on Ewon: " + eWonName, e);
