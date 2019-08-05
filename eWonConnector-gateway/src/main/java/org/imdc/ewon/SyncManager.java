@@ -261,7 +261,7 @@ public class SyncManager {
             e.printStackTrace();
         }
 
-        // Make the Talk2M calls and popultate the "Realtime" values into ignition
+        // Make the Talk2M calls and populate the "Realtime" values into ignition
         for (String eWonName : liveEwonNames.keySet()) {
             try {
                 TMResult tagData = new TMResult(comm.getLiveData(eWonName));
