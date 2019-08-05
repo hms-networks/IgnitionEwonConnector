@@ -7,6 +7,8 @@
 ### Minor Changes
 
 * Bugfix: Enabled writing to boolean tags on the eWON
+* Bugfix: Fixed precision loss when reading large number via realtime
+* Bugfix: Correctly handle reading an empty string via realtime
 
 ## v1.1.6
 
