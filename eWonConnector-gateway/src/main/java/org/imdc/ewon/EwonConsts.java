@@ -1,8 +1,7 @@
 package org.imdc.ewon;
 
 /**
- * These are various constants for the talk2m service, mostly url parameter keys.
- *
+ * Constants for the Talk2M service, primarily URL parameter keys.
  */
 public class EwonConsts {
    public static final String URL_DM = "https://data.talk2m.com/";
