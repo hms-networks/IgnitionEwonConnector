@@ -351,8 +351,12 @@ public class SyncManager {
                            String tagName =
                                  replaceUnderscore ? unSanitizeName(tagPath.getItemName())
                                        : tagPath.getItemName();
+                           String writeValue = o.toString();
+                           if (o instanceof Boolean) {
+                              writeValue = (Boolean) o ? "1" : "0";
+                           }
                            comm.writeTag(tagPath.getParentPath().getItemName(), tagName,
-                                 o.toString());
+                                 writeValue);
                            provider.updateValue(p.toStringPartial(), o, TagQuality.GOOD);
                         } catch (Exception e) {
                            logger.error("Writing tag to eWON via Talk2M API Failed");
