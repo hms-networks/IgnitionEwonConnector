@@ -9,16 +9,30 @@ import com.inductiveautomation.ignition.gateway.web.models.DefaultConfigTab;
 import com.inductiveautomation.ignition.gateway.web.models.IConfigTab;
 import com.inductiveautomation.ignition.gateway.web.pages.IConfigPage;
 
+/**
+ * Class representation of Ewon Connector config page
+ */
 public class EwonConfigPage extends RecordEditForm {
+   /**
+    * Model for Ewon Connector config tab/page
+    */
    public static final IConfigTab CONFIG_TAB = DefaultConfigTab.builder()
          .category(ConfigCategory.TAGS).name("ewon").i18n("ewon.config.menutitle")
          .page(EwonConfigPage.class).terms("ewon", "data mailbox", "dm").build();
 
+   /**
+    * Create EwonConfigPage from Ignition web page
+    * @param configPage IConfigPage used to create EwonConfigPage
+    */
    public EwonConfigPage(IConfigPage configPage) {
       super(configPage, null, null, ((GatewayContext) Application.get()).getPersistenceInterface()
             .find(EwonConnectorSettings.META, 0L));
    }
 
+   /**
+    * Get Ewon Connector config page menu location
+    * @return menu location
+    */
    @Override
    public Pair<String, String> getMenuLocation() {
       return CONFIG_TAB.getMenuLocation();

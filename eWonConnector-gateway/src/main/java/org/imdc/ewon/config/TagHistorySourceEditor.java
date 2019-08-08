@@ -13,8 +13,18 @@ import simpleorm.dataset.SFieldMeta;
 import simpleorm.dataset.SRecordInstance;
 import java.util.List;
 
+/**
+ * Tag history provider source editor component
+ */
 public class TagHistorySourceEditor extends AbstractEditor {
 
+   /**
+    * Create a new tag history source editor with given information
+    * @param id identifier
+    * @param formMeta form meta
+    * @param editMode edit mode
+    * @param record record instance
+    */
    @SuppressWarnings("unchecked")
    public TagHistorySourceEditor(String id, FormMeta formMeta, RecordEditMode editMode,
          SRecordInstance record) {
@@ -30,9 +40,17 @@ public class TagHistorySourceEditor extends AbstractEditor {
 
    }
 
+   /**
+    * Dropdown chooser component for tag history provider selection.
+    */
    private class TagHistoryDropdownChoice extends DropDownChoice<String>
          implements IRecordFieldComponent {
 
+      /**
+       * Create a new dropdown chooser component for tag history provider selection.
+       * @param id identifier
+       * @param record record instance
+       */
       @SuppressWarnings("unchecked")
       public TagHistoryDropdownChoice(String id, SRecordInstance record) {
          super(id);
@@ -43,6 +61,10 @@ public class TagHistorySourceEditor extends AbstractEditor {
          setChoices(stores);
       }
 
+      /**
+       * Get meta for dropdown chooser field.
+       * @return dropdown chooser field meta
+       */
       public SFieldMeta getFieldMeta() {
          return getFormMeta().getField();
       }
