@@ -25,7 +25,7 @@ public class EwonConnectorSettings extends PersistentRecord {
 
    public static final IdentityField ID = new IdentityField(META);
    public static final StringField Name =
-         new StringField(META, "name", SFieldFlags.SMANDATORY).setDefault("eWon");
+         new StringField(META, "name", SFieldFlags.SMANDATORY).setDefault("Ewon");
    public static final BooleanField Enabled = new BooleanField(META, "enabled");
    public static final BooleanField ReplaceUnderscore = new BooleanField(META, "replaceUnderscore");
    public static final StringField Account = new StringField(META, "account");

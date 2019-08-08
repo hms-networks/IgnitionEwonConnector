@@ -9,7 +9,7 @@ from subprocess import call
 import zipfile
 import xml.etree.ElementTree as ET
 
-PROJECT_NAME = "eWonConnector"
+PROJECT_NAME = "EwonConnector"
 IGNITION_VERSION = "7_9"
 
 #Path that the release file gets saved to
