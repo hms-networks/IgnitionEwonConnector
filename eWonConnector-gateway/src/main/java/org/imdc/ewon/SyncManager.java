@@ -834,9 +834,8 @@ public class SyncManager {
      * @param ewonName name of Ewon
      * @param tagName name of tag
      * @return tag path string
-     * @throws IOException does not throw, ignore
      */
-    protected String buildTagPath(String ewonName, String tagName) throws IOException {
+    protected String buildTagPath(String ewonName, String tagName) {
         return sanitizeName(ewonName + "/" + tagName);
     }
 
