@@ -73,7 +73,7 @@ public class GatewayHook extends AbstractGatewayModuleHook {
    }
 
    protected void updateSettings(EwonConnectorSettings settings) {
-      logger.info("eWon connector settings changed, reconfiguring synchronization manager.");
+      logger.info("Ewon connector settings changed, reconfiguring synchronization manager.");
       shutdownManager();
       startupMgr(settings);
    }
@@ -91,7 +91,7 @@ public class GatewayHook extends AbstractGatewayModuleHook {
          mgr = new SyncManager(gatewayContext, realtime);
          mgr.startup(settings);
       } else {
-         logger.debug("eWon connector is not enabled, will not be started.");
+         logger.debug("Ewon connector is not enabled, will not be started.");
       }
    }
 

@@ -1,4 +1,4 @@
-# eWON Ignition 7.9 Connector Changelog
+# Ewon Ignition 7.9 Connector Changelog
 
 ## v1.1.1
 ### Major Changes
