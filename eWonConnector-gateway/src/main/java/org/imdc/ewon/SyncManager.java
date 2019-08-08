@@ -39,56 +39,155 @@ import com.inductiveautomation.ignition.gateway.sqltags.model.BasicScanclassHist
 import com.inductiveautomation.ignition.gateway.sqltags.simple.SimpleTagProvider;
 import com.inductiveautomation.ignition.gateway.sqltags.simple.WriteHandler;
 
+/**
+ * Manager for synchronization and configuration of Ewon Connector
+ */
 public class SyncManager {
+   /**
+    * Tag path for last synchronization time
+    */
    private static final String STATUS_LASTSYNCTIME = "_Status/LastSyncTime";
+
+   /**
+    * Tag path for last synchronization duration in ms
+    */
    private static final String STATUS_LASTSYNCDURATION = "_Status/LastSyncDurationMS";
+
+   /**
+    * Tag path for last historical data synchronization time
+    */
    private static final String STATUS_LAST_H_SYNCTIME = "_Status/LastHistoricalSyncTime";
+
+   /**
+    * Tag path for last historical data synchronization identifier
+    */
    private static final String STATUS_LASTSYNCID = "_Status/LastHistoricalTransaction";
+
+   /**
+    * Tag path for reset sync tag
+    */
    private static final String STATUS_RESETSYNC = "_Status/ResetSync";
+
+   /**
+    * Tag path for force sync tag
+    */
    private static final String STATUS_FORCE_HSYNC = "_Status/ForceSync";
 
+   /**
+    * Tag path for successful synchronization counter
+    */
    private static final String STATUS_SUCCESSCOUNT = "_Status/SuccessfulSyncCount";
+
+   /**
+    * Tag path for failed synchronization counter
+    */
    private static final String STATUS_FAILURECOUNT = "_Status/FailedSyncCount";
+
+   /**
+    * Tag path for historical points processed counter
+    */
    private static final String STATUS_HIST_POINT_CNT = "_Status/HistoricalPointsProcessed";
 
+   /**
+    * Hash set of registered Ewon Connector tags
+    */
    private static HashSet<String> registeredTags = new HashSet<String>();
 
+   /**
+    * Current gateway context
+    */
    GatewayContext gatewayContext;
+
+   /**
+    * Log handler
+    */
    Logger logger = LoggerFactory.getLogger("Ewon.SyncManager");
+
+   /**
+    * Current tag provider
+    */
    SimpleTagProvider provider;
+
+   /**
+    * Current communication manager
+    */
    CommunicationManger comm;
+
+   /**
+    * Tag history store information
+    */
    String tagHistoryStore;
-   // Key = ewonId, value = lastSynchroDate
+
+   /**
+    * Cache of last synchronization information, key = ewonId, value = lastSynchroDate
+    */
    Map<Integer, Date> lastSyncCache = new HashMap<>();
+
+   /**
+    * Boolean if tag history is enabled
+    */
    boolean historyEnabled = false;
+
+   /**
+    * Boolean if tag name sanitization is enabled
+    */
    boolean replaceUnderscore = false;
+
+   /**
+    * Ewon synchronization data
+    */
    EwonSyncData syncData = null;
 
+   /**
+    * Counter for successful synchronizations
+    */
    long successCount = 0;
+
+   /**
+    * Counter for failed synchronizations
+    */
    long failureCount = 0;
+
+   /**
+    * Counter for number of historical data points
+    */
    long histPoints = 0;
 
+   /**
+    * Main constructor for creation of sync managers
+    * @param context gateway context
+    * @param provider tag provider
+    */
    public SyncManager(GatewayContext context, SimpleTagProvider provider) {
       this.gatewayContext = context;
       this.provider = provider;
    }
 
+   /**
+    * Handle startup and registration of Ewon Connector module
+    * @param settings settings to use
+    */
    public void startup(EwonConnectorSettings settings) {
       logger.info("Starting Ewon sync manager.");
 
+      // Create and configure communication manager
       comm = new CommunicationManger();
       comm.setAuthInfo(settings.getAuthInfo());
 
+      // Store tag name sanitization information
       replaceUnderscore = settings.isReplaceUnderscore();
 
+      // Store tag history configuration information
       historyEnabled = settings.isHistoryEnabled();
       tagHistoryStore = settings.getHistoryProvider();
 
+      // Verify integrity of tag history storage information if tag history enabled
       if (historyEnabled && StringUtils.isBlank(tagHistoryStore)) {
          logger.warn(
                "History sync is enable, but no history provider has been specified for storage. No data will be stored.");
       }
 
+      // Load and store synchronization data, and create it if necessary
       syncData = gatewayContext.getPersistenceInterface().find(EwonSyncData.META, 1L);
       if (syncData == null) {
          logger.info("Ewon sync data not found, initializing.");
@@ -97,6 +196,7 @@ public class SyncManager {
          gatewayContext.getLocalPersistenceInterface().save(syncData);
       }
 
+      // Load and register realtime polling interval configuration information
       long pollRateMS = TimeUnits.toMillis(settings.getPollRate().doubleValue(), TimeUnits.MIN);
       logger.debug("Configuring polling for {} ms", pollRateMS);
       if (pollRateMS > 0) {
@@ -104,6 +204,7 @@ public class SyncManager {
                (int) pollRateMS);
       }
 
+      // Configure Ewon Connector status/statistics tags
       provider.configureTag(buildTagPath(STATUS_LASTSYNCTIME), DataType.DateTime, TagType.Custom);
       provider.configureTag(buildTagPath(STATUS_LAST_H_SYNCTIME), DataType.DateTime,
             TagType.Custom);
@@ -111,6 +212,7 @@ public class SyncManager {
       provider.configureTag(buildTagPath(STATUS_RESETSYNC), DataType.Boolean, TagType.Custom);
       provider.configureTag(buildTagPath(STATUS_FORCE_HSYNC), DataType.Boolean, TagType.Custom);
 
+      // Update values of Ewon Connector status/statistics tags
       provider.updateValue(buildTagPath(STATUS_LAST_H_SYNCTIME), syncData.getLastLocalSync(),
             DataQuality.GOOD_DATA);
       provider.updateValue(buildTagPath(STATUS_LASTSYNCID), syncData.getTransactionId(),
@@ -121,6 +223,7 @@ public class SyncManager {
       provider.updateValue(buildTagPath(STATUS_FAILURECOUNT), failureCount, DataQuality.GOOD_DATA);
       provider.updateValue(buildTagPath(STATUS_HIST_POINT_CNT), histPoints, DataQuality.GOOD_DATA);
 
+      // Create write handler to enable write to tag for resetting synchronization information
       provider.registerWriteHandler(buildTagPath(STATUS_RESETSYNC), new WriteHandler() {
          @Override
          public Quality write(TagPath path, Object val) {
@@ -136,6 +239,7 @@ public class SyncManager {
          }
       });
 
+      // Create write handler to enable write to tag for forcing historical data synchronization
       provider.registerWriteHandler(buildTagPath(STATUS_FORCE_HSYNC), new WriteHandler() {
          @Override
          public Quality write(TagPath path, Object val) {
@@ -146,15 +250,25 @@ public class SyncManager {
       });
    }
 
+   /**
+    * Handle shutdown and unregister of Ewon Connector module
+    */
    public void shutdown() {
       logger.info("Shutting down Ewon sync manager.");
       gatewayContext.getExecutionManager().unRegister("ewon", "syncpoll");
    }
 
+   /**
+    * Get and return if tag history is enabled
+    * @return true/false if tag history is enabled
+    */
    protected boolean isHistoryEnabled() {
       return historyEnabled && !StringUtils.isBlank(tagHistoryStore);
    }
 
+   /**
+    * Perform a full synchronization/poll of Ewon data and tags
+    */
    protected void run() {
       try {
          long start = System.currentTimeMillis();
@@ -166,6 +280,9 @@ public class SyncManager {
       }
    }
 
+   /**
+    * Execute synchronization for tags and data
+    */
    protected void executeSync() {
       long start = System.currentTimeMillis();
       try {
@@ -181,6 +298,7 @@ public class SyncManager {
          // Therefore, we still need to check the realtime values, I think.
          syncLatestValues();
 
+         // Update last sync time and duration tags
          provider.updateValue(buildTagPath(STATUS_LASTSYNCTIME), new Date(start),
                DataQuality.GOOD_DATA);
          provider.updateValue(buildTagPath(STATUS_LASTSYNCDURATION),
@@ -191,23 +309,41 @@ public class SyncManager {
          logger.error("Error synchronizing Ewon data.", e);
          failureCount++;
       }
+
+      // Update module status tags with latest information/statistics.
       updateStatusTags();
    }
 
+   /**
+    * Update module status tags with latest information/statistics
+    */
    protected void updateStatusTags() {
       provider.updateValue(buildTagPath(STATUS_SUCCESSCOUNT), successCount, DataQuality.GOOD_DATA);
       provider.updateValue(buildTagPath(STATUS_FAILURECOUNT), failureCount, DataQuality.GOOD_DATA);
       provider.updateValue(buildTagPath(STATUS_HIST_POINT_CNT), histPoints, DataQuality.GOOD_DATA);
    }
 
+   /**
+    * Perform a synchronization of latest values
+    * @throws Exception if data synchronization fails
+    */
    protected void syncLatestValues() throws Exception {
+      // Store data for Ewons
       EwonsData data = comm.queryEwonDevices();
+
+      // Create list for storing Ewons to synchronize
       List<EwonData> toSync = new ArrayList<>();
+
+      // Verify integrity of Ewons data
       if (data != null && data.getEwons() != null) {
+         // For each Ewon in the data, add to toSync list if synchronization needed.
          for (EwonData ewon : data.getEwons()) {
             int id = ewon.getId();
+
+            // Store and check last synchronization timestamp
             Date lastSync = lastSyncCache.get(id);
             if (lastSync == null || lastSync.before(ewon.getLastSync_Date())) {
+               // Add Ewon to synchronization list if synchronization needed
                toSync.add(ewon);
                logger.debug("Will mark '{}' for update, device sync time={} vs local sync time={}",
                      ewon.getName(), ewon.getLastSync_Date(), lastSync);
@@ -215,12 +351,18 @@ public class SyncManager {
          }
       }
 
+      // For each Ewon marked for synchronization, perform synchronization
       for (EwonData ewon : toSync) {
          try {
+            // Store start timestamp
             long devstart = System.currentTimeMillis();
+
+            // Perform tag value update
             updateTagValues(comm.queryEwon(ewon.getId()));
             logger.debug("Sync of Ewon device '{}' finished in {}", ewon.getName(),
                   FormatUtil.formatDurationSince(devstart));
+
+            // Update last sync cache with latest sync time
             lastSyncCache.put(ewon.getId(), ewon.getLastSync_Date());
          } catch (Exception e) {
             logger.error("Error syncing Ewon device '{}/{}'", ewon.getName(), ewon.getId(), e);
@@ -228,19 +370,30 @@ public class SyncManager {
       }
    }
 
+   /**
+    * Perform a synchronization of historical data
+    * @throws Exception if data synchronization fails
+    */
    protected void syncHistoricalData() throws Exception {
       Long lastTX;
       boolean hasMore = false;
+      // Loop until there is no more data to process
       do {
+         // Store start timestamp and previous transaction ID
          long start = System.currentTimeMillis();
          lastTX = syncData.getTransactionId();
          logger.debug("Starting syncData for txid {}", lastTX);
 
+         // Get and store latest data for Ewons
          EwonsData data = comm.syncData(lastTX);
 
+         // Verify integrity of Ewons data
          if (data != null) {
+            // Store new transaction ID and check for more data
             Long newTXID = data.getTransactionId();
             hasMore = data.isMoreDataAvailable();
+
+            // Update tag values with latest data
             updateTagValues(data);
             logger.debug("Data retrieved and processed in {}. New txid: {}, hasMore: {}",
                   FormatUtil.formatDurationSince(start), newTXID, hasMore);
@@ -260,6 +413,9 @@ public class SyncManager {
       } while (hasMore);
    }
 
+   /**
+    * Save synchronization information to gateway and provider
+    */
    protected void saveSyncData() {
       try {
          gatewayContext.getPersistenceInterface().save(syncData);
@@ -272,22 +428,37 @@ public class SyncManager {
       }
    }
 
+   /**
+    * Update tag values with given multiple Ewons data
+    * @param data data for multiple Ewons
+    */
    protected void updateTagValues(EwonsData data) {
+      // Verify integrity of Ewons data
       if (data == null || data.getEwons() == null) {
          return;
       }
 
+      // Call updateTagValues on each Ewon's data
       for (EwonData ewon : data.getEwons()) {
          updateTagValues(ewon);
       }
    }
 
+   /**
+    * Create a TagValue object with given tag information and value
+    * @param v tag value
+    * @param quality tag data quality
+    * @param ts timestamp
+    * @param dtype tag data type
+    * @return created TagValue object
+    */
    protected TagValue buildTagValue(Object v, DataQuality quality, Date ts, DataType dtype) {
+      // Store given tag value
       Object vToUse = v;
+
+      // Verify integrity of given tag value
       if (v != null) {
-         // A lot of values come in as BigDecimal, BigInteger, that Ignition doesn't really deal
-         // with well. We'll
-         // convert them to what we know they should be first.
+         // ConvertNumber objects (i.e. BigDecimal) to standard values
          if (v instanceof Number) {
             Number bd = (Number) v;
             switch (dtype.getTypeClass()) {
@@ -303,10 +474,19 @@ public class SyncManager {
             }
          }
       }
+
+      // Create and return TagValue with given and processed information and value
       return new BasicTagValue(TypeUtilities.coerceNullSafe(vToUse, dtype.getJavaType()), quality,
             ts);
    }
 
+   /**
+    * Create a HistoricalTagValue object with given tag information and value
+    * @param path tag path
+    * @param dtc tag data type class
+    * @param v tag value
+    * @return created HistoricalTagValue object
+    */
    protected HistoricalTagValue buildHTV(TagPath path, DataTypeClass dtc, TagValue v) {
       return new PackedHistoricalTagValue(path, dtc,
             dtc == DataTypeClass.Float ? InterpolationMode.Analog_Compressed
@@ -314,24 +494,39 @@ public class SyncManager {
             TimestampSource.Value, v);
    }
 
+   /**
+    * Update tag values with given Ewon data
+    * @param data Ewon data
+    */
    protected void updateTagValues(EwonData data) {
+      // Verify integrity of given Ewon data
       if (data == null || data.getTags() == null) {
          return;
       }
+
+      // Store device information locally
       String device = data.getName();
       Date deviceDate = data.getLastSync_Date();
       Date latestValueTS = null;
+
+      // Verify integrity of given Ewon data getTags, duplicate check
       if (data.getTags() != null) {
+         // Create basic tag history set
          BasicScanclassHistorySet historySet =
                new BasicScanclassHistorySet(provider.getName(), "_exempt_", -1);
+
+         // Loop for each tag in given Ewon data
          for (Tag t : data.getTags()) {
+            // Try to create tag dataset
             try {
+               // Get tag path and data type information
                TagPath p = buildTagPath(device, t.getName());
                DataType dType = EwonUtil.toDataType(t.getDataType());
                DataTypeClass dtc = dType.getTypeClass();
-               // Note: we don't check history enabled here, because even if history is not
-               // "enabled", it can be
-               // manually triggered.
+
+               // Verify tag history information integrity, then
+               // add historical tag values to tag history set
+               // Note: No history enabled check here, because it can be manually triggered.
                if (!StringUtils.isBlank(tagHistoryStore) && t.getHistory() != null) {
                   for (DataPoint d : t.getHistory()) {
                      HistoricalTagValue htv = buildHTV(p, dtc,
@@ -342,19 +537,29 @@ public class SyncManager {
                   }
                }
 
-               // Register write callback
+               // If tag write callback not registered, register tag write callback
                if (!registeredTags.contains(p.toStringPartial())) {
+                  // Register tag
                   registeredTags.add(p.toStringPartial());
+
+                  // Register tag write handler with provider
                   provider.registerWriteHandler(p.toStringPartial(), new WriteHandler() {
                      public Quality write(TagPath tagPath, Object o) {
                         try {
+                           // Unsanitize tag name if necessary
                            String tagName =
                                  replaceUnderscore ? unSanitizeName(tagPath.getItemName())
                                        : tagPath.getItemName();
+
+                           // Store write value from object
                            String writeValue = o.toString();
+
+                           // Handle boolean values
                            if (o instanceof Boolean) {
                               writeValue = (Boolean) o ? "1" : "0";
                            }
+
+                           // Perform tag write and update value with provider
                            comm.writeTag(tagPath.getParentPath().getItemName(), tagName,
                                  writeValue);
                            provider.updateValue(p.toStringPartial(), o, TagQuality.GOOD);
@@ -366,18 +571,23 @@ public class SyncManager {
                   });
                }
 
-               // Update realtime
+               // Build tag value for realtime update
                TagValue v = buildTagValue(t.getValue(), EwonUtil.toQuality(t.getQuality()),
                      deviceDate, dType);
+
+               // Update tag value
                provider.updateValue(p, v);
+
+               // Output success
                logger.trace("Updated realtime value for '{}' [id={}] to {}", p, t.getId(), v);
             } catch (Exception e) {
                logger.error("Unable to create dataset for tag '{}/{}'", device, t.getName(), e);
             }
          }
+
+         // If there is tag history data, sort if ascending by timestamp, and store it
          if (historySet.size() > 0) {
             try {
-               // We need the values to be sorted asc based on tstamp
                historySet.sort((a, b) -> a.getTimestamp().compareTo(b.getTimestamp()));
                latestValueTS = historySet.get(historySet.size() - 1).getTimestamp();
                gatewayContext.getHistoryManager().storeHistory(tagHistoryStore, historySet);
@@ -386,6 +596,8 @@ public class SyncManager {
             }
          }
       }
+
+      // Verify integrity of sync data and update timestamps
       if (syncData != null) {
          syncData.setLastRemoteSync(deviceDate);
          if (latestValueTS != null) {
@@ -394,22 +606,40 @@ public class SyncManager {
       }
    }
 
+   /**
+    * Convert an unsanitized name to sanitized name
+    * @param name unsanitized name
+    * @return sanitized name
+    */
    protected String sanitizeName(String name) {
       return name.replaceAll("[\\.]", "_");
    }
 
+   /**
+    * Convert a sanitized name to unsanitized name
+    * @param name sanitized name
+    * @return unsanitized name
+    */
    protected String unSanitizeName(String name) {
       return name.replaceAll("[\\_]", ".");
    }
 
+   /**
+    * Build a tag path string using given tag name.
+    * @param tagName tag name
+    * @return tag path string
+    */
    protected TagPath buildTagPath(String tagName) {
       return TagPathParser.parseSafe(provider.getName(), sanitizeName(tagName));
    }
 
    /**
-    * This is what determines the path for a tag. Current, the device is the first folder, and then
-    * the rest of the path.
-    **/
+    * Build a tag path string using given Ewon name and tag name. Format: [Ewon Name]/[tag name]
+    * @param ewonName name of Ewon
+    * @param tagName name of tag
+    * @return tag path string
+    * @throws IOException if unable to parse tag path
+    */
    protected TagPath buildTagPath(String ewonName, String tagName) throws IOException {
       return TagPathParser.parse(provider.getName(), sanitizeName(ewonName + "/" + tagName));
    }
