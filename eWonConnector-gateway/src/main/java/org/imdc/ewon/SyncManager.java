@@ -102,6 +102,16 @@ public class SyncManager {
     private static HashSet<String> registeredTags = new HashSet<String>();
 
     /**
+     * Hash set of registered Ewon Connector Ewons
+     */
+    private static HashSet<String> registeredEwons = new HashSet<>();
+
+    /**
+     * Hash set of Ewons to be updated in realtime
+     */
+    private static HashSet<String> realtimeEwons = new HashSet<>();
+
+    /**
      * Current gateway context
      */
     GatewayContext gatewayContext;
@@ -369,11 +379,18 @@ public class SyncManager {
             values = cf.get();
             // For each tag in list of registered tags
             for (int i = 0; i < tagList.size(); i++) {
+                // Indexes for Ewon name and tag name in a tag path
+                final int EWON_NAME_INDEX = 0;
+                final int TAG_NAME_INDEX = 1;
+
+                // Get Ewon name and tag name
+                String ewonName = tagList.get(i).getPathComponent(EWON_NAME_INDEX);
+                String tagName = tagList.get(i).getPathComponent(TAG_NAME_INDEX);
 
                 // Read tag value and mark as realtime if applicable
                 boolean isRealtime = false;
                 Object propValue = values.get(i).getValue();
-                if (readAllTagsRealtime) {
+                if (readAllTagsRealtime || realtimeEwons.contains(ewonName)) {
                     isRealtime = true;
                 } else if (propValue instanceof Boolean) {
                     isRealtime = (boolean) propValue;
@@ -384,18 +401,15 @@ public class SyncManager {
                 // If marked as realtime tag, add to hashmap of Ewons and their realtime tags
                 if (isRealtime) {
 
-                    final int EWON_NAME_INDEX = 0;
-                    final int TAG_NAME_INDEX = 1;
 
-                    String eWonName = tagList.get(i).getPathComponent(EWON_NAME_INDEX);
                     // If Ewon already has realtime tags in hashmap, add to list, otherwise create list and add
-                    if (liveEwonNames.containsKey(eWonName)) {
-                        liveEwonNames.get(eWonName)
-                                .add(tagList.get(i).getPathComponent(TAG_NAME_INDEX));
+                    if (liveEwonNames.containsKey(ewonName)) {
+                        liveEwonNames.get(ewonName)
+                                .add(tagName);
                     } else {
                         ArrayList<String> tags = new ArrayList<String>();
-                        tags.add(tagList.get(i).getPathComponent(TAG_NAME_INDEX));
-                        liveEwonNames.put(eWonName, tags);
+                        tags.add(tagName);
+                        liveEwonNames.put(ewonName, tags);
                     }
                 }
             }
@@ -697,6 +711,43 @@ public class SyncManager {
             // Create basic tag history set
             BasicScanclassHistorySet historySet =
                     new BasicScanclassHistorySet(providerName, "_exempt_", -1);
+
+            // Add AllRealtime tag under Ewon _config tag folder
+            if (!registeredEwons.contains(device))
+            {
+                // Create path to Ewon's all realtime tag
+                String ewonRealtimePath = buildTagPath(device + "/_config/AllRealtime");
+
+                // Add Ewon to registered Ewon list
+                registeredEwons.add(device);
+
+                // Register all realtime tag write handler with provider
+                provider.registerWriteHandler(ewonRealtimePath, new WriteHandler() {
+                    public QualityCode write(TagPath tagPath, Object o) {
+                        try {
+                            boolean realtimeEnabledBool = (boolean) o;
+                            if (realtimeEnabledBool) {
+                                realtimeEwons.add(device);
+                            }
+                            else {
+                                realtimeEwons.remove(device);
+                            }
+                            provider.updateValue(ewonRealtimePath, o, QualityCode.Good);
+                        } catch (ClassCastException e) {
+                            logger.error(
+                                    "Writing Ewon AllRealtime tag has failed. Incorrect datatype.",
+                                    e);
+                            provider.configureTag(ewonRealtimePath, DataType.Boolean);
+                            provider.updateValue(ewonRealtimePath, Boolean.FALSE, QualityCode.Good);
+                        } catch (Exception e) {
+                            logger.error("Writing Ewon AllRealtime tag has failed.", e);
+                        }
+                        return QualityCode.Good;
+                    }
+                });
+                provider.configureTag(ewonRealtimePath, DataType.Boolean);
+                provider.updateValue(ewonRealtimePath, Boolean.FALSE, QualityCode.Good);
+            }
 
             // Loop for each tag in given Ewon data
             for (Tag t : data.getTags()) {
