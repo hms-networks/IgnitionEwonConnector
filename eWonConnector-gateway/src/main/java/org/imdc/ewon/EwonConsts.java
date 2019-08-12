@@ -19,9 +19,12 @@ public class EwonConsts {
    public static final String T2M_DIR_RCGI = "rcgi.bin/";
 
    public static final String T2M_CALL_UPDATETAGFORM = "UpdateTagForm";
+   public static final String T2M_CALL_PARAMFORM = "ParamForm";
 
    public static final String T2M_PARAM_TAGNAME1 = "TagName1";
    public static final String T2M_PARAM_TAGVALUE1 = "TagValue1";
+   public static final String T2M_PARAM_EXPORTBLOCK = "AST_Param";
+   public static final String T2M_PARAM_TAGVALUES = "$dtIV$ftT";
 
    public static final String DM_CALL_GETEWONS = "getewons";
    public static final String DM_CALL_GETEWON = "getewon";

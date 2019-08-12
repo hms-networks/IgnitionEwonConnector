@@ -1,20 +1,14 @@
 package org.imdc.ewon;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import com.inductiveautomation.ignition.common.sqltags.model.types.*;
+import com.inductiveautomation.ignition.common.sqltags.parser.BasicTagPath;
 import org.apache.commons.lang3.StringUtils;
 import org.imdc.ewon.comm.CommunicationManger;
 import org.imdc.ewon.config.EwonConnectorSettings;
 import org.imdc.ewon.config.EwonSyncData;
-import org.imdc.ewon.data.DataPoint;
-import org.imdc.ewon.data.EwonData;
-import org.imdc.ewon.data.EwonsData;
-import org.imdc.ewon.data.Tag;
+import org.imdc.ewon.data.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.inductiveautomation.ignition.common.FormatUtil;
@@ -23,13 +17,6 @@ import com.inductiveautomation.ignition.common.model.values.Quality;
 import com.inductiveautomation.ignition.common.sqltags.BasicTagValue;
 import com.inductiveautomation.ignition.common.sqltags.history.InterpolationMode;
 import com.inductiveautomation.ignition.common.sqltags.model.TagPath;
-import com.inductiveautomation.ignition.common.sqltags.model.types.DataQuality;
-import com.inductiveautomation.ignition.common.sqltags.model.types.DataType;
-import com.inductiveautomation.ignition.common.sqltags.model.types.DataTypeClass;
-import com.inductiveautomation.ignition.common.sqltags.model.types.TagQuality;
-import com.inductiveautomation.ignition.common.sqltags.model.types.TagType;
-import com.inductiveautomation.ignition.common.sqltags.model.types.TagValue;
-import com.inductiveautomation.ignition.common.sqltags.model.types.TimestampSource;
 import com.inductiveautomation.ignition.common.sqltags.parser.TagPathParser;
 import com.inductiveautomation.ignition.common.util.TimeUnits;
 import com.inductiveautomation.ignition.gateway.history.HistoricalTagValue;
@@ -94,6 +81,16 @@ public class SyncManager {
    private static HashSet<String> registeredTags = new HashSet<String>();
 
    /**
+    * Hash set of registered Ewon Connector Ewons
+    */
+   private static HashSet<String> registeredEwons = new HashSet<>();
+
+   /**
+    * Hash set of Ewons to be updated in realtime
+    */
+   private static HashSet<String> realtimeEwons = new HashSet<>();
+
+   /**
     * Current gateway context
     */
    GatewayContext gatewayContext;
@@ -132,6 +129,11 @@ public class SyncManager {
     * Boolean if tag name sanitization is enabled
     */
    boolean replaceUnderscore = false;
+
+   /**
+    * Boolean if force all tags realtime is enabled
+    */
+   boolean readAllTagsRealtime = false;
 
    /**
     * Ewon synchronization data
@@ -177,6 +179,9 @@ public class SyncManager {
       // Store tag name sanitization information
       replaceUnderscore = settings.isReplaceUnderscore();
 
+      // Store read all tags in realtime configuration information
+      readAllTagsRealtime = settings.isForceLive();
+
       // Store tag history configuration information
       historyEnabled = settings.isHistoryEnabled();
       tagHistoryStore = settings.getHistoryProvider();
@@ -196,12 +201,21 @@ public class SyncManager {
          gatewayContext.getLocalPersistenceInterface().save(syncData);
       }
 
-      // Load and register realtime polling interval configuration information
+      // Load and register polling interval configuration information
       long pollRateMS = TimeUnits.toMillis(settings.getPollRate().doubleValue(), TimeUnits.MIN);
       logger.debug("Configuring polling for {} ms", pollRateMS);
       if (pollRateMS > 0) {
          gatewayContext.getExecutionManager().register("ewon", "syncpoll", this::run,
                (int) pollRateMS);
+      }
+
+      // Load and register realtime polling interval configuration information
+      long livePollRateMS =
+              TimeUnits.toMillis(settings.getLivePollRate().doubleValue(), TimeUnits.SEC);
+      logger.debug("Configuring live polling for {} ms", livePollRateMS);
+      if (pollRateMS > 0) {
+         gatewayContext.getExecutionManager().register("ewon", "synclive", this::runLive,
+                 (int) livePollRateMS);
       }
 
       // Configure Ewon Connector status/statistics tags
@@ -277,6 +291,116 @@ public class SyncManager {
          logger.debug("Poll completed in {}", FormatUtil.formatDurationSince(start));
       } catch (Exception e) {
          logger.error("Error polling Ewon data.", e);
+      }
+   }
+
+   /**
+    * Perform a synchronization of realtime tags
+    */
+   protected void runLive() {
+      updateLive();
+   }
+
+   protected void updateLive() {
+      HashMap<String, ArrayList<String>> liveEwonNames = fetchRealtimeTags();
+      updateRealtimeTags(liveEwonNames);
+   }
+
+   /**
+    * Compile a hash map containing realtime tags
+    * @return realtime tag hash map
+    */
+   private HashMap<String, ArrayList<String>> fetchRealtimeTags() {
+      // Create hashmap to store Ewons and their realtime tags
+      HashMap<String, ArrayList<String>> liveEwonNames = new HashMap<String, ArrayList<String>>();
+
+      // Create list for storing registered tags
+      ArrayList<TagPath> tagList = new ArrayList<TagPath>();
+
+      // Populate list of registered tags
+      for (String tagPath : registeredTags) {
+         List<String> pathParts = Arrays.asList(tagPath.split("/", 0));
+         BasicTagPath propPath = new BasicTagPath(provider.getName(), pathParts);
+         tagList.add(propPath);
+      }
+
+      // For each tag in list of registered tags
+      for (TagPath tagPath: tagList) {
+         // Indexes for Ewon name and tag name in a tag path
+         final int EWON_NAME_INDEX = 0;
+         final int TAG_NAME_INDEX = 1;
+
+         // Get Ewon name and tag name
+         String ewonName = tagPath.getPathComponent(EWON_NAME_INDEX);
+         String tagName = tagPath.getPathComponent(TAG_NAME_INDEX);
+
+         // Read tag value and mark as realtime if applicable
+         boolean isRealtime = false;
+         if (readAllTagsRealtime || realtimeEwons.contains(ewonName)) {
+            isRealtime = true;
+         }
+
+         // If marked as realtime tag, add to hashmap of Ewons and their realtime tags
+         if (isRealtime) {
+            // If Ewon already has realtime tags in hashmap, add to list, otherwise create list and add
+            if (liveEwonNames.containsKey(ewonName)) {
+               liveEwonNames.get(ewonName).add(tagName);
+            } else {
+               ArrayList<String> tags = new ArrayList<String>();
+               tags.add(tagName);
+               liveEwonNames.put(ewonName, tags);
+            }
+         }
+      }
+      return liveEwonNames;
+   }
+
+   /**
+    * Perform an update of realtime tags using Talk2M
+    * @param liveEwonNames hash map containing realtime tags
+    */
+   private void updateRealtimeTags(HashMap<String, ArrayList<String>> liveEwonNames) {
+      // For each Ewon with realtime tags, make Talk2M calls and update realtime tags
+      for (String eWonName : liveEwonNames.keySet()) {
+         try {
+            // Store tag data for current Ewon
+            TMResult tagData = new TMResult(comm.getLiveData(eWonName));
+
+            // For each realtime tag on current Ewon, update value
+            for (String tag : liveEwonNames.get(eWonName)) {
+               Object value;
+               String valueString = tagData.getTagValue(unSanitizeName(tag));
+
+               // Identify tag type and store properly
+               try {
+                  // Value is an empty string
+                  if (valueString.length() == 0) {
+                     value = "";
+                  }
+                  // Value is a string
+                  else if (valueString.charAt(0) == '\"') {
+                     // Strip leading and trailing double quote chars
+                     value = valueString.substring(1, valueString.length() - 1);
+                  }
+                  // Value is a number
+                  else {
+                     value = Double.parseDouble(valueString);
+                  }
+               } catch (NullPointerException e) {
+                  logger.error("Tag: " + tag + " does not exist on Ewon: " + eWonName, e);
+                  value = "";
+               }
+
+               // Update tag value with provider
+               provider.updateValue((eWonName + "/" + tag), value, DataQuality.GOOD_DATA, new Date());
+            }
+         } catch (IOException e) {
+            logger.error(
+                    "Error connecting to eWON for live data, " + eWonName + " may be offline",
+                    e);
+         } catch (Exception e) {
+            logger.error("Error while parsing live data", e);
+         }
       }
    }
 
@@ -515,6 +639,46 @@ public class SyncManager {
          BasicScanclassHistorySet historySet =
                new BasicScanclassHistorySet(provider.getName(), "_exempt_", -1);
 
+         // Add AllRealtime tag under Ewon _config tag folder
+         if (!registeredEwons.contains(device))
+         {
+            // Create path to Ewon's all realtime tag
+            TagPath ewonRealtimePath = buildTagPath(device + "/_config/AllRealtime");
+
+            // Configure Ewon's all realtime tag
+            provider.configureTag(ewonRealtimePath, DataType.Boolean, TagType.Custom);
+            provider.updateValue(ewonRealtimePath.toStringPartial(), false, DataQuality.GOOD_DATA);
+
+            // Add Ewon to registered Ewon list
+            registeredEwons.add(device);
+
+            // Register all realtime tag write handler with provider
+            provider.registerWriteHandler(ewonRealtimePath.toStringPartial(), new WriteHandler() {
+               public Quality write(TagPath tagPath, Object o) {
+                  try {
+                     boolean realtimeEnabledBool = (boolean) o;
+                     if (realtimeEnabledBool) {
+                        realtimeEwons.add(device);
+                     }
+                     else {
+                        realtimeEwons.remove(device);
+                     }
+                     provider.updateValue(ewonRealtimePath.toStringPartial(), o, DataQuality.GOOD_DATA);
+                  } catch (ClassCastException e) {
+                      logger.error(
+                              "Writing Ewon AllRealtime tag has failed. Incorrect datatype.",
+                              e);
+                      provider.configureTag(ewonRealtimePath, DataType.Boolean, TagType.Custom);
+                      provider.updateValue(ewonRealtimePath, Boolean.FALSE, DataQuality.GOOD_DATA);
+                  } catch (Exception e) {
+                      logger.error("Writing Ewon AllRealtime tag has failed.", e);
+                  }
+                  return DataQuality.GOOD_DATA;
+               }
+            });
+         }
+
+
          // Loop for each tag in given Ewon data
          for (Tag t : data.getTags()) {
             // Try to create tag dataset
@@ -575,8 +739,13 @@ public class SyncManager {
                TagValue v = buildTagValue(t.getValue(), EwonUtil.toQuality(t.getQuality()),
                      deviceDate, dType);
 
-               // Update tag value
-               provider.updateValue(p, v);
+               // Configure tag data type
+               provider.configureTag(p, dType, TagType.Custom);
+
+               // Update tag value if read all tags in realtime is enabled
+               if (!readAllTagsRealtime) {
+                  provider.updateValue(p.toStringPartial(), v.getValue(), v.getQuality(), v.getTimestamp());
+               }
 
                // Output success
                logger.trace("Updated realtime value for '{}' [id={}] to {}", p, t.getId(), v);

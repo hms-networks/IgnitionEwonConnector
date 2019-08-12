@@ -250,6 +250,32 @@ public class CommunicationManger {
    }
 
    /**
+    * Get live data for given device using Talk2M
+    * @param device device
+    * @return resulting live data
+    * @throws Exception if Talk2M call fails
+    */
+   public String getLiveData(String device) throws Exception {
+      // Create list for parameters
+      List<String> params = new ArrayList<>();
+
+      // Build base Talk2M call string
+      String directory = EwonConsts.T2M_DIR_GET + device + "/" + EwonConsts.T2M_DIR_RCGI;
+
+      // Add Talk2M API key (from authentication information) to parameters list
+      params.add(EwonConsts.T2M_M2W_DEVKEY);
+      params.add(authInfo.getDevKey());
+
+      // Build Talk2M call
+      params.add(EwonConsts.T2M_PARAM_EXPORTBLOCK);
+      params.add(EwonConsts.T2M_PARAM_TAGVALUES);
+
+      // Execute built Talk2M call
+      return EwonUtil.httpGet(buildT2MCall(directory, EwonConsts.T2M_CALL_PARAMFORM,
+              params.toArray(new String[params.size()])));
+   }
+
+   /**
     * Perform synchronization of Ewons data
     * @param token last transaction identifier/from time
     * @return resulting Ewons data
