@@ -84,6 +84,16 @@ public class EwonConnectorSettings extends PersistentRecord {
    public static final IntField PollRate = new IntField(META, "pollrate").setDefault(1);
 
    /**
+    * Configured realtime tag poll rate
+    */
+   public static final IntField LivePollRate = new IntField(META, "livepollrate").setDefault(10);
+
+   /**
+    * Configured override for enabling realtime on all tags
+    */
+   public static final BooleanField ForceLive = new BooleanField(META, "forceLive");
+
+   /**
     * Configured boolean if tag history enabled
     */
    public static final BooleanField HistoryEnabled = new BooleanField(META, "historyEnabled");
@@ -98,7 +108,7 @@ public class EwonConnectorSettings extends PersistentRecord {
     */
    public static final Category MainCategory =
          new Category("EwonConnectorSettings.Category.Main", 10).include(Name, Enabled,
-               ReplaceUnderscore, PollRate);
+               ReplaceUnderscore, PollRate, LivePollRate, ForceLive);
 
    /**
     * Settings category for Talk2M account information
@@ -191,6 +201,22 @@ public class EwonConnectorSettings extends PersistentRecord {
     */
    public Integer getPollRate() {
       return getInt(PollRate);
+   }
+
+   /**
+    * Get configured realtime tag poll rate
+    * @return realtime tag poll rate
+    */
+   public Integer getLivePollRate() {
+      return getInt(LivePollRate);
+   }
+
+   /**
+    * Get boolean if force all realtime tags is enabled
+    * @return true/false if force all realtime tags is enabled
+    */
+   public boolean isForceLive() {
+      return getBoolean(ForceLive);
    }
 
    /**
