@@ -1,6 +1,6 @@
 # Ewon Connector
 
-Synchronize DataMailbox data to Ignition's Tag Historian
+Synchronize Ewon data to Ignition's Tag Historian
 
 ## Version
 
