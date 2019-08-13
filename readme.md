@@ -17,7 +17,8 @@ The module can be downloaded from the [releases page](https://github.com/hms-net
 * Realtime Read functionality
    * Faster tag value update rates via the Talk2M API
    * Supports up to once per second update rates
-   * Configured on a tag by tag basis
+   * Configured on a tag by tag basis by setting a tag's `Realtime` property to true
+   * Configured on a per Ewon basis by setting the `AllRealtime` tag in an Ewon's `_config` directory to true.
 * Write functionality
    * Allows Ignition to modify tag values on a Flexy
 
