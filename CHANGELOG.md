@@ -1,5 +1,13 @@
 # Ewon Ignition 8 Connector Changelog
 
+## v1.1.8
+
+### Major Changes
+
+* Realtime values are now available on a per Ewon basis
+
+### Minor Changes
+
 ## v1.1.7
 
 ### Major Changes
