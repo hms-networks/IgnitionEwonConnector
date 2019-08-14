@@ -39,7 +39,7 @@ public class EwonConnectorSettings extends PersistentRecord {
    /**
     * Configured boolean if Ewon Connector enabled
     */
-   public static final BooleanField Enabled = new BooleanField(META, "enabled");
+   public static final BooleanField Enabled = new BooleanField(META, "enabled").setDefault(true);
 
    /**
     * Configured tag name sanitization choice
