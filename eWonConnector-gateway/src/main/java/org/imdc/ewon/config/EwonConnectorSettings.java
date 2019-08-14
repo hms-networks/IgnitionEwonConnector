@@ -103,10 +103,10 @@ public class EwonConnectorSettings extends PersistentRecord {
    public static final StringField HistoryProvider = new StringField(META, "historyProvider");
 
    /**
-    * Settings category for main configuration options
+    * Settings category for general configuration options
     */
-   public static final Category MainCategory =
-         new Category("EwonConnectorSettings.Category.Main", 10).include(Name, Enabled,
+   public static final Category GeneralCategory =
+         new Category("EwonConnectorSettings.Category.General", 10).include(Name, Enabled,
                ReplaceUnderscore, PollRate, LivePollRate);
 
    /**
