@@ -107,7 +107,7 @@ public class EwonConnectorSettings extends PersistentRecord {
     */
    public static final Category MainCategory =
          new Category("EwonConnectorSettings.Category.Main", 10).include(Name, Enabled,
-               ReplaceUnderscore, PollRate, LivePollRate, ForceLive);
+               ReplaceUnderscore, PollRate, LivePollRate);
 
    /**
     * Settings category for Talk2M account information
@@ -129,6 +129,12 @@ public class EwonConnectorSettings extends PersistentRecord {
    public static final Category HistoryCategory =
          new Category("EwonConnectorSettings.Category.History", 100).include(HistoryEnabled,
                HistoryProvider);
+
+      /**
+       * Settings category for advanced configuration
+      */
+      public static final Category AdvancedCategory =
+      new Category("EwonConnectorSettings.Category.Advanced", 125).include(ForceLive);
 
    // Configure passwords and history provider fields information
    static {

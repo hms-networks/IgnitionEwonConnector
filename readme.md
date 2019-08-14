@@ -85,8 +85,6 @@ With the module successfully installed, a new `Ewon Connector` page will be adde
    * **Tag Names Contain Periods** - Check this if your Ewon tag names contain periods. If your tag names contain periods they must not contain underscores.
    * **Poll Rate in Minutes** - Interval for how often data will be pulled from Datamailbox.
    * **Live Data Poll Rate in Seconds** - Interval for how often data will be pulled from an Ewon when realtime reads are activated.
-   * **Read all values in realtime** - Option to always read values in realtime.
-      * **Note:** This disables Datamailbox reads. Values logged on the Ewon are not logged in Ignition when this option is enabled.
 
 * **Ewon Account Information**
    * **Account** - Your Talk2M account name.
@@ -102,6 +100,10 @@ With the module successfully installed, a new `Ewon Connector` page will be adde
 * **History**
    * **History Enabled** - Option to turn off historical logging.
    * **Target History Provider** - Ignition History Provider used to log Ewon data.
+
+* **Advanced**
+    * **Read all values in realtime** - Option to always read values in realtime.
+      * **Note:** This disables Datamailbox reads. Values logged on the Ewon are not logged in Ignition when this option is enabled.
 
 ### Saving Changes
 
