@@ -84,7 +84,7 @@ With the module successfully installed, a new `Ewon Connector` page will be adde
    * **Enabled** - Option to turn on/off the Ewon Connector functionality.
    * **Tag Names Contain Periods** - Check this if your Ewon tag names contain periods. If your tag names contain periods they must not contain underscores.
    * **Poll Rate in Minutes** - Interval for how often data will be pulled from Datamailbox.
-   * **Live Data Poll Rate in Seconds** - Interval for how often data will be pulled from an Ewon when realtime reads are activated.
+   * **Realtime Poll Rate in Seconds** - Interval for how often data will be pulled from an Ewon when realtime reads are activated.
 
 * **Ewon Account Information**
    * **Account** - Your Talk2M account name.
