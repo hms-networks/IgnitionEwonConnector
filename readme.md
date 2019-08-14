@@ -1,46 +1,248 @@
-# Ewon Connector
 
-Synchronize DataMailbox data to Ignition's Tag Historian
+# Ignition Ewon® Connector
 
-## Version
+## [Table of Contents](#table-of-contents)
 
-This module version is compatible with Ignition 7.9.  For an Ignition 8 compatible module go to [Ignition-8-master](https://github.com/hms-networks/eWonConnector/tree/Ignition-8-master) branch.
+1. [Description](#description)
+2. [Version](#version)
+3. [Support](#support)
+4. [Features](#features)
+5. [Download](#download)
+6. [Installation](#installation)
+7. [Ewon Setup](#ewon-setup)
+8. [Connector Setup](#connector-setup)
+9. [Connector Usage](#connector-usage)
+10. [Troubleshooting](#troubleshooting)
+11. [FAQs](#faqs)
 
-## Download
 
-The module can be downloaded from the [releases page](https://github.com/hms-networks/eWonConnector/releases).
+## [Description](#table-of-contents)
 
-## Features
+Synchronize Ewon Flexy data to Ignition's Tag Historian.
 
-* Data synchronization between Ewon DataMail and Ignition
-   * Tag value updated up to once per minute
-* Write functionality
-   * Allows Ignition to modify tag values on a Flexy
+<sup>[Back to top](#table-of-contents)</sup>
 
-## Installation
+## [Version](#table-of-contents)
 
-The module can be installed by navigating to the Ignition web server. Once on the webserver go to the "Config" section then under the "System" category click the "Modules" page. At the bottom of the "Modules" page click "Install or Upgrade a Module...". Follow the prompts to install the module.
+This module version is compatible with Ignition 7.9.  For an Ignition 8 compatible module go to [Ignition-8-master](https://github.com/hms-networks/IgnitionEwonConnector/tree/Ignition-8-master) branch.
 
-## Configuration
+<sup>[Back to top](#table-of-contents)</sup>
 
-Once the module is installed navigate back to the "Config" page, then under the "Tags" category click the "Ewon Connector" page.  On this page you will need to configure the connector.
+## [Support](#table-of-contents)
 
-### Main
+This application is supported by HMS Networks' North American offices.
 
-These are the general setting for the connector and how it will appear in Ignition.
+| Phone                                        | Forum                                      | Email                                           |
+|:--------------------------------------------:|:------------------------------------------:|:-----------------------------------------------:|
+| [+1 312 829 0601](tel:13128290601), Option 2 | [hms.how](https://forum.hms-networks.com/) | [support@hms.how](mailto:support@hms.how)       |
 
-### Ewon Account Information
+<sup>[Back to top](#table-of-contents)</sup>
 
-This is your Talk2M account details
+## [Features](#table-of-contents)
 
-### Ewon Device Information
+* Read Functionality
+   * Historical (via DataMailbox) (default option)
+      * Updated up to once per minute
+   * Realtime (via M2Web)
+      * Updated up to once per second
+      * Can be enabled per-Ewon or system-wide
+* Write Functionality (via M2Web)
+   * Modify Ewon tag values from Ignition
 
-This is your Ewon local user name and password.  If more than one Ewon is tied to your Talk2M account you will want to create a universal local username and password on each device.  This local login is needed for writing data from Ignition to your Flexy.
+<sup>[Back to top](#table-of-contents)</sup>
+
+## [Download](#table-of-contents)
+
+The module can be downloaded from the [releases page](https://github.com/hms-networks/IgnitionEwonConnector/releases).
+
+## [Installation](#table-of-contents)
+
+1.  On the Gateway Webpage, select `Config` > `SYSTEM` > `Modules` to open the Module Configuration page.
+
+      <img src="https://raw.githubusercontent.com/hms-networks/IgnitionEwonConnector/Ignition-7.9-master/images/module_config_page.JPG" alt="Ignition Module Page" width="1000"/>
+
+2. Scroll to the bottom on the list, find the blue arrow, and click the `Install or Upgrade a Module` link.
+
+      <img src="https://raw.githubusercontent.com/hms-networks/IgnitionEwonConnector/Ignition-7.9-master/images/module_install_link.JPG" alt="Ignition Module Install Link" width="1000"/>
+
+3. Click `Choose File`, select a .modl file that you have previously downloaded.
+
+      <img src="https://raw.githubusercontent.com/hms-networks/IgnitionEwonConnector/Ignition-7.9-master/images/module_install_page.JPG" alt="Ignition Module Install Page" width="1000"/>
+
+4. Click Install.
+
+   * When the page reloads you can now see the module you installed in the list of modules.
+
+<sup>[Back to top](#table-of-contents)</sup>
+
+## [Ewon Setup](#table-of-contents)
+
+When setting up an Ewon, follow all standard Ewon Flexy documentation and Install guides. [https://websupport.ewon.biz/support](https://websupport.ewon.biz/support "https://websupport.ewon.biz/support")
+
+In addition to the standard documentation, follow these additional steps.
+
+### Link Ewon to Talk2M
+Open the Ewon webserver and navigate to the VPN Wizard page (At the top right of the page click `Wizards`, then on the right hand menu bar select `VPN`). Select `Configure Talk2M connectivity` and follow the prompts to connect the Ewon to Talk2M.
+
+<img src="https://raw.githubusercontent.com/hms-networks/IgnitionEwonConnector/Ignition-7.9-master/images/vpn_wizard.JPG" alt="Ewon VPN Wizard" width="1000"/>
+
+### Setup Historical Logging for Tags
+
+Open the Ewon webserver and navigate to the `Values` page (On the left hand menu click `Tags` > `Values`). Change the `MODE` to `SETUP`. For each tag that requires logged data, double click the tag to open the `Tag configuration` menu. Scroll down to the `Historical Logging` section and check the `Historical Logging Enabled` checkbox. Enable either deadband or interval logging.
+
+>**Deadband Logging**
+>
+>The Logging Deadband field triggers logging when the tags value changes by a particular amount. For example, a logging deadband of 2 means that a tag will be logged when the value changes by 2 or more. A negative value in the logging deadband field disables logging on value change.
+>
+>**Interval Logging**
+>
+>The Logging Interval field triggers time based logging. For example, a logging interval of 60 means that the tag will be logged every 60 seconds. A logging interval of 0 disables time based logging.
+
+Once configured, click `Update Tag` on the bottom right of the page.
+
+<img src="https://raw.githubusercontent.com/hms-networks/IgnitionEwonConnector/Ignition-7.9-master/images/tag_config_page.JPG" alt="Ewon Tag Configuration Page" width="1000"/>
+
+### Enable Historical Data In DataMailbox
+
+Open the Ewon webserver and navigate to the `Data Management` page ( On the left hand menu click `Setup` > `System` > `Main` > `Data Management`). Check the `Historical Data` checkbox and set the `Datamailbox upload interval` to a reasonable number for your application. The `Datamailbox upload interval` sets how often the Flexy will send batches of historical data to Datamailbox and does not affect the frequency at which tag values are logged. When done, click `Update` at the bottom of the page.
+
+<img src="https://raw.githubusercontent.com/hms-networks/IgnitionEwonConnector/Ignition-7.9-master/images/data_management_page.JPG" alt="Ewon Data Management Page" width="1000"/>
+
+<sup>[Back to top](#table-of-contents)</sup>
+
+## [Connector Setup](#table-of-contents)
+
+With the module successfully installed, a new `Ewon Connector` page will be added to your Ignition Gateway webpages. Navigate to this page by selecting `Config` > `TAGS` > `Ewon Connector`.
+
+   <img src="https://raw.githubusercontent.com/hms-networks/IgnitionEwonConnector/Ignition-7.9-master/images/config_page.JPG" alt="Ewon Module Configuration Page" width="1000"/>
+
+
+* **Main**
+   * **Name** - Unique name of the tag provider created in Ignition.
+   * **Enabled** - Option to turn on/off the Ewon Connector functionality.
+   * **Tag Names Contain Periods** - Check this if your Ewon tag names contain periods. If your tag names contain periods they must not contain underscores.
+   * **Poll Rate in Minutes** - Interval for how often data will be pulled from Datamailbox.
+   * **Realtime Poll Rate in Seconds** - Interval for how often data will be pulled from an Ewon when realtime reads are activated.
+
+* **Talk2M Account Information**
+   * **Account** - Your Talk2M account name.
+   * **Username** - Your Talk2M user name.
+   * **Password** - Your Talk2M password.
+   * **Change Password?** - Check this box to change the password stored in Ignition.
+   * **Talk2M Developer ID** - Your Talk2M Developer ID. Include all dashes.
+      * If you do not have a Talk2M Developer ID, you may request one here: [https://developer.ewon.biz/registration](https://developer.ewon.biz/registration "https://developer.ewon.biz/registration").
+
+* **Ewon Device Information** - All Ewons must have at least once common user account to enable realtime and write functionality. The username and password for this account must be identical for all linked Ewons.
+   * **Ewon Username** - Common Ewon username.
+   * **Ewon Password** - Common Ewon password.
+   * **Change Password?** - Check this box to change the password stored in Ignition.
+
+* **History**
+   * **History Enabled** - Option to turn off historical logging.
+   * **Target History Provider** - Ignition History Provider used to log Ewon data.
+
+* **Advanced**
+    * **Read all values in realtime** - Option to always read values in realtime.
+      * **Note:** This disables Datamailbox reads. Values logged on the Ewon are not logged in Ignition when this option is enabled.
 
 ### Saving Changes
 
-Once all the configuration information has been entered click "Save Changes" then restart Ignition.
+Once all the configuration information has been entered, click `Save Changes`, then restart Ignition.
 
-## Usage
+<sup>[Back to top](#table-of-contents)</sup>
 
-Tags will be populated automatically into Ignition on startup.  Tags will be visible under the provider name assigned during the configuration process.  Each Ewon tied to the Talk2M account will be a unique tag directory.
+## [Connector Usage](#table-of-contents)
+
+Tags will be created automatically in Ignition on startup. Tags will be visible under the provider name assigned during the configuration process. Each Ewon tied to the Talk2M account will be a unique tag directory.
+
+<img src="https://raw.githubusercontent.com/hms-networks/IgnitionEwonConnector/Ignition-7.9-master/images/tag_browser.JPG" alt="Ignition Tag Browser" width="600"/>
+
+### **Reading Values**
+
+The tags created by the connector are native Ignition tags and are updated cyclically by the connector based on the polling rates set during the [Setup](#setup) step.
+
+The `Tag Browser` tool in Ignition Designer can be used to read tag values.
+
+### **Writing Values**
+
+Ewon tag values can be written from Ignition. When attempting to write a tag value, be sure that the the communication mode is set to `Comm Read/Write` in the Ignition Designer `Project` menu.
+
+The `Tag Browser` tool in Ignition Designer can be used to write tag values.
+
+After a tag value is written in Ignition, the displayed value my revert back to its previous state. This is because new Datamailbox values were received. Datamailbox values will alway lag the live tag value. This behavior can be avoided by temporarily enabling realtime mode for the tag/Ewon being written to.
+
+### **Realtime Values**
+
+The realtime value functionality allows Ignition to read live tag values from an Ewon up to once per second.
+
+This functionality can be enabled in two ways.
+
+**1. Individual Ewon**
+
+   * Open Designer and navigate to the `Tag Browser`
+   * Expand the `All Providers` directory.
+   * Expand the directory associated with your Ewon Connector Tag Provider.
+   * Expand the directory associated with the Ewon you want to read live tag values from.
+   * Expand the `_config` directory.
+   * Find the `AllRealtime` tag and enable it.
+
+**2. All Ewons**
+
+   * Navigate to the Ewon Connector Configuration webpage discussed in the [Setup](#setup) section.
+   * Enable the `Read all values in realtime` option.
+   * Click `Save Changes`, then restart Ignition.
+
+_Note: The realtime functionality counts against your Talk2M account's monthly bandwidth._
+
+### **Deleting Tags**
+
+Tags can be deleted by right clicking the tag in the `Tag Browser` then selecting `Delete`. If the tag still exists on the Ewon or in Datamailbox the tag will be recreated in Ignition on the next Datamailbox update.
+
+<sup>[Back to top](#table-of-contents)</sup>
+
+## [Troubleshooting](#table-of-contents)
+
+### Troubleshooting Topics
+
+* [Tags do not appear in Ignition](#Tags-do-not-appear-in-Ignition)
+* [Changes on the Ewon Connector page do not take effect](#Changes-on-the-Ewon-Connector-page-do-not-take-effect)
+
+### Tags do not appear in Ignition
+
+There are several reasons tags may not be populated into Ignition. Please follow the following steps in order.
+
+1. Verify that all steps in the [Ewon Setup](#ewon-setup) section were followed.
+2. If the system has just been configured, wait one hour for data to be registered in Datamailbox.
+3. Verify your Talk2M credentials are correctly entered into the Ewon Connector settings in Ignition.
+   * If your credentials were incorrectly entered, the Ignition logs will indicate a Authentication Error.  Check the logs on the Ignition webserver by clicking `Status` > `Logs`. If your credentials are incorrect, you will see log entries in this format.
+
+   <img src="https://raw.githubusercontent.com/hms-networks/IgnitionEwonConnector/Ignition-7.9-master/images/auth_error.JPG" alt="Ignition Authentication Error" width="1000"/>
+
+   * If you see this log error, check your Talk2M Account information entered on the `Ewon Connector` configuration page. _Note: Any changes done on this page require a restart of the connector module or Ignition. You can restart the module by navigating to `Config` > `Modules` and clicking `restart` next to the module._
+4. If tag values are still not populated in Ignition, please contact [support](#support).
+
+### Changes on the Ewon Connector page do not take effect
+
+Any changes done on this page require a restart of the connector module or Ignition. You can restart the module by navigating to `Config` > `Modules` and clicking `restart` next to the module.
+
+<sup>[Back to top](#table-of-contents)</sup>
+
+## [FAQs](#table-of-contents)
+
+* [How do I check my Talk2M data usage?](#How-do-I-check-my-Talk2M-data-usage?)
+* [If Ignition is not running will my data still be logged?](#If-Ignition-is-not-running-will-my-data-still-be-logged?)
+
+### How do I check my Talk2M data usage?
+
+Your Talk2M data usage can be accessed through [eCatcher](https://ewon.biz/cloud-services/talk2m/ecatcher "https://ewon.biz/cloud-services/talk2m/ecatcher").
+
+1. Open eCatcher and login.
+2. On the left hand menu bar click `Account`.
+3. Once in the account properties click `Reports` near the top of the page.
+4. From here you will be able to download the current or past montly connection log reports.
+
+### If Ignition is not running will my data still be logged?
+
+If Ignition is offline, data will still be logged by the Flexy and stored in Datamailbox. The amount of data points stored in Datamailbox depends on your [account type](https://ewon.biz/cloud-services/talk2m/plan-pricing "https://ewon.biz/cloud-services/talk2m/plan-pricing"). Once Ignition is online again, all logged points will be fetched from Datamailbox by Ignition.
+
+<sup>[Back to top](#table-of-contents)</sup>
