@@ -8,6 +8,10 @@
 
 ### Minor Changes
 
+* Created new readme
+* Updated Configuration Webpage
+* SecurityFix: Removed user credentials from Ignition log files
+
 ## v1.1.7
 
 ### Major Changes
