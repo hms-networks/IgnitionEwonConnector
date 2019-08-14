@@ -10,11 +10,13 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.text.SimpleDateFormat;
@@ -161,6 +163,27 @@ public class EwonUtil {
          // Close Reader and return resulting HTTP GET data
          reader.close();
          return sb.toString();
+      } catch (IOException e) {
+         final int HTTP_UNAUTHORIZED = 401;
+         final int HTTP_NOT_FOUND = 404;
+
+         int httpResponse = HTTP_NOT_FOUND;
+
+         // Set the HTTP error code based off the response
+         try {
+            httpResponse = con.getResponseCode();
+         } catch (UnknownHostException he) {
+            httpResponse = HTTP_NOT_FOUND;
+         }
+
+         // Generate a "cleaned" exception based on the response code.
+         if (httpResponse == HTTP_UNAUTHORIZED) {
+            throw new IOException("Authentication Error: Please check your account credentials.");
+         } else if (httpResponse == HTTP_NOT_FOUND) {
+            throw new IOException("Network Error: Ewon services not found. Check network link.");
+         } else {
+            throw new IOException("HTTP request failed. HTTP Error: " + httpResponse + ".");
+         }
       } finally {
          try {
             // Close HTTP connection if possible
