@@ -60,7 +60,7 @@ The module can be downloaded from the [releases page](https://github.com/hms-net
 
 2. Scroll to the bottom on the list, find the blue arrow, and click the `Install or Upgrade a Module` link.
 
-      <img src="https://raw.githubusercontent.com/hms-networks/IgnitionEwonConnector/Ignition-8-README-master/images/module_install_link.JPG" alt="Ignition Module Install Link" width="1000"/>
+      <img src="https://raw.githubusercontent.com/hms-networks/IgnitionEwonConnector/Ignition-8-master/images/module_install_link.JPG" alt="Ignition Module Install Link" width="1000"/>
 
 3. Click `Choose File`, select a .modl file that you have previously downloaded.
 
