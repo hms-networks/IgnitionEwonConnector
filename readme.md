@@ -9,8 +9,9 @@
 4. [Features](#features)
 5. [Download](#download)
 6. [Installation](#installation)
-7. [Connector Setup](#connector-setup)
-8. [Connector Usage](#connector-usage)
+7. [Ewon Setup](#ewon-setup)
+8. [Connector Setup](#connector-setup)
+9. [Connector Usage](#connector-usage)
 
 
 ## [Description](#table-of-contents)
@@ -69,6 +70,41 @@ The module can be downloaded from the [releases page](https://github.com/hms-net
 4. Click Install.
 
    * When the page reloads you can now see the module you installed in the list of modules.
+
+<sup>[Back to top](#table-of-contents)</sup>
+
+## [Ewon Setup](#table-of-contents)
+
+When setting up an Ewon, follow all standard Ewon Flexy documentation and Install guides. [https://websupport.ewon.biz/support](https://websupport.ewon.biz/support "https://websupport.ewon.biz/support")
+
+In addition to the standard documentation, follow these additional steps.
+
+### Link Ewon to Talk2M
+Open the Ewon webserver and navigate to the VPN Wizard page (At the top right of the page click `Wizards`, then on the right hand menu bar select `VPN`). Select `Configure Talk2M connectivity` and follow the prompts to connect the Ewon to Talk2M.
+
+<img src="https://raw.githubusercontent.com/hms-networks/IgnitionEwonConnector/Ignition-8-master/images/vpn_wizard.JPG" alt="Ewon VPN Wizard" width="1000"/>
+
+### Setup Historical Logging for Tags
+
+Open the Ewon webserver and navigate to the `Values` page (On the left hand menu click `Tags` > `Values`). Change the `MODE` to `SETUP`. For each tag that requires logged data, double click the tag to open the `Tag configuration` menu. Scroll down to the `Historical Logging` section and check the `Historical Logging Enabled` checkbox. Enable either deadband or interval logging.
+
+>**Deadband Logging**
+>
+>The Logging Deadband field triggers logging when the tags value changes by a particular amount. For example, a logging deadband of 2 means that a tag will be logged when the value changes by 2 or more. A negative value in the logging deadband field disables logging on value change.
+>
+>**Interval Logging**
+>
+>The Logging Interval field triggers time based logging. For example, a logging interval of 60 means that the tag will be logged every 60 seconds. A logging interval of 0 disables time based logging.
+
+Once configured, click `Update Tag` on the bottom right of the page.
+
+<img src="https://raw.githubusercontent.com/hms-networks/IgnitionEwonConnector/Ignition-8-master/images/tag_config_page.JPG" alt="Ewon Tag Configuration Page" width="1000"/>
+
+### Enable Historical Data In DataMailbox
+
+Open the Ewon webserver and navigate to the `Data Management` page ( On the left hand menu click `Setup` > `System` > `Main` > `Data Management`). Check the `Historical Data` checkbox and set the `Datamailbox upload interval` to a reasonable number for your application. The `Datamailbox upload interval` sets how often the Flexy will send batches of historical data to Datamailbox and does not affect the frequency at which tag values are logged. When done, click `Update` at the bottom of the page.
+
+<img src="https://raw.githubusercontent.com/hms-networks/IgnitionEwonConnector/Ignition-8-master/images/data_management_page.JPG" alt="Ewon Data Management Page" width="1000"/>
 
 <sup>[Back to top](#table-of-contents)</sup>
 
