@@ -124,7 +124,7 @@ With the module successfully installed, a new `Ewon Connector` page will be adde
    * **Poll Rate in Minutes** - Interval for how often data will be pulled from Datamailbox.
    * **Realtime Poll Rate in Seconds** - Interval for how often data will be pulled from an Ewon when realtime reads are activated.
 
-* **Ewon Account Information**
+* **Talk2M Account Information**
    * **Account** - Your Talk2M account name.
    * **Username** - Your Talk2M user name.
    * **Password** - Your Talk2M password.
@@ -225,7 +225,7 @@ There are several reasons tags may not be populated into Ignition. Please follow
 
    <img src="https://raw.githubusercontent.com/hms-networks/IgnitionEwonConnector/Ignition-8-master/images/auth_error.JPG" alt="Ignition Authentication Error" width="1000"/>
 
-   * If you see this log error, check your Ewon Account information entered on the `Ewon Connector` configuration page. _Note: Any changes done on this page require a restart of the connector module or Ignition. You can restart the module by navigating to `Config` > `Modules` and clicking `restart` next to the module._
+   * If you see this log error, check your Talk2M Account information entered on the `Ewon Connector` configuration page. _Note: Any changes done on this page require a restart of the connector module or Ignition. You can restart the module by navigating to `Config` > `Modules` and clicking `restart` next to the module._
 4. If tag values are still not populated in Ignition, please contact [support](#support)
 
 ### Changes on the Ewon Connector page do not take effect
