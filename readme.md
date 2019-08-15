@@ -13,6 +13,7 @@
 8. [Connector Setup](#connector-setup)
 9. [Connector Usage](#connector-usage)
 10. [Troubleshooting](#troubleshooting)
+11. [FAQs](#faqs)
 
 
 ## [Description](#table-of-contents)
@@ -234,3 +235,21 @@ Any changes done on this page require a restart of the connector module or Ignit
 <sup>[Back to top](#table-of-contents)</sup>
 
 ## [FAQs](#table-of-contents)
+
+* [How do I check my Talk2M data usage?](#How-do-I-check-my-Talk2M-data-usage?)
+* [If Ignition is not running will my data still be logged?](#If-Ignition-is-not-running-will-my-data-still-be-logged?)
+
+### How do I check my Talk2M data usage?
+
+Your Talk2M data usage can be accessed through [eCatcher](https://ewon.biz/cloud-services/talk2m/ecatcher "https://ewon.biz/cloud-services/talk2m/ecatcher").
+
+1. Open eCatcher and login.
+2. On the left hand menu bar click `Account`.
+3. Once in the account properties click `Reports` near the top of the page.
+4. From here you will be able to download the current or past montly connection log reports.
+
+### If Ignition is not running will my data still be logged?
+
+If Ignition is offline, data will still be logged by the Flexy and stored in Datamailbox. The amount of data points stored in Datamailbox depends on your [account type](https://ewon.biz/cloud-services/talk2m/plan-pricing "https://ewon.biz/cloud-services/talk2m/plan-pricing"). Once Ignition is online again, all logged points will be fetched from Datamailbox by Ignition.
+
+<sup>[Back to top](#table-of-contents)</sup>
