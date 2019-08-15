@@ -46,7 +46,7 @@ This application is supported by HMS Networks' North American offices.
    * Realtime (via M2Web)
       * Updated up to once per second
       * Can be enabled per-tag, per-Ewon or system-wide
-* Write Functionality
+* Write Functionality (via M2Web)
    * Modify Ewon tag values from Ignition
 
 <sup>[Back to top](#table-of-contents)</sup>
