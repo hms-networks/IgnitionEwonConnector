@@ -9,7 +9,7 @@
 4. [Features](#features)
 5. [Download](#download)
 6. [Installation](#installation)
-7. [Setup](#setup)
+7. [Connector Setup](#connector-setup)
 8. [Connector Usage](#connector-usage)
 
 
@@ -72,7 +72,7 @@ The module can be downloaded from the [releases page](https://github.com/hms-net
 
 <sup>[Back to top](#table-of-contents)</sup>
 
-## [Setup](#table-of-contents)
+## [Connector Setup](#table-of-contents)
 
 With the module successfully installed, a new `Ewon Connector` page will be added to your Ignition Gateway webpages. Navigate to this page by selecting `Config` > `TAGS` > `Ewon Connector`.
 
