@@ -90,7 +90,7 @@ With the module successfully installed, a new `Ewon Connector` page will be adde
    * **Account** - Your Talk2M account name.
    * **Username** - Your Talk2M user name.
    * **Password** - Your Talk2M password.
-   * **API Key** - Your Talk2M Developer ID.
+   * **Talk2M Developer ID** - Your Talk2M Developer ID. Include all dashes.
       * If you do not have a Talk2M Developer ID, you may request one here: [https://developer.ewon.biz/registration](https://developer.ewon.biz/registration "https://developer.ewon.biz/registration").
 
 * **Ewon Device Information** - All Ewons must have at least once common user account to enable realtime and write functionality. The username and password for this account must be identical for all linked Ewons.
