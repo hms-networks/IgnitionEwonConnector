@@ -12,6 +12,7 @@
 7. [Ewon Setup](#ewon-setup)
 8. [Connector Setup](#connector-setup)
 9. [Connector Usage](#connector-usage)
+10. [Troubleshooting](#troubleshooting)
 
 
 ## [Description](#table-of-contents)
@@ -204,3 +205,32 @@ _Note: The realtime functionality counts against your Talk2M account's monthly b
 Tags can be deleted by right clicking the tag in the `Tag Browser` then selecting `Delete`. If the tag still exists on the Ewon or in Datamailbox the tag will be recreated in Ignition on the next Datamailbox update.
 
 <sup>[Back to top](#table-of-contents)</sup>
+
+## [Troubleshooting](#table-of-contents)
+
+### Troubleshooting Topics
+
+* [Tags do not appear in Ignition](#Tags-do-not-appear-in-Ignition)
+* [Changes on the Ewon Connector page do not take effect](#Changes-on-the-Ewon-Connector-page-do-not-take-effect)
+
+### Tags do not appear in Ignition
+
+There are several reasons tags may not be populated into Ignition. Please follow the following steps in order.
+
+1. Verify all steps in the [Ewon Setup](#ewon-setup) section were followed.
+2. If the system has just been configured, wait one hour for data to be registered in Datamailbox.
+3. Verify your Talk2M credentials are correctly entered into the Ewon Connector settings in Ignition.
+   * If your credentials were incorrectly entered, the Ignition logs will indicate a Authentication Error.  Check the logs on the Ignition webserver by clicking `Status` > `Logs`. If your credentials are incorrect, you will see log entries in this format.
+
+   <img src="https://raw.githubusercontent.com/hms-networks/IgnitionEwonConnector/Ignition-8-master/images/auth_error.JPG" alt="Ignition Authentication Error" width="1000"/>
+
+   * If you see this log error, check your Ewon Account information entered on the `Ewon Connector` configuration page. _Note: Any changes done on this page require a restart of the connector module or Ignition. You can restart the module by navigating to `Config` > `Modules` and clicking `restart` next to the module._
+4. If tag values are still not populated in Ignition, please contact [support](#support)
+
+### Changes on the Ewon Connector page do not take effect
+
+Any changes done on this page require a restart of the connector module or Ignition. You can restart the module by navigating to `Config` > `Modules` and clicking `restart` next to the module.
+
+<sup>[Back to top](#table-of-contents)</sup>
+
+## [FAQs](#table-of-contents)
