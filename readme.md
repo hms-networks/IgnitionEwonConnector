@@ -218,7 +218,7 @@ Tags can be deleted by right clicking the tag in the `Tag Browser` then selectin
 
 There are several reasons tags may not be populated into Ignition. Please follow the following steps in order.
 
-1. Verify all steps in the [Ewon Setup](#ewon-setup) section were followed.
+1. Verify that all steps in the [Ewon Setup](#ewon-setup) section were followed.
 2. If the system has just been configured, wait one hour for data to be registered in Datamailbox.
 3. Verify your Talk2M credentials are correctly entered into the Ewon Connector settings in Ignition.
    * If your credentials were incorrectly entered, the Ignition logs will indicate a Authentication Error.  Check the logs on the Ignition webserver by clicking `Status` > `Logs`. If your credentials are incorrect, you will see log entries in this format.
