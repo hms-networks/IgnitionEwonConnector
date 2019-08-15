@@ -25,6 +25,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TimeZone;
 import java.text.DateFormat;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Various utilities used across EwonConnector to facilitate functionality
@@ -39,6 +41,11 @@ public class EwonUtil {
     * Default timeout for HTTP connection reading
     */
    private static final int defaultReadTimeout = 60000;
+
+   /**
+    * Log handler
+    */
+   private static Logger logger = LoggerFactory.getLogger("Ewon.EwonUtil");
 
    /**
     * Trust manager used for HTTP connections. Note: Bypasses trust verification.
@@ -178,6 +185,9 @@ public class EwonUtil {
 
          // Generate a "cleaned" exception based on the response code.
          if (httpResponse == HTTP_UNAUTHORIZED) {
+            logger.error("Verify your account name, password, and developer ID are correctly"
+                  + " entered on the Ewon Connector configuration page");
+            logger.error("Talk2M account credentials are invalid!");
             throw new IOException("Authentication Error: Please check your account credentials.");
          } else if (httpResponse == HTTP_NOT_FOUND) {
             throw new IOException("Network Error: Ewon services not found. Check network link.");
