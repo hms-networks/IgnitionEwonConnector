@@ -18,7 +18,7 @@
 
 ## [Description](#table-of-contents)
 
-Synchronize Ewon data to Ignition's Tag Historian.
+Synchronize Ewon Flexy data to Ignition's Tag Historian.
 
 <sup>[Back to top](#table-of-contents)</sup>
 
