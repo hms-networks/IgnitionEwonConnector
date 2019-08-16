@@ -1,5 +1,5 @@
 
-# Ignition Ewon Connector
+# Ignition Ewon® Connector
 
 ## [Table of Contents](#table-of-contents)
 
