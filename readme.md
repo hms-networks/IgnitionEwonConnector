@@ -18,7 +18,7 @@
 
 ## [Description](#table-of-contents)
 
-Synchronize Ewon data to Ignition's Tag Historian
+Synchronize Ewon data to Ignition's Tag Historian.
 
 <sup>[Back to top](#table-of-contents)</sup>
 
@@ -179,8 +179,8 @@ This functionality can be enabled in three ways.
 
    * Open Designer and navigate to the `Tag Browser`
    * Expand the `All Providers` directory.
-   * Expand the directory associated with your Ewon Connector Tag Provider
-   * Expand the directory associated with the Ewon you want to read a live tag value from
+   * Expand the directory associated with your Ewon Connector Tag Provider.
+   * Expand the directory associated with the Ewon you want to read a live tag value from.
    * Expand the tag name to show the tag's properties.
    * Find the `Realtime` property and enable it.
 
@@ -188,8 +188,8 @@ This functionality can be enabled in three ways.
 
    * Open Designer and navigate to the `Tag Browser`
    * Expand the `All Providers` directory.
-   * Expand the directory associated with your Ewon Connector Tag Provider
-   * Expand the directory associated with the Ewon you want to read live tag values from
+   * Expand the directory associated with your Ewon Connector Tag Provider.
+   * Expand the directory associated with the Ewon you want to read live tag values from.
    * Expand the `_config` directory.
    * Find the `AllRealtime` tag and enable it.
 
@@ -226,7 +226,7 @@ There are several reasons tags may not be populated into Ignition. Please follow
    <img src="https://raw.githubusercontent.com/hms-networks/IgnitionEwonConnector/Ignition-8-master/images/auth_error.JPG" alt="Ignition Authentication Error" width="1000"/>
 
    * If you see this log error, check your Talk2M Account information entered on the `Ewon Connector` configuration page. _Note: Any changes done on this page require a restart of the connector module or Ignition. You can restart the module by navigating to `Config` > `Modules` and clicking `restart` next to the module._
-4. If tag values are still not populated in Ignition, please contact [support](#support)
+4. If tag values are still not populated in Ignition, please contact [support](#support).
 
 ### Changes on the Ewon Connector page do not take effect
 
