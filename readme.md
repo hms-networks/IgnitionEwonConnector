@@ -73,6 +73,10 @@ The module can be downloaded from the [releases page](https://github.com/hms-net
 
    * When the page reloads you can now see the module you installed in the list of modules.
 
+### Upgrading
+
+Upgrading the module to a newer version can be done by following the [Installation](#installation) steps above. Once installed, restart Ignition for the changes to fully take effect.
+
 <sup>[Back to top](#table-of-contents)</sup>
 
 ## [Ewon Setup](#table-of-contents)
