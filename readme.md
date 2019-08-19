@@ -128,12 +128,14 @@ With the module successfully installed, a new `Ewon Connector` page will be adde
    * **Account** - Your Talk2M account name.
    * **Username** - Your Talk2M user name.
    * **Password** - Your Talk2M password.
+   * **Change Password?** - Check this box to change the password stored in Ignition.
    * **Talk2M Developer ID** - Your Talk2M Developer ID. Include all dashes.
       * If you do not have a Talk2M Developer ID, you may request one here: [https://developer.ewon.biz/registration](https://developer.ewon.biz/registration "https://developer.ewon.biz/registration").
 
 * **Ewon Device Information** - All Ewons must have at least once common user account to enable realtime and write functionality. The username and password for this account must be identical for all linked Ewons.
    * **Ewon Username** - Common Ewon username.
    * **Ewon Password** - Common Ewon password.
+   * **Change Password?** - Check this box to change the password stored in Ignition.
 
 * **History**
    * **History Enabled** - Option to turn off historical logging.
