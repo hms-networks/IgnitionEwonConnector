@@ -47,7 +47,7 @@
                     <moduleId>org.imdc.ewon.eWonConnector</moduleId>
                     <moduleName>${project.parent.name}</moduleName>
                     <moduleDescription>${project.description}</moduleDescription>
-                    <moduleVersion>1.1.8</moduleVersion>
+                    <moduleVersion>1.1.9</moduleVersion>
                     <requiredIgnitionVersion>8.0.0</requiredIgnitionVersion>
                     <requiredFrameworkVersion>8</requiredFrameworkVersion>
                     <licenseFile>license.html</licenseFile>
