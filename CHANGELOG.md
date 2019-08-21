@@ -6,6 +6,8 @@
 
 ### Minor Changes
 
+* The connector no longer faults when initially installed and no credentials are entered
+
 ## v1.1.8
 
 ### Major Changes
