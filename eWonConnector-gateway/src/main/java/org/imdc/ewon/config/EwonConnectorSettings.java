@@ -253,8 +253,18 @@ public class EwonConnectorSettings extends PersistentRecord {
     * @return created AuthInfo object
     */
    public AuthInfo getAuthInfo() {
-      return new AuthInfo(getAccount(), getUserName(), getPassword(), getAPIKey(),
-            getEwonUserName(), getEwonPassword());
+
+      AuthInfo authInfo;
+      try {
+         // Try fetching the credentials from the configuration page
+         authInfo = new AuthInfo(getAccount(), getUserName(), getPassword(), getAPIKey(),
+               getEwonUserName(), getEwonPassword());
+      } catch (NullPointerException e) {
+         // Some of the configuration page credentials are empty, force empty strings
+         // Ignition logs will indicate incorrect user credentials
+         authInfo = new AuthInfo("", "", "", "", "", "");
+      }
+      return authInfo;
    }
 
    /**
