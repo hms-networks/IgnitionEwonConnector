@@ -10,11 +10,13 @@ import java.security.cert.X509Certificate;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
+import java.io.IOException;
 import java.util.Map.Entry;
 import java.util.TimeZone;
 import java.text.DateFormat;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
+import java.net.UnknownHostException;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
@@ -23,6 +25,8 @@ import org.apache.commons.lang3.StringUtils;
 import com.inductiveautomation.ignition.common.Base64;
 import com.inductiveautomation.ignition.common.sqltags.model.types.DataQuality;
 import com.inductiveautomation.ignition.common.sqltags.model.types.DataType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Various utilities user across EwonConnector to facilitate functionality
@@ -37,6 +41,11 @@ public class EwonUtil {
     * Default timeout for HTTP connection reading
     */
    private static final int defaultReadTimeout = 60000;
+
+   /**
+    * Log handler
+    */
+   private static Logger logger = LoggerFactory.getLogger("Ewon.EwonUtil");
 
    /**
     * Trust manager used for HTTP connections. Note: Bypasses trust verification.
@@ -152,6 +161,30 @@ public class EwonUtil {
          // Close Reader and return resulting HTTP GET data
          reader.close();
          return sb.toString();
+      } catch (IOException e) {
+         final int HTTP_UNAUTHORIZED = 401;
+         final int HTTP_NOT_FOUND = 404;
+
+         int httpResponse = HTTP_NOT_FOUND;
+
+         // Set the HTTP error code based off the response
+         try {
+            httpResponse = con.getResponseCode();
+         } catch (UnknownHostException he) {
+            httpResponse = HTTP_NOT_FOUND;
+         }
+
+         // Generate a "cleaned" exception based on the response code.
+         if (httpResponse == HTTP_UNAUTHORIZED) {
+            logger.error("Verify your account name, password, and developer ID are correctly"
+                    + " entered on the Ewon Connector configuration page");
+            logger.error("Talk2M account credentials are invalid!");
+            throw new IOException("Authentication Error: Please check your account credentials.");
+         } else if (httpResponse == HTTP_NOT_FOUND) {
+            throw new IOException("Network Error: Ewon services not found. Check network link.");
+         } else {
+            throw new IOException("HTTP request failed. HTTP Error: " + httpResponse + ".");
+         }
       } finally {
          try {
             // Close HTTP connection if possible
