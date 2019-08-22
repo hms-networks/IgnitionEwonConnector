@@ -1,5 +1,16 @@
 # Ewon Ignition 7.9 Connector Changelog
 
+## v1.1.2
+### Major Changes
+* Added Flexy realtime read support
+
+### Minor Changes
+* Fixed an issue that caused the connector to fault when initially installed and no credentials configured
+* Fixed a security issue by removing user credentials from Ignition log files
+* Fixed an issue with writing boolean tag values
+* Improved configuration page
+* Improved readme/documentation
+
 ## v1.1.1
 ### Major Changes
 * Module is now signed
