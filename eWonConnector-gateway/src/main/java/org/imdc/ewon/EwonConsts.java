@@ -38,4 +38,7 @@ public class EwonConsts {
    public static final String DM_PARAM_FROM = "from";
    public static final String DM_PARAM_CREATE_TRANSACTION = "createTransaction";
    public static final String DM_PARAM_LAST_TID = "lastTransactionId";
+
+   public static final String ALLOWED_TAGNAME_REGEX = "\\A[\\p{Alnum}\\_][\\p{Alnum}\\_\\p{Blank}\\`\\-\\:\\(\\)]*\\z";
+   public static final String ALLOWED_TAGNAME_REGEX_NO_UNDERSCORE = "\\A[\\p{Alnum}\\.][\\p{Alnum}\\.\\p{Blank}\\`\\-\\:\\(\\)]*\\z";
 }

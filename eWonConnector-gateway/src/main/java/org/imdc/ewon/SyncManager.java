@@ -758,74 +758,92 @@ public class SyncManager {
                     DataType dType = EwonUtil.toDataType(t.getDataType());
                     DataTypeClass dtc = dType.getTypeClass();
 
-                    // Verify tag history information integrity, then
-                    // add historical tag values to tag history set
-                    // Note: No history enabled check here, because it can be manually triggered.
-                    if (!StringUtils.isBlank(tagHistoryStore) && t.getHistory() != null) {
-                        for (DataPoint d : t.getHistory()) {
-                            HistoricalTagValue htv = buildHTV(p, dtc,
-                                    buildTagValue(d.getValue(), EwonUtil.toQuality(d.getQuality()),
-                                            EwonUtil.toDate(d.getDate()), dType));
-                            historySet.add(htv);
-                            histPoints++;
-                        }
+
+                    // Check tag name format and display warning if necessary
+                    if (!replaceUnderscore && !t.getName().matches(EwonConsts.ALLOWED_TAGNAME_REGEX)) {
+                        logger.error(String.format("The tag %s has an unsupported name. " +
+                                "Supported tag names must begin with an alphanumeric or underscore, " +
+                                "followed by any number of alphanumerics, underscores, spaces, " +
+                                "or the following: \' - : ( )", t.getName()));
                     }
-
-                    // If tag write callback not registered, register tag write callback
-                    if (!registeredTags.contains(p)) {
-                        // Register tag
-                        registeredTags.add(p);
-
-                        // Create a "Realtime" property for the tag, default state is false
-                        BasicBoundPropertySet readtimeProperty =
-                                new BasicBoundPropertySet(new PropertyValue(
-                                        new BasicProperty<Boolean>("Realtime", boolean.class),
-                                        "false"));
-                        provider.configureTag(p, readtimeProperty);
-
-                        // Register tag write handle with provider
-                        provider.registerWriteHandler(p, new WriteHandler() {
-                            public QualityCode write(TagPath tagPath, Object o) {
-                                try {
-                                    // Unsanitize tag name if necessary
-                                    String tagName = replaceUnderscore
-                                            ? unSanitizeName(tagPath.getItemName())
-                                            : tagPath.getItemName();
-
-                                    // Store write value from object
-                                    String writeValue = o.toString();
-
-                                    // Handle boolean values
-                                    if (o instanceof Boolean) {
-                                        writeValue = (Boolean) o ? "1" : "0";
-                                    }
-
-                                    // Perform tag write and update value with provider
-                                    comm.writeTag(tagPath.getParentPath().getItemName(), tagName,
-                                            writeValue);
-                                    provider.updateValue(p, o, QualityCode.Good);
-                                } catch (Exception e) {
-                                    logger.error("Writing tag to Ewon via Talk2M API Failed");
-                                }
-                                return QualityCode.Good;
+                    else if (replaceUnderscore && !t.getName().matches(EwonConsts.ALLOWED_TAGNAME_REGEX_NO_UNDERSCORE)) {
+                        logger.error(String.format("The tag %s has an unsupported name. " +
+                                "Supported tag names must begin with an alphanumeric or period, " +
+                                "followed by any number of alphanumerics, spaces, " +
+                                "or the following: \' . - : ( ) To enable support for tag " +
+                                "names containing underscores, disable the \"Tag Names Contain Periods?\" " +
+                                "option.", t.getName()));
+                    }
+                    else {
+                        // Verify tag history information integrity, then
+                        // add historical tag values to tag history set
+                        // Note: No history enabled check here, because it can be manually triggered.
+                        if (!StringUtils.isBlank(tagHistoryStore) && t.getHistory() != null) {
+                            for (DataPoint d : t.getHistory()) {
+                                HistoricalTagValue htv = buildHTV(p, dtc,
+                                        buildTagValue(d.getValue(), EwonUtil.toQuality(d.getQuality()),
+                                                EwonUtil.toDate(d.getDate()), dType));
+                                historySet.add(htv);
+                                histPoints++;
                             }
-                        });
+                        }
+
+                        // If tag write callback not registered, register tag write callback
+                        if (!registeredTags.contains(p)) {
+                            // Register tag
+                            registeredTags.add(p);
+
+                            // Create a "Realtime" property for the tag, default state is false
+                            BasicBoundPropertySet readtimeProperty =
+                                    new BasicBoundPropertySet(new PropertyValue(
+                                            new BasicProperty<Boolean>("Realtime", boolean.class),
+                                            "false"));
+                            provider.configureTag(p, readtimeProperty);
+
+                            // Register tag write handle with provider
+                            provider.registerWriteHandler(p, new WriteHandler() {
+                                public QualityCode write(TagPath tagPath, Object o) {
+                                    try {
+                                        // Unsanitize tag name if necessary
+                                        String tagName = replaceUnderscore
+                                                ? unSanitizeName(tagPath.getItemName())
+                                                : tagPath.getItemName();
+
+                                        // Store write value from object
+                                        String writeValue = o.toString();
+
+                                        // Handle boolean values
+                                        if (o instanceof Boolean) {
+                                            writeValue = (Boolean) o ? "1" : "0";
+                                        }
+
+                                        // Perform tag write and update value with provider
+                                        comm.writeTag(tagPath.getParentPath().getItemName(), tagName,
+                                                writeValue);
+                                        provider.updateValue(p, o, QualityCode.Good);
+                                    } catch (Exception e) {
+                                        logger.error("Writing tag to Ewon via Talk2M API Failed");
+                                    }
+                                    return QualityCode.Good;
+                                }
+                            });
+                        }
+
+                        // Build tag value for realtime update
+                        TagValue v = buildTagValue(t.getValue(), EwonUtil.toQuality(t.getQuality()),
+                                deviceDate, dType);
+
+                        // Configure tag data type
+                        provider.configureTag(p, dType);
+
+                        // Update tag value if read all tags in realtime is enabled
+                        if (!readAllTagsRealtime) {
+                            provider.updateValue(p, v.getValue(), v.getQuality(), v.getTimestamp());
+                        }
+
+                        // Output success
+                        logger.trace("Updated realtime value for '{}' [id={}] to {}", p, t.getId(), v);
                     }
-
-                    // Build tag value for realtime update
-                    TagValue v = buildTagValue(t.getValue(), EwonUtil.toQuality(t.getQuality()),
-                            deviceDate, dType);
-
-                    // Configure tag data type
-                    provider.configureTag(p, dType);
-
-                    // Update tag value if read all tags in realtime is enabled
-                    if (!readAllTagsRealtime) {
-                        provider.updateValue(p, v.getValue(), v.getQuality(), v.getTimestamp());
-                    }
-
-                    // Output success
-                    logger.trace("Updated realtime value for '{}' [id={}] to {}", p, t.getId(), v);
                 } catch (Exception e) {
                     logger.error("Unable to create dataset for tag '{}/{}'", device, t.getName(),
                             e);
