@@ -161,6 +161,14 @@ Tags will be created automatically in Ignition on startup. Tags will be visible 
 
 <img src="https://raw.githubusercontent.com/hms-networks/IgnitionEwonConnector/Ignition-8-master/images/tag_browser.JPG" alt="Ignition Tag Browser" width="600"/>
 
+### **Allowed Tag Names**
+
+The tags synchronized by the connector must adhere to the following rules.
+
+By default, and with the `Tag Names Contain Periods` option disabled, tags must begin with an alphanumeric or underscore. Additional characters in tag names must be an alphanumeric, underscore, space, or any of the following: `' - : ( )`.
+
+With the `Tag Names Contain Periods` option enabled, tags must begin with an alphanumeric or period. Additional characters in tag names must be an alphanumeric, period, space, or any of the following: `' - : ( )`. Note that this option does not support tag names that contain underscores.
+
 ### **Reading Values**
 
 The tags created by the connector are native Ignition tags and are updated cyclically by the connector based on the polling rates set during the [Setup](#setup) step.
