@@ -1,4 +1,4 @@
-package org.imdc.ewon.data;
+package com.hms_networks.data;
 
 /**
  * Class representation of get data request result

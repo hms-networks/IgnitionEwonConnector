@@ -1,4 +1,4 @@
-package org.imdc.ewon.data;
+package com.hms_networks.data;
 
 import java.util.HashMap;
 import java.io.BufferedReader;

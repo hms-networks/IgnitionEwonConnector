@@ -1,4 +1,4 @@
-package org.imdc.ewon;
+package com.hms_networks;
 
 import com.inductiveautomation.ignition.common.BundleUtil;
 import com.inductiveautomation.ignition.common.licensing.LicenseState;
@@ -8,9 +8,9 @@ import com.inductiveautomation.ignition.gateway.model.GatewayContext;
 import com.inductiveautomation.ignition.gateway.tags.managed.ManagedTagProvider;
 import com.inductiveautomation.ignition.gateway.tags.managed.ProviderConfiguration;
 import com.inductiveautomation.ignition.gateway.web.models.IConfigTab;
-import org.imdc.ewon.config.EwonConfigPage;
-import org.imdc.ewon.config.EwonConnectorSettings;
-import org.imdc.ewon.config.EwonSyncData;
+import com.hms_networks.config.EwonConfigPage;
+import com.hms_networks.config.EwonConnectorSettings;
+import com.hms_networks.config.EwonSyncData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.Arrays;

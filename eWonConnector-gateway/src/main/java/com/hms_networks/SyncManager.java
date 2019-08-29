@@ -1,4 +1,4 @@
-package org.imdc.ewon;
+package com.hms_networks;
 
 import com.inductiveautomation.ignition.common.FormatUtil;
 import com.inductiveautomation.ignition.common.TypeUtilities;
@@ -26,14 +26,14 @@ import com.inductiveautomation.ignition.gateway.tags.managed.DeletionHandler;
 import com.inductiveautomation.ignition.gateway.tags.managed.ManagedTagProvider;
 import com.inductiveautomation.ignition.gateway.tags.managed.WriteHandler;
 import org.apache.commons.lang3.StringUtils;
-import org.imdc.ewon.comm.CommunicationManger;
-import org.imdc.ewon.config.EwonConnectorSettings;
-import org.imdc.ewon.config.EwonSyncData;
-import org.imdc.ewon.data.DataPoint;
-import org.imdc.ewon.data.EwonData;
-import org.imdc.ewon.data.EwonsData;
-import org.imdc.ewon.data.TMResult;
-import org.imdc.ewon.data.Tag;
+import com.hms_networks.comm.CommunicationManger;
+import com.hms_networks.config.EwonConnectorSettings;
+import com.hms_networks.config.EwonSyncData;
+import com.hms_networks.data.DataPoint;
+import com.hms_networks.data.EwonData;
+import com.hms_networks.data.EwonsData;
+import com.hms_networks.data.TMResult;
+import com.hms_networks.data.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.io.IOException;
