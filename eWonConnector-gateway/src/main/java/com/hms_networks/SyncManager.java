@@ -1,14 +1,14 @@
-package org.imdc.ewon;
+package com.hms_networks;
 
 import java.io.IOException;
 import java.util.*;
 import com.inductiveautomation.ignition.common.sqltags.model.types.*;
 import com.inductiveautomation.ignition.common.sqltags.parser.BasicTagPath;
 import org.apache.commons.lang3.StringUtils;
-import org.imdc.ewon.comm.CommunicationManger;
-import org.imdc.ewon.config.EwonConnectorSettings;
-import org.imdc.ewon.config.EwonSyncData;
-import org.imdc.ewon.data.*;
+import com.hms_networks.comm.CommunicationManger;
+import com.hms_networks.config.EwonConnectorSettings;
+import com.hms_networks.config.EwonSyncData;
+import com.hms_networks.data.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.inductiveautomation.ignition.common.FormatUtil;

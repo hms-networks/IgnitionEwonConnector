@@ -1,10 +1,10 @@
-package org.imdc.ewon;
+package com.hms_networks;
 
 import java.util.Arrays;
 import java.util.List;
-import org.imdc.ewon.config.EwonConfigPage;
-import org.imdc.ewon.config.EwonConnectorSettings;
-import org.imdc.ewon.config.EwonSyncData;
+import com.hms_networks.config.EwonConfigPage;
+import com.hms_networks.config.EwonConnectorSettings;
+import com.hms_networks.config.EwonSyncData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.inductiveautomation.ignition.common.BundleUtil;

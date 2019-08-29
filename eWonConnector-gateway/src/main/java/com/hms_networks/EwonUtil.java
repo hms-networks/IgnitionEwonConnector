@@ -1,4 +1,4 @@
-package org.imdc.ewon;
+package com.hms_networks;
 
 import java.io.InputStreamReader;
 import java.io.Reader;

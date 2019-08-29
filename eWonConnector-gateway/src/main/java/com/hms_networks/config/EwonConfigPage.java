@@ -1,4 +1,4 @@
-package org.imdc.ewon.config;
+package com.hms_networks.config;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.wicket.Application;
