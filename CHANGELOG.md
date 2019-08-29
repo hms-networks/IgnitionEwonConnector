@@ -4,9 +4,13 @@
 
 ### Major Changes
 
+* Module now listed in the Ignition Showcase
+
 ### Minor Changes
 
-* The connector no longer faults when initially installed and no credentials are entered
+* Ewon tag names are verified for compatibility with Ignition
+* Module ID has changed
+* Bugfix: The connector no longer faults when initially installed and no credentials are entered
 
 ## v1.1.8
 
