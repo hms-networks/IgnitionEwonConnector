@@ -1,4 +1,4 @@
-package org.imdc.ewon.config;
+package com.hms_networks.config;
 
 /**
  * Enum for synchronization mode

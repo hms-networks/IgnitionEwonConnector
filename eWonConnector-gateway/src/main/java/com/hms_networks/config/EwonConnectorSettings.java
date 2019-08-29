@@ -1,6 +1,6 @@
-package org.imdc.ewon.config;
+package com.hms_networks.config;
 
-import org.imdc.ewon.comm.AuthInfo;
+import com.hms_networks.comm.AuthInfo;
 import com.inductiveautomation.ignition.common.util.TimeUnits;
 import com.inductiveautomation.ignition.gateway.localdb.persistence.BooleanField;
 import com.inductiveautomation.ignition.gateway.localdb.persistence.Category;

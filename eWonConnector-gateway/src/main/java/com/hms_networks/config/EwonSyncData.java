@@ -1,4 +1,4 @@
-package org.imdc.ewon.config;
+package com.hms_networks.config;
 
 import java.util.Date;
 import com.inductiveautomation.ignition.gateway.localdb.persistence.IdentityField;

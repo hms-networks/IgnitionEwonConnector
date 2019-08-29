@@ -1,4 +1,4 @@
-package org.imdc.ewon.config;
+package com.hms_networks.config;
 
 import com.inductiveautomation.ignition.gateway.history.HistoryFlavor;
 import com.inductiveautomation.ignition.gateway.localdb.persistence.FormMeta;
