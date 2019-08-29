@@ -44,7 +44,7 @@
                         </projectScope>
                     </projectScopes>
 
-                    <moduleId>com.hms_networks.eWonConnector</moduleId>
+                    <moduleId>com.hms_networks.EwonConnector</moduleId>
                     <moduleName>${project.parent.name}</moduleName>
                     <moduleDescription>${project.description}</moduleDescription>
                     <moduleVersion>1.1.9</moduleVersion>
