@@ -1,7 +1,7 @@
-package org.imdc.ewon.data;
+package com.hms_networks.data;
 
 import java.util.Date;
-import org.imdc.ewon.EwonUtil;
+import com.hms_networks.EwonUtil;
 
 /**
  * Object representing and containing information for an Ewon

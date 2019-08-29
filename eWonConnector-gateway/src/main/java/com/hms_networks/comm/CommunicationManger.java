@@ -1,13 +1,13 @@
-package org.imdc.ewon.comm;
+package com.hms_networks.comm;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import org.imdc.ewon.EwonConsts;
-import org.imdc.ewon.EwonUtil;
-import org.imdc.ewon.config.SyncMode;
-import org.imdc.ewon.data.EwonData;
-import org.imdc.ewon.data.EwonsData;
+import com.hms_networks.EwonConsts;
+import com.hms_networks.EwonUtil;
+import com.hms_networks.config.SyncMode;
+import com.hms_networks.data.EwonData;
+import com.hms_networks.data.EwonsData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.gson.Gson;

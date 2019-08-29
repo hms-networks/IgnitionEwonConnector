@@ -1,4 +1,4 @@
-package org.imdc.ewon;
+package com.hms_networks;
 
 /**
  * Constants for the Talk2M service, primarily URL parameter keys.

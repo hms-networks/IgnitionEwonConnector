@@ -1,4 +1,4 @@
-package org.imdc.ewon;
+package com.hms_networks;
 
 import com.inductiveautomation.ignition.common.Base64;
 import com.inductiveautomation.ignition.common.sqltags.model.types.DataQuality;

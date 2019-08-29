@@ -1,10 +1,10 @@
-package org.imdc.ewon.comm;
+package com.hms_networks.comm;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.io.UnsupportedEncodingException;
 import org.apache.commons.lang3.StringUtils;
-import org.imdc.ewon.EwonConsts;
+import com.hms_networks.EwonConsts;
 
 /**
  * Authentication information object
