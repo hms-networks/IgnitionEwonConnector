@@ -5,9 +5,12 @@
 ### Major Changes
 
 * Added Flexy realtime read support
+* Module now listed in the Ignition Showcase
 
 ### Minor Changes
 
+* Ewon tag names are verified for compatibility with Ignition
+* Module ID has changed
 * Fixed an issue that caused the connector to fault when initially installed and no credentials configured
 * Fixed a security issue by removing user credentials from Ignition log files
 * Fixed an issue with writing boolean tag values
