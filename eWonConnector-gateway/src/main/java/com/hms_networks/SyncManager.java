@@ -481,9 +481,9 @@ public class SyncManager {
                          QualifiedValue currentTagValue = gatewayContext.getTagManager().readAsync(
                             Collections.singletonList(tagPath)).get().get(0);
 
-                        provider.updateValue((eWonName + "/" + tag), currentTagValue.getValue(), QualityCode.Bad_Failure);
+                        provider.updateValue((eWonName + "/" + tag), currentTagValue.getValue(), QualityCode.Bad_Stale);
                     } catch (Exception ex) {
-                        provider.updateValue((eWonName + "/" + tag), null, QualityCode.Bad_Failure);
+                        provider.updateValue((eWonName + "/" + tag), null, QualityCode.Bad_Stale);
                     }
                 }
             } catch (Exception e) {
@@ -818,6 +818,15 @@ public class SyncManager {
                             // Register tag write handle with provider
                             provider.registerWriteHandler(p, new WriteHandler() {
                                 public QualityCode write(TagPath tagPath, Object o) {
+                                    Object currentTagValue;
+                                    try {
+                                        final int tagValueListIndex = 0;
+                                        currentTagValue = gatewayContext.getTagManager().readAsync(
+                                            Collections.singletonList(tagPath)).get()
+                                            .get(tagValueListIndex).getValue();
+                                    } catch (Exception e) {
+                                        currentTagValue = null;
+                                    }
                                     try {
                                         // Unsanitize tag name if necessary
                                         String tagName = replaceUnderscore
@@ -838,7 +847,7 @@ public class SyncManager {
                                         provider.updateValue(p, o, QualityCode.Good);
                                     } catch (Exception e) {
                                         logger.error("Writing tag to Ewon via Talk2M API Failed");
-                                        provider.updateValue(p, o, QualityCode.Bad_Failure);
+                                        provider.updateValue(p, currentTagValue, QualityCode.Bad_Failure);
                                         return QualityCode.Bad_Failure;
                                     }
                                     return QualityCode.Good;
