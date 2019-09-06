@@ -25,6 +25,7 @@ import com.inductiveautomation.ignition.gateway.sqltags.model.BasicScanclassHist
 import com.inductiveautomation.ignition.gateway.tags.managed.DeletionHandler;
 import com.inductiveautomation.ignition.gateway.tags.managed.ManagedTagProvider;
 import com.inductiveautomation.ignition.gateway.tags.managed.WriteHandler;
+import java.util.Collections;
 import org.apache.commons.lang3.StringUtils;
 import com.hms_networks.comm.CommunicationManger;
 import com.hms_networks.config.EwonConnectorSettings;
@@ -471,6 +472,20 @@ public class SyncManager {
                 logger.error(
                         "Error connecting to eWON for live data, " + eWonName + " may be offline",
                         e);
+
+                // Mark tags as bad
+                for (String tag: liveEwonNames.get(eWonName)) {
+                    List<String> pathParts = Arrays.asList(eWonName,tag);
+                    TagPath tagPath = new BasicTagPath(providerName, pathParts);
+                    try {
+                         QualifiedValue currentTagValue = gatewayContext.getTagManager().readAsync(
+                            Collections.singletonList(tagPath)).get().get(0);
+
+                        provider.updateValue((eWonName + "/" + tag), currentTagValue.getValue(), QualityCode.Bad_Failure);
+                    } catch (Exception ex) {
+                        provider.updateValue((eWonName + "/" + tag), null, QualityCode.Bad_Failure);
+                    }
+                }
             } catch (Exception e) {
                 logger.error("Error while parsing live data", e);
             }
@@ -823,6 +838,8 @@ public class SyncManager {
                                         provider.updateValue(p, o, QualityCode.Good);
                                     } catch (Exception e) {
                                         logger.error("Writing tag to Ewon via Talk2M API Failed");
+                                        provider.updateValue(p, o, QualityCode.Bad_Failure);
+                                        return QualityCode.Bad_Failure;
                                     }
                                     return QualityCode.Good;
                                 }
