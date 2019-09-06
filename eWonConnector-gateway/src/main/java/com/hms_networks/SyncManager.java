@@ -405,9 +405,9 @@ public class SyncManager {
                TagPath tagPath = new BasicTagPath(provider.getName(), pathParts);
                try {
                   QualifiedValue currentTagValue = gatewayContext.getTagManager().read(Collections.singletonList(tagPath)).get(0);
-                  provider.updateValue((eWonName + "/" + tag), currentTagValue.getValue(), DataQuality.COMM_ERROR);
+                  provider.updateValue((eWonName + "/" + tag), currentTagValue.getValue(), DataQuality.STALE);
                } catch (Exception ex) {
-                  provider.updateValue((eWonName + "/" + tag), null, DataQuality.COMM_ERROR);
+                  provider.updateValue((eWonName + "/" + tag), null, DataQuality.STALE);
                }
             }
          } catch (Exception e) {
@@ -737,6 +737,9 @@ public class SyncManager {
                      // Register tag write handler with provider
                      provider.registerWriteHandler(p.toStringPartial(), new WriteHandler() {
                         public Quality write(TagPath tagPath, Object o) {
+                           final int tagValueListIndex = 0;
+                           QualifiedValue currentTagValue = gatewayContext.getTagManager().read(
+                               Collections.singletonList(tagPath)).get(tagValueListIndex);
                            try {
                               // Unsanitize tag name if necessary
                               String tagName =
@@ -757,8 +760,14 @@ public class SyncManager {
                               provider.updateValue(p.toStringPartial(), o, TagQuality.GOOD);
                            } catch (Exception e) {
                               logger.error("Writing tag to Ewon via Talk2M API Failed");
-                              provider.updateValue(p.toStringPartial(), o, TagQuality.BAD);
-                              return TagQuality.BAD;
+
+                              // Mark data with comm_error quality and restore former value
+                              try {
+                                 provider.updateValue(p.toStringPartial(), currentTagValue.getValue(), DataQuality.COMM_ERROR);
+                              } catch (Exception ex) {
+                                 provider.updateValue(p.toStringPartial(), null, DataQuality.COMM_ERROR);
+                              }
+                              return DataQuality.COMM_ERROR;
                            }
                            return TagQuality.GOOD;
                         }
