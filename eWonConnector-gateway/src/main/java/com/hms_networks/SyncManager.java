@@ -1,5 +1,6 @@
 package com.hms_networks;
 
+import com.inductiveautomation.ignition.common.model.values.QualifiedValue;
 import java.io.IOException;
 import java.util.*;
 import com.inductiveautomation.ignition.common.sqltags.model.types.*;
@@ -398,6 +399,17 @@ public class SyncManager {
             logger.error(
                     "Error connecting to eWON for live data, " + eWonName + " may be offline",
                     e);
+            // Mark tags as bad
+            for (String tag: liveEwonNames.get(eWonName)) {
+               List<String> pathParts = Arrays.asList(eWonName,tag);
+               TagPath tagPath = new BasicTagPath(provider.getName(), pathParts);
+               try {
+                  QualifiedValue currentTagValue = gatewayContext.getTagManager().read(Collections.singletonList(tagPath)).get(0);
+                  provider.updateValue((eWonName + "/" + tag), currentTagValue.getValue(), DataQuality.COMM_ERROR);
+               } catch (Exception ex) {
+                  provider.updateValue((eWonName + "/" + tag), null, DataQuality.COMM_ERROR);
+               }
+            }
          } catch (Exception e) {
             logger.error("Error while parsing live data", e);
          }
@@ -745,6 +757,8 @@ public class SyncManager {
                               provider.updateValue(p.toStringPartial(), o, TagQuality.GOOD);
                            } catch (Exception e) {
                               logger.error("Writing tag to Ewon via Talk2M API Failed");
+                              provider.updateValue(p.toStringPartial(), o, TagQuality.BAD);
+                              return TagQuality.BAD;
                            }
                            return TagQuality.GOOD;
                         }
