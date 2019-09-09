@@ -1,5 +1,12 @@
 # Ewon Ignition 8 Connector Changelog
 
+### v.1.1.10
+
+### Major Changes
+
+* Tags are now highlighted and returned to original value if a write fails
+* Applicable tags are now marked as stale when realtime updating fails
+
 ## v1.1.9
 
 ### Major Changes
