@@ -120,7 +120,7 @@ public class SyncManager {
     /**
      * Log handler
      */
-    Logger logger = LoggerFactory.getLogger("Ewon.SyncManager");
+    Logger logger = LoggerFactory.getLogger("Ewon.EwonSyncManager");
 
     /**
      * Current tag provider
@@ -204,7 +204,7 @@ public class SyncManager {
      * @param settings settings to use
      */
     public void startup(EwonConnectorSettings settings) {
-        logger.info("Starting Ewon sync manager.");
+        logger.info("Starting up...");
 
         // Create and configure communication manager
         comm = new CommunicationManger();
@@ -232,20 +232,21 @@ public class SyncManager {
         // Verify integrity of tag history storage information if tag history enabled
         if (historyEnabled && StringUtils.isBlank(tagHistoryStore)) {
             logger.warn(
-                    "History sync is enable, but no history provider has been specified for storage."
-                            + "No data will be stored.");
+                    "History synchronization is enabled, but no history provider " +
+                        "has been specified for storage. No data will be stored");
         }
 
         // Output warning if tag name check is disabled
         if (tagNameCheckDisabled) {
-            logger.warn("Tag name checking is disabled. Tags with unsupported characters may not " +
-                "work properly.");
+            logger.warn("Strict checking for allowed tag name characters is " +
+                    "disabled. Tags with unsupported characters may not work properly");
         }
 
         // Load and store synchronization data, and create it if necessary
         syncData = gatewayContext.getPersistenceInterface().find(EwonSyncData.META, 1L);
         if (syncData == null) {
-            logger.info("Ewon sync data not found, initializing.");
+            logger.info("Existing Ewon synchronization data not found, " +
+                    "creating new data store");
             syncData = gatewayContext.getLocalPersistenceInterface().createNew(EwonSyncData.META);
             syncData.setLong(EwonSyncData.Id, 1L);
             gatewayContext.getLocalPersistenceInterface().save(syncData);
@@ -253,19 +254,27 @@ public class SyncManager {
 
         // Load and register polling interval configuration information
         long pollRateMS = TimeUnits.toMillis(settings.getPollRate().doubleValue(), TimeUnits.MIN);
-        logger.debug("Configuring polling for {} ms", pollRateMS);
         if (pollRateMS > 0) {
+            logger.debug("Configuring polling for {} ms", pollRateMS);
             gatewayContext.getExecutionManager().register("ewon", "syncpoll", this::run,
                     (int) pollRateMS);
+        }
+        else if (pollRateMS < 0) {
+            logger.warn("Cannot configure polling for {} ms. " +
+                "Try an interval greater than 0 mins", pollRateMS);
         }
 
         // Load and register realtime polling interval configuration information
         long livePollRateMS =
                 TimeUnits.toMillis(settings.getLivePollRate().doubleValue(), TimeUnits.SEC);
-        logger.debug("Configuring live polling for {} ms", livePollRateMS);
         if (pollRateMS > 0) {
+            logger.debug("Configuring realtime polling for {} ms", livePollRateMS);
             gatewayContext.getExecutionManager().register("ewon", "synclive", this::runLive,
                     (int) livePollRateMS);
+        }
+        else if (livePollRateMS < 0) {
+            logger.warn("Cannot configure realtime polling for {} ms. " +
+                "Try an interval greater than 0 secs", livePollRateMS);
         }
 
         // Configure Ewon Connector status/statistics tags
@@ -290,7 +299,7 @@ public class SyncManager {
         provider.registerWriteHandler(buildTagPath(STATUS_RESETSYNC), new WriteHandler() {
             @Override
             public QualityCode write(TagPath tagPath, Object o) {
-                logger.info("Resetting historical sync transaction id.");
+                logger.info("Resetting synchronization information");
                 syncData.setTransactionId(0L);
                 syncData.setLastLocalSync(new Date(0));
                 successCount = 0;
@@ -306,18 +315,20 @@ public class SyncManager {
         provider.registerWriteHandler(buildTagPath(STATUS_FORCE_HSYNC), new WriteHandler() {
             @Override
             public QualityCode write(TagPath tagPath, Object o) {
-                logger.info("Forcing historical sync");
+                logger.info("Forcing historical synchronization");
                 gatewayContext.getExecutionManager().executeOnce(() -> executeSync());
                 return QualityCode.Good;
             }
         });
+
+        logger.info("Start up complete");
     }
 
     /**
      * Handle shutdown and unregister of Ewon Connector module
      */
     public void shutdown() {
-        logger.info("Shutting down Ewon sync manager.");
+        logger.info("Shutting down...");
         gatewayContext.getExecutionManager().unRegister("ewon", "syncpoll");
     }
 
@@ -335,11 +346,11 @@ public class SyncManager {
     protected void run() {
         try {
             long start = System.currentTimeMillis();
-            logger.debug("Starting poll...");
+            logger.debug("Starting historical poll...");
             executeSync();
-            logger.debug("Poll completed in {}", FormatUtil.formatDurationSince(start));
+            logger.debug("Historical poll completed in {}", FormatUtil.formatDurationSince(start));
         } catch (Exception e) {
-            logger.error("Error polling Ewon data.", e);
+            logger.error("Error completing historical poll", e);
         }
     }
 
@@ -347,7 +358,14 @@ public class SyncManager {
      * Perform a synchronization of realtime tags
      */
     protected void runLive() {
-        updateLive();
+        try {
+            long start = System.currentTimeMillis();
+            logger.debug("Starting realtime poll...");
+            updateLive();
+            logger.debug("Realtime poll completed in {}", FormatUtil.formatDurationSince(start));
+        } catch (Exception e) {
+            logger.error("Error completing realtime poll", e);
+        }
     }
 
     /**
@@ -427,14 +445,14 @@ public class SyncManager {
                 }
             }
         } catch (InterruptedException e) {
-            logger.error("Error while reading tag parameters. InterruptedException.", e);
+            logger.error("Error while reading tag parameters. InterruptedException", e);
             e.printStackTrace();
         } catch (ExecutionException e) {
-            logger.error("Error while reading tag parameters. ExecutionException.", e);
+            logger.error("Error while reading tag parameters. ExecutionException", e);
             e.printStackTrace();
         } catch (NullPointerException e) {
-            logger.error("Error while reading tag parameters. Realtime property does not exist or"
-                    + "is the wrong datatype.", e);
+            logger.error("Error while reading tag parameters. Realtime property "+
+                "does not exist or is the wrong data type", e);
             e.printStackTrace();
         }
 
@@ -473,7 +491,8 @@ public class SyncManager {
                             value = Double.parseDouble(valueString);
                         }
                     } catch (NullPointerException e) {
-                        logger.error("Tag: " + tag + " does not exist on Ewon: " + eWonName, e);
+                        logger.error("The tag " + tag + " does not exist on Ewon: " +
+                            eWonName, e);
                         value = "";
                     }
 
@@ -481,9 +500,8 @@ public class SyncManager {
                     provider.updateValue((eWonName + "/" + tag), value, QualityCode.Good, new Date());
                 }
             } catch (IOException e) {
-                logger.error(
-                        "Error connecting to eWON for live data, " + eWonName + " may be offline",
-                        e);
+                logger.error("An error occurred while connecting to " + eWonName +
+                    " for realtime data. Check that it is online and connected to Talk2M", e);
 
                 // Mark tags as bad
                 for (String tag: liveEwonNames.get(eWonName)) {
@@ -499,7 +517,7 @@ public class SyncManager {
                     }
                 }
             } catch (Exception e) {
-                logger.error("Error while parsing live data", e);
+                logger.error("An error occurred while parsing realtime data", e);
             }
         }
     }
@@ -530,7 +548,7 @@ public class SyncManager {
             successCount++;
 
         } catch (Exception e) {
-            logger.error("Error synchronizing Ewon data.", e);
+            logger.error("An error occurred while synchronizing Ewon data", e);
             failureCount++;
         }
 
@@ -569,9 +587,8 @@ public class SyncManager {
                 if (lastSync == null || lastSync.before(ewon.getLastSync_Date())) {
                     // Add Ewon to synchronization list if synchronization needed
                     toSync.add(ewon);
-                    logger.debug(
-                            "Will mark '{}' for update, device sync time={} vs local sync time={}",
-                            ewon.getName(), ewon.getLastSync_Date(), lastSync);
+                    logger.debug("Will mark '{}' for update, device sync time={} vs" +
+                            " local sync time={}", ewon.getName(), ewon.getLastSync_Date(), lastSync);
                 }
             }
         }
@@ -584,7 +601,7 @@ public class SyncManager {
 
                 // Perform tag value update
                 updateTagValues(comm.queryEwon(ewon.getId()));
-                logger.debug("Sync of Ewon device '{}' finished in {}", ewon.getName(),
+                logger.debug("Sync of '{}' finished in {}", ewon.getName(),
                         FormatUtil.formatDurationSince(devstart));
 
                 // Update last sync cache with latest sync time
@@ -607,7 +624,7 @@ public class SyncManager {
             // Store start timestamp and previous transaction ID
             long start = System.currentTimeMillis();
             lastTX = syncData.getTransactionId();
-            logger.debug("Starting syncData for txid {}", lastTX);
+            logger.debug("Starting historical synchronization for TX ID {}...", lastTX);
 
             // Get and store latest data for Ewons
             EwonsData data = comm.syncData(lastTX);
@@ -620,8 +637,8 @@ public class SyncManager {
 
                 // Update tag values with latest data
                 updateTagValues(data);
-                logger.debug("Data retrieved and processed in {}. New txid: {}, hasMore: {}",
-                        FormatUtil.formatDurationSince(start), newTXID, hasMore);
+                logger.debug("Data retrieved and processed in {}. New TX ID: {}, "+
+                    "Has More: {}", FormatUtil.formatDurationSince(start), newTXID, hasMore);
 
                 // Update the internal database for next time, in order to not lose our spot after a
                 // reboot. However, if the txid hasn't changed, don't update- each time we update,
@@ -648,7 +665,7 @@ public class SyncManager {
             provider.updateValue(buildTagPath(STATUS_LASTSYNCID), syncData.getTransactionId(),
                     QualityCode.Good);
         } catch (Exception e) {
-            logger.error("Error saving and updating sync information.", e);
+            logger.error("Error saving and updating synchronization information", e);
         }
     }
 
@@ -761,13 +778,13 @@ public class SyncManager {
                             }
                             provider.updateValue(ewonRealtimePath, o, QualityCode.Good);
                         } catch (ClassCastException e) {
-                            logger.error(
-                                    "Writing Ewon AllRealtime tag has failed. Incorrect datatype.",
-                                    e);
+                            logger.error("An error occurred while writing Ewon " +
+                                "AllRealtime tag. Data type is incorrect", e);
                             provider.configureTag(ewonRealtimePath, DataType.Boolean);
                             provider.updateValue(ewonRealtimePath, Boolean.FALSE, QualityCode.Good);
                         } catch (Exception e) {
-                            logger.error("Writing Ewon AllRealtime tag has failed.", e);
+                            logger.error("An error occurred while writing Ewon " +
+                                "AllRealtime tag", e);
                         }
                         return QualityCode.Good;
                     }
@@ -801,7 +818,7 @@ public class SyncManager {
                                 "followed by any number of alphanumerics, spaces, " +
                                 "or the following: \' . - : ( ) To enable support for tag " +
                                 "names containing underscores, disable the \"Tag Names Contain Periods?\" " +
-                                "option.", t.getName()));
+                                "option", t.getName()));
                     }
                     else {
                         // Verify tag history information integrity, then
@@ -860,7 +877,8 @@ public class SyncManager {
                                                 writeValue);
                                         provider.updateValue(p, o, QualityCode.Good);
                                     } catch (Exception e) {
-                                        logger.error("Writing tag to Ewon via Talk2M API Failed");
+                                        logger.error("An error occurred while " +
+                                            "writing tag to Ewon using the Talk2M API");
                                         provider.updateValue(p, currentTagValue, QualityCode.Bad_Failure);
                                         return QualityCode.Bad_Failure;
                                     }
@@ -882,11 +900,12 @@ public class SyncManager {
                         }
 
                         // Output success
-                        logger.trace("Updated realtime value for '{}' [id={}] to {}", p, t.getId(), v);
+                        logger.trace("Updated realtime value for '{}' [id={}] to {}",
+                            p, t.getId(), v);
                     }
                 } catch (Exception e) {
-                    logger.error("Unable to create dataset for tag '{}/{}'", device, t.getName(),
-                            e);
+                    logger.error("Unable to create dataset for tag '{}/{}'", device,
+                        t.getName(), e);
                 }
             }
 
