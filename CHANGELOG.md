@@ -1,6 +1,6 @@
 # Ewon Ignition 8 Connector Changelog
 
-### v.1.1.10
+## v.1.1.10
 
 ### Major Changes
 
