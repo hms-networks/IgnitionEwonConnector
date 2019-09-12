@@ -163,6 +163,11 @@ public class SyncManager {
     boolean readAllTagsRealtime = false;
 
     /**
+     * Boolean if tag name checking is disabled
+     */
+    boolean tagNameCheckDisabled = false;
+
+    /**
      * Ewon synchronization data
      */
     EwonSyncData syncData = null;
@@ -215,6 +220,7 @@ public class SyncManager {
 
         // Store tag name sanitization information
         replaceUnderscore = settings.isReplaceUnderscore();
+        tagNameCheckDisabled = settings.isTagNameCheckDisabled();
 
         // Store read all tags in realtime configuration information
         readAllTagsRealtime = settings.isForceLive();
@@ -228,6 +234,12 @@ public class SyncManager {
             logger.warn(
                     "History sync is enable, but no history provider has been specified for storage."
                             + "No data will be stored.");
+        }
+
+        // Output warning if tag name check is disabled
+        if (tagNameCheckDisabled) {
+            logger.warn("Tag name checking is disabled. Tags with unsupported characters may not " +
+                "work properly.");
         }
 
         // Load and store synchronization data, and create it if necessary
@@ -775,13 +787,15 @@ public class SyncManager {
 
 
                     // Check tag name format and display warning if necessary
-                    if (!replaceUnderscore && !t.getName().matches(EwonConsts.ALLOWED_TAGNAME_REGEX)) {
+                    if (!tagNameCheckDisabled && !replaceUnderscore &&
+                        !t.getName().matches(EwonConsts.ALLOWED_TAGNAME_REGEX)) {
                         logger.error(String.format("The tag %s has an unsupported name. " +
                                 "Supported tag names must begin with an alphanumeric or underscore, " +
                                 "followed by any number of alphanumerics, underscores, spaces, " +
                                 "or the following: \' - : ( )", t.getName()));
                     }
-                    else if (replaceUnderscore && !t.getName().matches(EwonConsts.ALLOWED_TAGNAME_REGEX_NO_UNDERSCORE)) {
+                    else if (!tagNameCheckDisabled && replaceUnderscore &&
+                        !t.getName().matches(EwonConsts.ALLOWED_TAGNAME_REGEX_NO_UNDERSCORE)) {
                         logger.error(String.format("The tag %s has an unsupported name. " +
                                 "Supported tag names must begin with an alphanumeric or period, " +
                                 "followed by any number of alphanumerics, spaces, " +
