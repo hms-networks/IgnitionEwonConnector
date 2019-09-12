@@ -267,7 +267,7 @@ public class SyncManager {
         // Load and register realtime polling interval configuration information
         long livePollRateMS =
                 TimeUnits.toMillis(settings.getLivePollRate().doubleValue(), TimeUnits.SEC);
-        if (pollRateMS > 0) {
+        if (livePollRateMS > 0) {
             logger.debug("Configuring realtime polling for {} ms", livePollRateMS);
             gatewayContext.getExecutionManager().register("ewon", "synclive", this::runLive,
                     (int) livePollRateMS);
