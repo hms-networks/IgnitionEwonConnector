@@ -330,6 +330,7 @@ public class SyncManager {
     public void shutdown() {
         logger.info("Shutting down...");
         gatewayContext.getExecutionManager().unRegister("ewon", "syncpoll");
+        gatewayContext.getExecutionManager().unRegister("ewon", "synclive");
     }
 
     /**
