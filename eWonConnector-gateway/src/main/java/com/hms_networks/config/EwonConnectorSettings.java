@@ -103,6 +103,11 @@ public class EwonConnectorSettings extends PersistentRecord {
    public static final StringField HistoryProvider = new StringField(META, "historyProvider");
 
    /**
+    * Configured boolean if Ewon Connector enabled
+    */
+   public static final BooleanField TagNameCheckDisabled = new BooleanField(META, "tagNameCheckDisabled").setDefault(false);
+
+   /**
     * Settings category for general configuration options
     */
    public static final Category GeneralCategory =
@@ -134,7 +139,8 @@ public class EwonConnectorSettings extends PersistentRecord {
        * Settings category for advanced configuration
       */
       public static final Category AdvancedCategory =
-      new Category("EwonConnectorSettings.Category.Advanced", 125).include(ForceLive);
+      new Category("EwonConnectorSettings.Category.Advanced", 125).include(ForceLive,
+          TagNameCheckDisabled);
 
    // Configure passwords and history provider fields information
    static {
@@ -238,6 +244,14 @@ public class EwonConnectorSettings extends PersistentRecord {
     */
    public boolean isReplaceUnderscore() {
       return getBoolean(ReplaceUnderscore);
+   }
+
+   /**
+    * Get boolean if tag name checking is disabled
+    * @return true/false if tag name checking is disabled
+    */
+   public boolean isTagNameCheckDisabled() {
+      return getBoolean(TagNameCheckDisabled);
    }
 
    /**
