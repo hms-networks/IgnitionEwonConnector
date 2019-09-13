@@ -316,7 +316,7 @@ public class SyncManager {
             @Override
             public QualityCode write(TagPath tagPath, Object o) {
                 logger.info("Forcing historical synchronization");
-                gatewayContext.getExecutionManager().executeOnce(() -> executeSync());
+                gatewayContext.getExecutionManager().executeOnce(() -> run());
                 return QualityCode.Good;
             }
         });
