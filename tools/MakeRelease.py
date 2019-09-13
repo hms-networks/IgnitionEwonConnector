@@ -20,6 +20,7 @@ README_FILENAME     = "README.md"
 CHANGELOG_FILENAME  = "CHANGELOG.md"
 MODL_FILENAME       = PROJECT_NAME + "-Ignition-Module-signed.modl"
 BUILD_XML_FILENAME  = "pom.xml"
+RELEASE_FOLDER_EXT  = ".zip"
 
 
 #Paths for release files
@@ -63,7 +64,7 @@ def CreateRelease():
    releaseFilename = RELEASE_PATH + PROJECT_NAME + "-" + IGNITION_VERSION + "-" + moduleVersion
 
    #Create the release zip folder
-   zf = zipfile.ZipFile("%s.zip" % releaseFilename, "w", zipfile.ZIP_DEFLATED)
+   zf = zipfile.ZipFile(("%s" + RELEASE_FOLDER_EXT) % releaseFilename, "w", zipfile.ZIP_DEFLATED)
 
    #Add all "release" files to the zip
    zf.write(os.path.abspath(os.path.join(README_PATH,README_FILENAME)), README_FILENAME)
@@ -73,7 +74,7 @@ def CreateRelease():
    #Close the release zip folder
    zf.close()
 
-   print "Successfully made release: " + releaseFilename + ".zip"
+   print "Successfully made release: " + releaseFilename + RELEASE_FOLDER_EXT
 
 if __name__ == '__main__':
 
