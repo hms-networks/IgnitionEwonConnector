@@ -54,6 +54,8 @@ def GetModuleVersion():
 
 def CreateRelease():
 
+   releaseBuildSuccess = True
+
    moduleVersion = GetModuleVersion()
 
    #Create releases directory if it does not already exist
@@ -68,12 +70,21 @@ def CreateRelease():
    #Add all "release" files to the zip
    zf.write(os.path.abspath(os.path.join(README_PATH,README_FILENAME)), README_FILENAME)
    zf.write(os.path.abspath(os.path.join(CHANGELOG_PATH,CHANGELOG_FILENAME)), CHANGELOG_FILENAME)
-   zf.write(os.path.abspath(os.path.join(MODL_PATH,MODL_FILENAME)), MODL_FILENAME)
+
+   try:
+      zf.write(os.path.abspath(os.path.join(MODL_PATH,MODL_FILENAME)), MODL_FILENAME)
+   except OSError:
+      print "MODL file does not exist"
+      releaseBuildSuccess = False
 
    #Close the release zip folder
    zf.close()
 
-   print "Successfully made release: " + releaseFilename + RELEASE_FOLDER_EXT
+   if releaseBuildSuccess:
+      print "Successfully made release: " + releaseFilename + RELEASE_FOLDER_EXT
+   else:
+      print "Could not build release"
+      os.remove(releaseFilename + RELEASE_FOLDER_EXT)
 
 if __name__ == '__main__':
 
