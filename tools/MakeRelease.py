@@ -16,11 +16,13 @@ IGNITION_VERSION = "8"
 RELEASE_PATH = "../releases/"
 
 #File names for release files
-README_FILENAME     = "README.md"
-CHANGELOG_FILENAME  = "CHANGELOG.md"
-MODL_FILENAME       = PROJECT_NAME + "-Ignition-Module-signed.modl"
-BUILD_XML_FILENAME  = "pom.xml"
-RELEASE_FOLDER_EXT  = ".zip"
+README_FILENAME          = "README.md"
+CHANGELOG_FILENAME       = "CHANGELOG.md"
+MODL_FILENAME            = PROJECT_NAME + "-Ignition-Module-signedRelease.modl"
+MODL_FILENAME_UNSIGNED   = PROJECT_NAME + "-Ignition-Module-unsigned.modl"
+BUILD_XML_FILENAME       = "pom.xml"
+RELEASE_FOLDER_EXT       = ".zip"
+UNSIGNED_RELEASE_POSTFIX = "-unsigned"
 
 
 #Paths for release files
@@ -56,6 +58,7 @@ def GetModuleVersion():
 def CreateRelease():
 
    releaseBuildSuccess = True
+   signedRelease = True
 
    moduleVersion = GetModuleVersion()
 
@@ -75,14 +78,23 @@ def CreateRelease():
    try:
       zf.write(os.path.abspath(os.path.join(MODL_PATH,MODL_FILENAME)), MODL_FILENAME)
    except OSError:
-      print "MODL file does not exist"
-      releaseBuildSuccess = False
+      try:
+         zf.write(os.path.abspath(os.path.join(MODL_PATH,MODL_FILENAME_UNSIGNED)), MODL_FILENAME_UNSIGNED)
+         signedRelease = False
+      except OSError:
+         print "MODL file does not exist"
+         releaseBuildSuccess = False
 
    #Close the release zip folder
    zf.close()
 
    if releaseBuildSuccess:
-      print "Successfully made release: " + releaseFilename + RELEASE_FOLDER_EXT
+      if signedRelease:
+         print "Successfully made release: " + releaseFilename + RELEASE_FOLDER_EXT
+      else:
+         os.rename(releaseFilename+".zip", releaseFilename + UNSIGNED_RELEASE_POSTFIX + RELEASE_FOLDER_EXT)
+         print "MODL file is unsigned"
+         print "Successfully made release: " + releaseFilename + UNSIGNED_RELEASE_POSTFIX + RELEASE_FOLDER_EXT
    else:
       print "Could not build release"
       os.remove(releaseFilename + RELEASE_FOLDER_EXT)
