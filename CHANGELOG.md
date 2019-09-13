@@ -10,7 +10,7 @@
 ### Minor Changes
 
 * Added option to disable strict checking for allowed tag name characters
-  
+
 ## v1.1.9
 
 ### Major Changes
