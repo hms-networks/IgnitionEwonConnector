@@ -31,7 +31,11 @@ BUILD_XML_PATH  = "../eWonConnector-build"
 # Returns the namespace of the xml element
 def GetNamespace(element):
    match = re.match('\{.*\}', element.tag)
-   return match.group(0) if match else ''
+   res = ''
+   if match:
+      FIRST_MATCH_INDEX = 0
+      res = match.group(FIRST_MATCH_INDEX)
+   return res
 
 # Returns the module version based on the build xml file
 def GetModuleVersion():
