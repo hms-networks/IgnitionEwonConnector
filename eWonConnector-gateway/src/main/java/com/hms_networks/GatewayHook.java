@@ -136,7 +136,7 @@ public class GatewayHook extends AbstractGatewayModuleHook {
                                 .setPersistValues(true));
             } catch (Exception e) {
                 logger.error("An error occurred while starting the realtime " +
-                    "tag provider.", e);
+                        "tag provider.", e);
                 realtime = null;
             }
             // Create sync manager and start it up with given settings
@@ -144,7 +144,7 @@ public class GatewayHook extends AbstractGatewayModuleHook {
             mgr.startup(settings);
         } else {
             logger.debug("The Ewon connector has been disabled in its options. " +
-                "Not starting up.");
+                    "Not starting up.");
         }
     }
 
