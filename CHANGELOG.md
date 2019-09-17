@@ -10,6 +10,9 @@
 ### Minor Changes
 
 * Added option to disable strict checking for allowed tag name characters
+* Updated user-friendly logging output
+* Fixed an issue with realtime tag provider shutdown
+* Fixed an issue with realtime poll rate value validation
 
 ## v1.1.9
 
