@@ -176,9 +176,9 @@ public class EwonUtil {
 
          // Generate a "cleaned" exception based on the response code.
          if (httpResponse == HTTP_UNAUTHORIZED) {
-            logger.error("Verify your account name, password, and developer ID are correctly"
-                    + " entered on the Ewon Connector configuration page");
-            logger.error("Talk2M account credentials are invalid!");
+            logger.error("The configured Talk2M account credentials are invalid! " +
+                    "Verify your account name, username, password and developer ID are " +
+                    "correctly entered on the Ewon Connector configuration page.");
             throw new IOException("Authentication Error: Please check your account credentials.");
          } else if (httpResponse == HTTP_NOT_FOUND) {
             throw new IOException("Network Error: Ewon services not found. Check network link.");
