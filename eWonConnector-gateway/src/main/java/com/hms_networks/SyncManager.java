@@ -233,7 +233,7 @@ public class SyncManager {
       double livePollRateS = settings.getLivePollRate().doubleValue();
       long livePollRateMS =
               TimeUnits.toMillis(livePollRateS, TimeUnits.SEC);
-      if (pollRateMS > 0) {
+      if (livePollRateMS > 0) {
          logger.debug("Configuring live polling for {} sec(s)", livePollRateS);
          gatewayContext.getExecutionManager().register("ewon", "synclive", this::runLive,
                  (int) livePollRateMS);
