@@ -283,7 +283,7 @@ public class SyncManager {
          @Override
          public Quality write(TagPath path, Object val) {
             logger.info("Forcing historical synchronization");
-            gatewayContext.getExecutionManager().executeOnce(() -> executeSync());
+            gatewayContext.getExecutionManager().executeOnce(() -> run());
             return DataQuality.GOOD_DATA;
          }
       });
