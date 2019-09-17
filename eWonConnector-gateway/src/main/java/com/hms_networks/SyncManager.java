@@ -252,28 +252,30 @@ public class SyncManager {
         }
 
         // Load and register polling interval configuration information
-        long pollRateMS = TimeUnits.toMillis(settings.getPollRate().doubleValue(), TimeUnits.MIN);
+        double pollRateM = settings.getPollRate().doubleValue();
+        long pollRateMS = TimeUnits.toMillis(pollRateM, TimeUnits.MIN);
         if (pollRateMS > 0) {
-            logger.debug("Configuring polling for {} ms", pollRateMS);
+            logger.debug("Configuring polling for {} min(s)", pollRateM);
             gatewayContext.getExecutionManager().register("ewon", "syncpoll", this::run,
                     (int) pollRateMS);
         }
         else if (pollRateMS < 0) {
-            logger.warn("Cannot configure polling for {} ms. " +
-                    "Try an interval greater than 0 mins", pollRateMS);
+            logger.warn("Cannot configure polling for {} min(s). " +
+                    "Try an interval greater than 0 mins", pollRateM);
         }
 
         // Load and register realtime polling interval configuration information
+        double livePollRateS = settings.getLivePollRate().doubleValue();
         long livePollRateMS =
-                TimeUnits.toMillis(settings.getLivePollRate().doubleValue(), TimeUnits.SEC);
+                TimeUnits.toMillis(livePollRateS, TimeUnits.SEC);
         if (livePollRateMS > 0) {
-            logger.debug("Configuring realtime polling for {} ms", livePollRateMS);
+            logger.debug("Configuring realtime polling for {} sec(s)", livePollRateS);
             gatewayContext.getExecutionManager().register("ewon", "synclive", this::runLive,
                     (int) livePollRateMS);
         }
         else if (livePollRateMS < 0) {
-            logger.warn("Cannot configure realtime polling for {} ms. " +
-                    "Try an interval greater than 0 secs", livePollRateMS);
+            logger.warn("Cannot configure realtime polling for {} sec(s). " +
+                    "Try an interval greater than 0 secs", livePollRateS);
         }
 
         // Configure Ewon Connector status/statistics tags
