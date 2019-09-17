@@ -18,7 +18,7 @@ RELEASE_PATH = "../releases/"
 #File names for release files
 README_FILENAME          = "README.md"
 CHANGELOG_FILENAME       = "CHANGELOG.md"
-MODL_FILENAME            = PROJECT_NAME + "-Ignition-Module-signedRelease.modl"
+MODL_FILENAME            = PROJECT_NAME + "-Ignition-Module-signed.modl"
 MODL_FILENAME_UNSIGNED   = PROJECT_NAME + "-Ignition-Module-unsigned.modl"
 BUILD_XML_FILENAME       = "pom.xml"
 RELEASE_FOLDER_EXT       = ".zip"
