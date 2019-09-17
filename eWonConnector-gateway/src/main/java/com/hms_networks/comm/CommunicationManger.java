@@ -84,7 +84,6 @@ public class CommunicationManger {
 
       // Get string from string builder, log and return
       String ret = sb.toString();
-      logger.debug("Generated call: {}", ret);
       return ret;
    }
 
