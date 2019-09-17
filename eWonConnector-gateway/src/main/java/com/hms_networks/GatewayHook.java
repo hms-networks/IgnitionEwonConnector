@@ -22,7 +22,7 @@ public class GatewayHook extends AbstractGatewayModuleHook {
    /**
     * Ewon Connector Logger
     */
-   private final Logger logger = LoggerFactory.getLogger("Ewon.ModuleManager");
+   private final Logger logger = LoggerFactory.getLogger("Ewon.EwonModuleManager");
 
    /**
     * Current GatewayContext
@@ -117,7 +117,7 @@ public class GatewayHook extends AbstractGatewayModuleHook {
     * @param settings updated settings
     */
    protected void updateSettings(EwonConnectorSettings settings) {
-      logger.info("Ewon connector settings changed, reconfiguring synchronization manager.");
+      logger.info("Settings have been updated. Restarting sync manager");
       shutdownManager();
       startupMgr(settings);
    }
@@ -135,14 +135,16 @@ public class GatewayHook extends AbstractGatewayModuleHook {
             // Startup realtime tag provider
             realtime.startup(gatewayContext);
          } catch (Exception e) {
-            logger.error("Error starting up realtime tag provider", e);
+            logger.error("An error occurred while starting the realtime " +
+                "tag provider", e);
             realtime = null;
          }
          // Create sync manager and start it up with given settings
          mgr = new SyncManager(gatewayContext, realtime);
          mgr.startup(settings);
       } else {
-         logger.debug("Ewon connector is not enabled, will not be started.");
+         logger.debug("The Ewon connector has been disabled in its options. " +
+             "Not starting up");
       }
    }
 
