@@ -57,7 +57,7 @@ def GetModuleVersion():
 def CreateRelease():
 
    releaseBuildSuccess = True
-   signedRelease = True
+   isSignedRelease = True
 
    moduleVersion = GetModuleVersion()
 
@@ -79,7 +79,7 @@ def CreateRelease():
    except OSError:
       try:
          zf.write(os.path.abspath(os.path.join(MODL_PATH,MODL_FILENAME_UNSIGNED)), MODL_FILENAME_UNSIGNED)
-         signedRelease = False
+         isSignedRelease = False
       except OSError:
          print "MODL file does not exist"
          releaseBuildSuccess = False
@@ -88,7 +88,7 @@ def CreateRelease():
    zf.close()
 
    if releaseBuildSuccess:
-      if signedRelease:
+      if isSignedRelease:
          print "Successfully made release: " + releaseFilename + RELEASE_FOLDER_EXT
       else:
          os.rename(releaseFilename+".zip", releaseFilename + UNSIGNED_RELEASE_POSTFIX + RELEASE_FOLDER_EXT)
