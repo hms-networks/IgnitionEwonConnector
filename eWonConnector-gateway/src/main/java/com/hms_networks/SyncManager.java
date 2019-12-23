@@ -475,7 +475,7 @@ public class SyncManager {
                 // For each realtime tag on current Ewon, update value
                 for (String tag : liveEwonNames.get(eWonName)) {
                     Object value;
-                    String valueString = tagData.getTagValue(unSanitizeName(tag));
+                    String valueString = tagData.getTagValue(replaceUnderscore ? unSanitizeName(tag): tag);
 
                     // Identify tag type and store properly
                     try {
