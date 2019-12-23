@@ -47,7 +47,7 @@
                     <moduleId>com.hms_networks.EwonConnector</moduleId>
                     <moduleName>${project.parent.name}</moduleName>
                     <moduleDescription>${project.description}</moduleDescription>
-                    <moduleVersion>1.1.3</moduleVersion>
+                    <moduleVersion>1.1.4</moduleVersion>
                     <requiredIgnitionVersion>7.9.0</requiredIgnitionVersion>
                     <requiredFrameworkVersion>8</requiredFrameworkVersion>
                     <licenseFile>license.html</licenseFile>

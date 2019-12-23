@@ -1,5 +1,11 @@
 # Ewon Ignition 7.9 Connector Changelog
 
+## v1.1.4
+
+### Major Changes
+
+* Fixed an issue that caused realtime update errors on tags with underscores
+
 ## v1.1.3
 
 ### Major Changes
