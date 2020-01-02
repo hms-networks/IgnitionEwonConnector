@@ -15,7 +15,12 @@ import com.inductiveautomation.ignition.common.sqltags.model.types.TagValue;
 import com.inductiveautomation.ignition.common.sqltags.model.types.TimestampSource;
 import com.inductiveautomation.ignition.common.sqltags.parser.TagPathParser;
 import com.inductiveautomation.ignition.common.config.BasicProperty;
+import com.inductiveautomation.ignition.common.tags.config.CollisionPolicy;
+import com.inductiveautomation.ignition.common.tags.config.TagConfigurationModel;
+import com.inductiveautomation.ignition.common.tags.config.properties.WellKnownTagProps;
+import com.inductiveautomation.ignition.common.tags.config.types.TagObjectType;
 import com.inductiveautomation.ignition.common.tags.model.TagPath;
+import com.inductiveautomation.ignition.common.tags.model.TagProvider;
 import com.inductiveautomation.ignition.common.tags.paths.BasicTagPath;
 import com.inductiveautomation.ignition.common.util.TimeUnits;
 import com.inductiveautomation.ignition.gateway.history.HistoricalTagValue;
@@ -47,6 +52,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Manager for synchronization and configuration of Ewon Connector
@@ -899,6 +905,31 @@ public class SyncManager {
                         // Update tag value if read all tags in realtime is enabled
                         if (!readAllTagsRealtime) {
                             provider.updateValue(p, v.getValue(), v.getQuality(), v.getTimestamp());
+                        }
+
+                        // Sync tag description to documentation and tooltip
+                        try {
+                            // Get tag provider from gateway context
+                            TagProvider gwTagProvider = gatewayContext.getTagManager().getTagProvider(providerName);
+                            final int gwTagProviderTimeoutSecs = 5;
+
+                            // Get path to tag and read config
+                            final int tagConfigSingletonIndex = 0;
+                            TagPath tagPath = com.inductiveautomation.ignition.common.tags.paths.parser.TagPathParser.parse(p);
+                            List<TagConfigurationModel> tagConfig = gwTagProvider.getTagConfigsAsync(Collections.singletonList(tagPath), false, true).get(gwTagProviderTimeoutSecs, TimeUnit.SECONDS);
+                            TagConfigurationModel tagConfigModel = tagConfig.get(tagConfigSingletonIndex);
+
+                            // Check integrity of read config
+                            if (tagConfigModel.getType() == TagObjectType.Unknown) throw new Exception("Tag edit configuration not found");
+
+                            // Set documentation and tooltip to tag description
+                            tagConfigModel.set(WellKnownTagProps.Documentation, t.getDescription());
+                            tagConfigModel.set(WellKnownTagProps.Tooltip, t.getDescription());
+
+                            // Save tag config changes
+                            gwTagProvider.saveTagConfigsAsync(Collections.singletonList(tagConfigModel), CollisionPolicy.MergeOverwrite).get(gwTagProviderTimeoutSecs, TimeUnit.SECONDS);
+                        } catch (Exception e) {
+                            logger.error("Unable to update tag description/documentation for tag {}/{}", device, t.getName(), e);
                         }
 
                         // Output success
