@@ -1,5 +1,11 @@
 # Ewon Ignition 8 Connector Changelog
 
+## v1.1.12
+
+### Major Changes
+
+* Ewon tag descriptions are now synced to Ignition tag documentation and tooltip
+
 ## v1.1.11
 
 ### Major Changes
