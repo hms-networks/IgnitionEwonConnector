@@ -120,7 +120,7 @@ With the module successfully installed, a new `Ewon Connector` page will be adde
 * **Main**
    * **Name** - Unique name of the tag provider created in Ignition.
    * **Enabled** - Option to turn on/off the Ewon Connector functionality.
-   * **Tag Names Contain Periods** - Check this if your Ewon tag names contain periods. If your tag names contain periods they must not contain underscores.
+   * **Tag Names Contain Periods** - Check this if any Ewon tag names contain periods. If any tag names of the connected Ewons contain periods ".", tag names on the connected Ewons may not contain the underscore "_" character. HMS suggests not using periods in tag names when using Ignition.
    * **Poll Rate in Minutes** - Interval for how often data will be pulled from Datamailbox.
    * **Realtime Poll Rate in Seconds** - Interval for how often data will be pulled from an Ewon when realtime reads are activated.
 
