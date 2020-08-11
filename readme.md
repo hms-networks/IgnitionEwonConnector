@@ -53,7 +53,8 @@ This application is supported by HMS Networks' North American offices.
 
 ## [Download](#table-of-contents)
 
-The module can be downloaded from the [releases page](https://github.com/hms-networks/IgnitionEwonConnector/releases).
+The module can be downloaded from the [releases page](https://github.com/hms-networks/IgnitionEwonConnector/releases). If you are just installing the connector into ignition only the .zip is required and the source files can be ignored.  
+If you are not sure what version you need we recommend the latest release for your version of ignition.  
 
 ## [Installation](#table-of-contents)
 
