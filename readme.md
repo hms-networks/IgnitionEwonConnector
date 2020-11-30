@@ -32,9 +32,9 @@ This module version is compatible with Ignition 8.  For an Ignition 7.9 compatib
 
 This application is supported by HMS Networks' North American offices.
 
-| Phone                                        | Forum                                      | Email                                           |
-|:--------------------------------------------:|:------------------------------------------:|:-----------------------------------------------:|
-| [+1 312 829 0601](tel:13128290601), Option 2 | [hms.how](https://forum.hms-networks.com/) | [support@hms.how](mailto:support@hms.how)       |
+| Phone                                        | Forum                                      |
+|:--------------------------------------------:|:------------------------------------------:|
+| [+1 312 829 0601](tel:13128290601), Option 2 | [hms.how](https://forum.hms-networks.com/) |
 
 <sup>[Back to top](#table-of-contents)</sup>
 
