@@ -13,7 +13,7 @@
     <description>EwonConnector Ignition Module</description>
 
     <properties>
-        <ignition-sdk-version>8.0.2</ignition-sdk-version>
+        <ignition-sdk-version>8.1.1</ignition-sdk-version>
     </properties>
 
     <modules>

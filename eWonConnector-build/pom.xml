@@ -48,7 +48,7 @@
                     <moduleName>${project.parent.name}</moduleName>
                     <moduleDescription>${project.description}</moduleDescription>
                     <moduleVersion>1.1.12</moduleVersion>
-                    <requiredIgnitionVersion>8.0.0</requiredIgnitionVersion>
+                    <requiredIgnitionVersion>${ignition-sdk-version}</requiredIgnitionVersion>
                     <requiredFrameworkVersion>8</requiredFrameworkVersion>
                     <licenseFile>license.html</licenseFile>
                     <freeModule>true</freeModule>
