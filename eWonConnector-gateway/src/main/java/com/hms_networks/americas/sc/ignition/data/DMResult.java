@@ -1,4 +1,4 @@
-package com.hms_networks.data;
+package com.hms_networks.americas.sc.ignition.data;
 
 /** Class representation of data mailbox connection result */
 public class DMResult {

@@ -1,4 +1,4 @@
-package com.hms_networks.data;
+package com.hms_networks.americas.sc.ignition.data;
 
 /** Object representing a Tag */
 public class Tag {

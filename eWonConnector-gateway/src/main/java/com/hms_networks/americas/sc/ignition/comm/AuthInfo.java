@@ -1,10 +1,10 @@
-package com.hms_networks.comm;
+package com.hms_networks.americas.sc.ignition.comm;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.io.UnsupportedEncodingException;
 import org.apache.commons.lang3.StringUtils;
-import com.hms_networks.EwonConsts;
+import com.hms_networks.americas.sc.ignition.EwonConsts;
 
 /** Authentication information object */
 public class AuthInfo {

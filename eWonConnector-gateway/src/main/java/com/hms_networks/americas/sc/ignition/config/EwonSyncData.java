@@ -1,4 +1,4 @@
-package com.hms_networks.config;
+package com.hms_networks.americas.sc.ignition.config;
 
 import java.util.Date;
 import com.inductiveautomation.ignition.gateway.localdb.persistence.IdentityField;

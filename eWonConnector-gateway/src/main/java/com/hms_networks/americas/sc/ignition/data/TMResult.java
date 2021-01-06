@@ -1,4 +1,4 @@
-package com.hms_networks.data;
+package com.hms_networks.americas.sc.ignition.data;
 
 import java.util.HashMap;
 import java.io.BufferedReader;

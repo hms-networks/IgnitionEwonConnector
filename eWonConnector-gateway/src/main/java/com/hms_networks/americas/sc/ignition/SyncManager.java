@@ -1,4 +1,4 @@
-package com.hms_networks;
+package com.hms_networks.americas.sc.ignition;
 
 import com.inductiveautomation.ignition.common.FormatUtil;
 import com.inductiveautomation.ignition.common.TypeUtilities;
@@ -32,14 +32,14 @@ import com.inductiveautomation.ignition.gateway.tags.managed.ManagedTagProvider;
 import com.inductiveautomation.ignition.gateway.tags.managed.WriteHandler;
 import java.util.Collections;
 import org.apache.commons.lang3.StringUtils;
-import com.hms_networks.comm.CommunicationManger;
-import com.hms_networks.config.EwonConnectorSettings;
-import com.hms_networks.config.EwonSyncData;
-import com.hms_networks.data.DataPoint;
-import com.hms_networks.data.EwonData;
-import com.hms_networks.data.EwonsData;
-import com.hms_networks.data.TMResult;
-import com.hms_networks.data.Tag;
+import com.hms_networks.americas.sc.ignition.comm.CommunicationManger;
+import com.hms_networks.americas.sc.ignition.config.EwonConnectorSettings;
+import com.hms_networks.americas.sc.ignition.config.EwonSyncData;
+import com.hms_networks.americas.sc.ignition.data.DataPoint;
+import com.hms_networks.americas.sc.ignition.data.EwonData;
+import com.hms_networks.americas.sc.ignition.data.EwonsData;
+import com.hms_networks.americas.sc.ignition.data.TMResult;
+import com.hms_networks.americas.sc.ignition.data.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.io.IOException;

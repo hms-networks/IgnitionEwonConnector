@@ -6,7 +6,7 @@
 
     <parent>
         <artifactId>EwonConnector</artifactId>
-        <groupId>com.hms_networks</groupId>
+        <groupId>com.hms_networks.americas.sc</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
@@ -14,7 +14,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.hms_networks</groupId>
+            <groupId>com.hms_networks.americas.sc</groupId>
             <artifactId>eWonConnector-gateway</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
@@ -44,7 +44,7 @@
                         </projectScope>
                     </projectScopes>
 
-                    <moduleId>com.hms_networks.EwonConnector</moduleId>
+                    <moduleId>com.hms_networks.americas.sc.ignition</moduleId>
                     <moduleName>${project.parent.name}</moduleName>
                     <moduleDescription>${project.description}</moduleDescription>
                     <moduleVersion>1.1.12</moduleVersion>
@@ -56,7 +56,7 @@
                     <hooks>
                         <hook>
                             <scope>G</scope>
-                            <hookClass>com.hms_networks.GatewayHook</hookClass>
+                            <hookClass>com.hms_networks.americas.sc.ignition.GatewayHook</hookClass>
                         </hook>
                     </hooks>
 

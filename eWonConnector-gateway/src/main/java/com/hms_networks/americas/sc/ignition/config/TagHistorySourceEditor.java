@@ -1,4 +1,4 @@
-package com.hms_networks.config;
+package com.hms_networks.americas.sc.ignition.config;
 
 import java.util.List;
 import com.inductiveautomation.ignition.gateway.history.HistoryFlavor;

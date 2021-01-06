@@ -1,17 +1,15 @@
-package com.hms_networks.config;
+package com.hms_networks.americas.sc.ignition.config;
 
-import com.inductiveautomation.ignition.common.util.TimeUnits;
 import com.inductiveautomation.ignition.gateway.localdb.persistence.BooleanField;
 import com.inductiveautomation.ignition.gateway.localdb.persistence.Category;
 import com.inductiveautomation.ignition.gateway.localdb.persistence.EncodedStringField;
-import com.inductiveautomation.ignition.gateway.localdb.persistence.EnumField;
 import com.inductiveautomation.ignition.gateway.localdb.persistence.IdentityField;
 import com.inductiveautomation.ignition.gateway.localdb.persistence.IntField;
 import com.inductiveautomation.ignition.gateway.localdb.persistence.PersistentRecord;
 import com.inductiveautomation.ignition.gateway.localdb.persistence.RecordMeta;
 import com.inductiveautomation.ignition.gateway.localdb.persistence.StringField;
 import com.inductiveautomation.ignition.gateway.web.components.editors.PasswordEditorSource;
-import com.hms_networks.comm.AuthInfo;
+import com.hms_networks.americas.sc.ignition.comm.AuthInfo;
 import simpleorm.dataset.SFieldFlags;
 
 /**

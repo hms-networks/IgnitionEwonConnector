@@ -1,4 +1,4 @@
-package com.hms_networks.data;
+package com.hms_networks.americas.sc.ignition.data;
 
 /** Object to store multiple Ewons' data */
 public class EwonsData extends DMResult {

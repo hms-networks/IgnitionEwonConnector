@@ -1,4 +1,4 @@
-package com.hms_networks;
+package com.hms_networks.americas.sc.ignition;
 
 import com.inductiveautomation.ignition.common.Base64;
 import com.inductiveautomation.ignition.common.sqltags.model.types.DataQuality;
