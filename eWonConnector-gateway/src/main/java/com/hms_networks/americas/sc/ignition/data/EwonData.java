@@ -1,7 +1,7 @@
-package com.hms_networks.data;
+package com.hms_networks.americas.sc.ignition.data;
 
 import java.util.Date;
-import com.hms_networks.EwonUtil;
+import com.hms_networks.americas.sc.ignition.EwonUtil;
 
 /** Object representing and containing information for an Ewon */
 public class EwonData extends DMResult {

@@ -1,13 +1,13 @@
-package com.hms_networks.comm;
+package com.hms_networks.americas.sc.ignition.comm;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import com.hms_networks.EwonConsts;
-import com.hms_networks.EwonUtil;
-import com.hms_networks.config.SyncMode;
-import com.hms_networks.data.EwonData;
-import com.hms_networks.data.EwonsData;
+import com.hms_networks.americas.sc.ignition.EwonConsts;
+import com.hms_networks.americas.sc.ignition.EwonUtil;
+import com.hms_networks.americas.sc.ignition.config.SyncMode;
+import com.hms_networks.americas.sc.ignition.data.EwonData;
+import com.hms_networks.americas.sc.ignition.data.EwonsData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.gson.Gson;

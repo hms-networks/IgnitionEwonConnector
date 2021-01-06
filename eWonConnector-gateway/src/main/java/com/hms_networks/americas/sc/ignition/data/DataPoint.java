@@ -1,9 +1,9 @@
-package com.hms_networks.data;
+package com.hms_networks.americas.sc.ignition.data;
 
 import com.inductiveautomation.ignition.common.model.values.BasicQualifiedValue;
 import com.inductiveautomation.ignition.common.model.values.QualifiedValue;
 import com.inductiveautomation.ignition.common.sqltags.model.types.DataQuality;
-import com.hms_networks.EwonUtil;
+import com.hms_networks.americas.sc.ignition.EwonUtil;
 
 /** Object representing and containing data point information */
 public class DataPoint {

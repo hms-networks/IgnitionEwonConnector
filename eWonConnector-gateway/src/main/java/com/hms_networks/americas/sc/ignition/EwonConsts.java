@@ -1,4 +1,4 @@
-package com.hms_networks;
+package com.hms_networks.americas.sc.ignition;
 
 /** Constants for the Talk2M service, primarily URL parameter keys. */
 public class EwonConsts {
