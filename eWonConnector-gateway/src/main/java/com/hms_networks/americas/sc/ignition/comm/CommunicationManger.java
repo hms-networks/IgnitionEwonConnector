@@ -248,7 +248,7 @@ public class CommunicationManger {
 
     // Add Talk2M API key (from authentication information) to parameters list
     params.add(EwonConsts.T2M_M2W_DEVKEY);
-    params.add(authInfo.getDevKey());
+    params.add(authInfo.getDevId());
 
     // Build and perform Talk2M call
     EwonUtil.httpGet(
@@ -274,7 +274,7 @@ public class CommunicationManger {
 
     // Add Talk2M API key (from authentication information) to parameters list
     params.add(EwonConsts.T2M_M2W_DEVKEY);
-    params.add(authInfo.getDevKey());
+    params.add(authInfo.getDevId());
 
     // Build Talk2M call
     params.add(EwonConsts.T2M_PARAM_EXPORTBLOCK);
