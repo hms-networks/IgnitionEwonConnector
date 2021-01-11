@@ -13,22 +13,22 @@ import com.hms_networks.americas.sc.ignition.EwonConsts;
  */
 public class AuthInfo {
   /** Talk2M account name */
-  private String account;
+  private final String account;
 
   /** Talk2M account username */
-  private String username;
+  private final String username;
 
   /** Talk2M account password */
-  private String password;
+  private final String password;
 
   /** Talk2M API key */
-  private String devKey;
+  private final String devKey;
 
   /** Ewon device username */
-  private String ewonUsername;
+  private final String ewonUsername;
 
   /** Ewon device password */
-  private String ewonPassword;
+  private final String ewonPassword;
 
   /**
    * This constructor provides the information needed to access basic Talk2M features and
@@ -44,6 +44,8 @@ public class AuthInfo {
     this.username = urlEncodeValue(username);
     this.password = urlEncodeValue(password);
     this.devKey = urlEncodeValue(devKey);
+    this.ewonUsername = null;
+    this.ewonPassword = null;
   }
 
   /**
@@ -64,7 +66,10 @@ public class AuthInfo {
       String devKey,
       String ewonUsername,
       String ewonPassword) {
-    this(account, username, password, devKey);
+    this.account = urlEncodeValue(account);
+    this.username = urlEncodeValue(username);
+    this.password = urlEncodeValue(password);
+    this.devKey = urlEncodeValue(devKey);
     this.ewonUsername = urlEncodeValue(ewonUsername);
     this.ewonPassword = urlEncodeValue(ewonPassword);
   }
