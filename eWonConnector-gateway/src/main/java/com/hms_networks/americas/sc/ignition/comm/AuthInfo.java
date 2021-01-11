@@ -6,7 +6,11 @@ import java.io.UnsupportedEncodingException;
 import org.apache.commons.lang3.StringUtils;
 import com.hms_networks.americas.sc.ignition.EwonConsts;
 
-/** Authentication information object */
+/**
+ * Object containing authentication information for accessing basic Talk2M features and DataMailbox.
+ *
+ * @author HMS Networks, MU Americas Solution Center
+ */
 public class AuthInfo {
   /** Talk2M account name */
   private String account;
@@ -30,10 +34,10 @@ public class AuthInfo {
    * This constructor provides the information needed to access basic Talk2M features and
    * DataMailbox.
    *
-   * @param account
-   * @param username
-   * @param password
-   * @param devKey
+   * @param account Talk2M account name
+   * @param username Talk2M account username
+   * @param password Talk2M account password
+   * @param devKey Talk2M developer ID
    */
   public AuthInfo(String account, String username, String password, String devKey) {
     this.account = urlEncodeValue(account);
@@ -46,12 +50,12 @@ public class AuthInfo {
    * This constructor includes a username and password for a specific ewon device, to use the
    * services of that device through Talk2M.
    *
-   * @param account
-   * @param username
-   * @param password
-   * @param devKey
-   * @param ewonUsername
-   * @param ewonPassword
+   * @param account Talk2M account name
+   * @param username Talk2M account username
+   * @param password Talk2M account password
+   * @param devKey Talk2M developer ID
+   * @param ewonUsername Ewon device username
+   * @param ewonPassword Ewon device password
    */
   public AuthInfo(
       String account,
