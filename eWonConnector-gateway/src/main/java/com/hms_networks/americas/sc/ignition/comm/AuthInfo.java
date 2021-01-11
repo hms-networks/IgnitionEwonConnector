@@ -24,6 +24,9 @@ public class AuthInfo {
   /** Talk2M developer ID */
   private final String devId;
 
+  /** Talk2M token */
+  private final String token;
+
   /** Ewon device username */
   private final String ewonUsername;
 
@@ -38,12 +41,14 @@ public class AuthInfo {
    * @param username Talk2M account username
    * @param password Talk2M account password
    * @param devId Talk2M developer ID
+   * @param token Talk2M token
    */
-  public AuthInfo(String account, String username, String password, String devId) {
+  public AuthInfo(String account, String username, String password, String devId, String token) {
     this.account = urlEncodeValue(account);
     this.username = urlEncodeValue(username);
     this.password = urlEncodeValue(password);
     this.devId = urlEncodeValue(devId);
+    this.token = urlEncodeValue(token);
     this.ewonUsername = null;
     this.ewonPassword = null;
   }
@@ -56,6 +61,7 @@ public class AuthInfo {
    * @param username Talk2M account username
    * @param password Talk2M account password
    * @param devId Talk2M developer ID
+   * @param token Talk2M token
    * @param ewonUsername Ewon device username
    * @param ewonPassword Ewon device password
    */
@@ -64,12 +70,14 @@ public class AuthInfo {
       String username,
       String password,
       String devId,
+      String token,
       String ewonUsername,
       String ewonPassword) {
     this.account = urlEncodeValue(account);
     this.username = urlEncodeValue(username);
     this.password = urlEncodeValue(password);
     this.devId = urlEncodeValue(devId);
+    this.token = urlEncodeValue(token);
     this.ewonUsername = urlEncodeValue(ewonUsername);
     this.ewonPassword = urlEncodeValue(ewonPassword);
   }
@@ -108,6 +116,15 @@ public class AuthInfo {
    */
   public String getDevId() {
     return devId;
+  }
+
+  /**
+   * Get Talk2M token
+   *
+   * @return Talk2M token
+   */
+  public String getToken() {
+    return token;
   }
 
   /**
