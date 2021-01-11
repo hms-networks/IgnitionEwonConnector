@@ -21,8 +21,8 @@ public class AuthInfo {
   /** Talk2M account password */
   private final String password;
 
-  /** Talk2M API key */
-  private final String devKey;
+  /** Talk2M developer ID */
+  private final String devId;
 
   /** Ewon device username */
   private final String ewonUsername;
@@ -37,13 +37,13 @@ public class AuthInfo {
    * @param account Talk2M account name
    * @param username Talk2M account username
    * @param password Talk2M account password
-   * @param devKey Talk2M developer ID
+   * @param devId Talk2M developer ID
    */
-  public AuthInfo(String account, String username, String password, String devKey) {
+  public AuthInfo(String account, String username, String password, String devId) {
     this.account = urlEncodeValue(account);
     this.username = urlEncodeValue(username);
     this.password = urlEncodeValue(password);
-    this.devKey = urlEncodeValue(devKey);
+    this.devId = urlEncodeValue(devId);
     this.ewonUsername = null;
     this.ewonPassword = null;
   }
@@ -55,7 +55,7 @@ public class AuthInfo {
    * @param account Talk2M account name
    * @param username Talk2M account username
    * @param password Talk2M account password
-   * @param devKey Talk2M developer ID
+   * @param devId Talk2M developer ID
    * @param ewonUsername Ewon device username
    * @param ewonPassword Ewon device password
    */
@@ -63,13 +63,13 @@ public class AuthInfo {
       String account,
       String username,
       String password,
-      String devKey,
+      String devId,
       String ewonUsername,
       String ewonPassword) {
     this.account = urlEncodeValue(account);
     this.username = urlEncodeValue(username);
     this.password = urlEncodeValue(password);
-    this.devKey = urlEncodeValue(devKey);
+    this.devId = urlEncodeValue(devId);
     this.ewonUsername = urlEncodeValue(ewonUsername);
     this.ewonPassword = urlEncodeValue(ewonPassword);
   }
@@ -102,12 +102,12 @@ public class AuthInfo {
   }
 
   /**
-   * Get Talk2M API key
+   * Get Talk2M developer ID
    *
-   * @return Talk2M API key
+   * @return Talk2M developer ID
    */
-  public String getDevKey() {
-    return devKey;
+  public String getDevId() {
+    return devId;
   }
 
   /**
@@ -144,7 +144,7 @@ public class AuthInfo {
             EwonConsts.T2M_PASSWORD,
             password,
             EwonConsts.T2M_DEVKEY,
-            devKey);
+            devId);
     if (!StringUtils.isBlank(ewonUsername) && !StringUtils.isBlank(ewonPassword)) {
       ret +=
           String.format(
