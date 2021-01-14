@@ -25,6 +25,11 @@ public class EwonConsts {
   public static final String T2M_PARAM_EXPORTBLOCK = "AST_Param";
   public static final String T2M_PARAM_TAGVALUES = "$dtIV$ftT";
 
+  public static final String T2M_API_CONTENT_TYPE_KEY = "Content-Type";
+  public static final String T2M_API_CONTENT_TYPE = "application/x-www-form-urlencoded";
+  public static final String T2M_API_CHARSET_KEY = "Charset";
+  public static final String T2M_API_CHARSET = "utf-8";
+
   public static final String DM_CALL_GETEWONS = "getewons";
   public static final String DM_CALL_GETEWON = "getewon";
   public static final String DM_CALL_GETDATA = "getdata";
