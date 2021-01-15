@@ -146,11 +146,20 @@ public class AuthInfo {
   }
 
   /**
-   * Generate an HTTP GET string with authentication information
+   * Generate a string with authentication information for use with the DMWeb API on Talk2M.
    *
-   * @return authentication information HTTP GET string
+   * @return DMWeb API authentication information string
    */
-  public String toGetString() {
+  public String toDMPostString() {
+    return String.format("%s=%s&%s=%s", EwonConsts.T2M_DEVKEY, devId, EwonConsts.T2M_TOKEN, token);
+  }
+
+  /**
+   * Generate a string with authentication information for use with the M2Web API on Talk2M.
+   *
+   * @return M2Web API authentication information string
+   */
+  public String toM2WPostString() {
     String ret =
         String.format(
             "%s=%s&%s=%s&%s=%s&%s=%s",
