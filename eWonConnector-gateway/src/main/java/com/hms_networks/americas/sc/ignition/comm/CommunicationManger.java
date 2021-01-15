@@ -3,7 +3,6 @@ package com.hms_networks.americas.sc.ignition.comm;
 import java.util.*;
 import com.hms_networks.americas.sc.ignition.EwonConsts;
 import com.hms_networks.americas.sc.ignition.EwonUtil;
-import com.hms_networks.americas.sc.ignition.config.SyncMode;
 import com.hms_networks.americas.sc.ignition.data.EwonData;
 import com.hms_networks.americas.sc.ignition.data.EwonsData;
 import org.slf4j.Logger;
@@ -16,19 +15,11 @@ public class CommunicationManger {
   /** Communication manager logger */
   private Logger logger = LoggerFactory.getLogger("Ewon.CommManager");
 
-  /*/**
-   * HTTP client
-   */
-  // private final OkHttpClient client;
-
   /** JSON string and object serialization library */
   private final Gson gson = new Gson();
 
   /** Authentication information */
   private AuthInfo authInfo;
-
-  /** Synchronization mode */
-  private SyncMode mode = SyncMode.GetData;
 
   /** Communication manager default constructor. Performs no operations. */
   public CommunicationManger() {}
@@ -290,20 +281,5 @@ public class CommunicationManger {
     return EwonUtil.httpPost(
         buildT2MCall(
             directory, EwonConsts.T2M_CALL_PARAMFORM, params.toArray(new String[params.size()])));
-  }
-
-  /**
-   * Perform synchronization of Ewons data
-   *
-   * @param token last transaction identifier/from time
-   * @return resulting Ewons data
-   * @throws Exception if DataMailbox call fails
-   */
-  public EwonsData sync(Object token) throws Exception {
-    if (mode == SyncMode.GetData) {
-      return getData(null, null, null, (Date) token);
-    } else {
-      return syncData((Long) token);
-    }
   }
 }
