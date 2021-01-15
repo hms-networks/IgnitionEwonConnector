@@ -1,8 +1,6 @@
 package com.hms_networks.americas.sc.ignition.comm;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import com.hms_networks.americas.sc.ignition.EwonConsts;
 import com.hms_networks.americas.sc.ignition.EwonUtil;
 import com.hms_networks.americas.sc.ignition.config.SyncMode;
@@ -52,27 +50,35 @@ public class CommunicationManger {
    * @param params HTTP URL parameters
    * @return created HTTP call as string
    */
-  protected String buildCall(String type, String function, String... params) {
-    // Build base HTTP call
-    StringBuilder sb = new StringBuilder(type);
-    sb.append(function).append("?");
+  protected TMHttpRequest buildCall(String type, String function, String... params) {
+    // Build full request URL
+    String requestUrl = type + function;
 
-    // Add authentication information to HTTP call
-    sb.append(authInfo.toGetString());
+    // Build request headers with content type information
+    Map<String, String> requestHeaders = new HashMap<>();
+    requestHeaders.put(EwonConsts.T2M_API_CONTENT_TYPE_KEY, EwonConsts.T2M_API_CONTENT_TYPE);
+    requestHeaders.put(EwonConsts.T2M_API_CHARSET_KEY, EwonConsts.T2M_API_CHARSET);
 
-    // Add each parameter to HTTP call
+    // Build request body starting with auth information
+    StringBuilder requestBody;
+    if (type.equals(EwonConsts.URL_DM)) {
+      requestBody = new StringBuilder(authInfo.toDMPostString());
+    } else {
+      requestBody = new StringBuilder(authInfo.toM2WPostString());
+    }
+
+    // Add each parameter to request body
     if (params != null) {
       for (int i = 0; i < params.length; i += 2) {
-        sb.append("&").append(params[i]);
+        requestBody.append("&").append(params[i]);
         if (params[i + 1] != null) {
-          sb.append("=").append(params[i + 1]);
+          requestBody.append("=").append(params[i + 1]);
         }
       }
     }
 
-    // Get string from string builder, log and return
-    String ret = sb.toString();
-    return ret;
+    // Build and return HTTP request
+    return new TMHttpRequest(requestUrl, requestHeaders, requestBody.toString());
   }
 
   /**
@@ -82,7 +88,7 @@ public class CommunicationManger {
    * @param params DataMailbox call parameters
    * @return created DataMailbox call
    */
-  protected String buildDMCall(String function, String... params) {
+  protected TMHttpRequest buildDMCall(String function, String... params) {
     return buildCall(EwonConsts.URL_DM, function, params);
   }
 
@@ -94,7 +100,7 @@ public class CommunicationManger {
    * @param params Talk2M call parameters
    * @return created Talk2M call
    */
-  protected String buildT2MCall(String directory, String function, String... params) {
+  protected TMHttpRequest buildT2MCall(String directory, String function, String... params) {
     return buildCall((EwonConsts.URL_T2M + directory), function, params);
   }
 
