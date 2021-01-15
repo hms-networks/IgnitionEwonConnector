@@ -42,6 +42,9 @@ public class EwonConnectorSettings extends PersistentRecord {
   /** Configured Talk2M account password */
   public static final EncodedStringField Password = new EncodedStringField(META, "password");
 
+  /** Configured Talk2M account token */
+  public static final EncodedStringField Token = new EncodedStringField(META, "token");
+
   /** Configured Ewon account username */
   public static final StringField EwonUserName = new StringField(META, "ewonUsername");
 
@@ -79,7 +82,7 @@ public class EwonConnectorSettings extends PersistentRecord {
   /** Settings category for Talk2M account information */
   public static final Category AccountCategory =
       new Category("EwonConnectorSettings.Category.Account", 50)
-          .include(Account, UserName, Password, APIKey);
+          .include(Account, UserName, Password, APIKey, Token);
 
   /** Settings category for Ewon device information */
   public static final Category DeviceCategory =
@@ -146,6 +149,15 @@ public class EwonConnectorSettings extends PersistentRecord {
    */
   public String getPassword() {
     return getString(Password);
+  }
+
+  /**
+   * Get configured Talk2M account token
+   *
+   * @return Talk2M account token
+   */
+  public String getToken() {
+    return getString(Token);
   }
 
   /**
@@ -245,12 +257,13 @@ public class EwonConnectorSettings extends PersistentRecord {
               getUserName(),
               getPassword(),
               getAPIKey(),
+              getToken(),
               getEwonUserName(),
               getEwonPassword());
     } catch (NullPointerException e) {
       // Some of the configuration page credentials are empty, force empty strings
       // Ignition logs will indicate incorrect user credentials
-      authInfo = new AuthInfo("", "", "", "", "", "");
+      authInfo = new AuthInfo("", "", "", "", "", "", "");
     }
     return authInfo;
   }
