@@ -9,6 +9,7 @@ public class EwonConsts {
   public static final String T2M_USERNAME = "t2musername";
   public static final String T2M_PASSWORD = "t2mpassword";
   public static final String T2M_DEVKEY = "t2mdevid";
+  public static final String T2M_TOKEN = "t2mtoken";
   public static final String T2M_M2W_DEVKEY = "t2mdeveloperid";
   public static final String T2M_DEVICE_USERNAME = "t2mdeviceusername";
   public static final String T2M_DEVICE_PASSWORD = "t2mdevicepassword";
