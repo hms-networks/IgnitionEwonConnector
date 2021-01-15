@@ -1,9 +1,8 @@
 package com.hms_networks.americas.sc.ignition;
 
-import com.inductiveautomation.ignition.common.Base64;
+import com.hms_networks.americas.sc.ignition.comm.TMHttpRequest;
 import com.inductiveautomation.ignition.common.sqltags.model.types.DataQuality;
 import com.inductiveautomation.ignition.common.sqltags.model.types.DataType;
-import org.apache.commons.lang3.StringUtils;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
@@ -12,6 +11,7 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.ProtocolException;
@@ -126,13 +126,13 @@ public class EwonUtil {
   }
 
   /**
-   * Perform an HTTP GET on given URL, and return result.
+   * Perform an HTTP POST using the specified HTTP request information object and return the result.
    *
-   * @param url URL to perform HTTP GET on
-   * @return the return data from HTTP GET
+   * @param tmHttpRequest HTTP request object
+   * @return the return data from HTTP POST
    * @throws Exception if HTTP connection fails
    */
-  public static String httpGet(String url) throws Exception {
+  public static String httpPost(TMHttpRequest tmHttpRequest) throws Exception {
     int connectTimeout = defaultConnectTimeout;
     int readTimeout = defaultReadTimeout;
     Boolean bypassCertValidation = false;
@@ -142,14 +142,26 @@ public class EwonUtil {
       // Attempt to create HTTP connection with given URL string
       con =
           setupHttpConnection(
-              url, "GET", connectTimeout, readTimeout, null, null, null, bypassCertValidation);
+              tmHttpRequest.getUrl(),
+              "POST",
+              connectTimeout,
+              readTimeout,
+              null,
+              null,
+              tmHttpRequest.getHeaders(),
+              bypassCertValidation);
 
       // Configure HTTP connection settings
-      con.setDoOutput(false);
       con.setUseCaches(false);
 
+      // Write HTTP request body
+      OutputStreamWriter httpRequestWriter = new OutputStreamWriter(con.getOutputStream());
+      httpRequestWriter.write(tmHttpRequest.getBody());
+      httpRequestWriter.flush();
+      httpRequestWriter.close();
+
       // Create Reader to read connection data and
-      // Create StringBuilder to build HTTP GET return data
+      // Create StringBuilder to build HTTP POST return data
       Reader reader = new InputStreamReader(con.getInputStream());
       StringBuilder sb = new StringBuilder();
 
@@ -249,13 +261,6 @@ public class EwonUtil {
     con.setReadTimeout(readTimeout);
     con.setDoOutput(true);
     con.setDoInput(true);
-
-    // Set connection authorization configuration if username/password is specified.
-    if (!StringUtils.isBlank(username)) {
-      String authToken =
-          Base64.encodeBytes((username + ":" + password).getBytes()).replace("\n", "");
-      con.setRequestProperty("Authorization", "Basic " + authToken);
-    }
 
     // Set connection header values with supplied values, if any
     if (headerValues != null) {

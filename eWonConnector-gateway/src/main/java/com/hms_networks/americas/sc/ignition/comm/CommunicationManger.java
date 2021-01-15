@@ -124,7 +124,7 @@ public class CommunicationManger {
    */
   public EwonsData queryEwonDevices() throws Exception {
     long start = System.currentTimeMillis();
-    String body = EwonUtil.httpGet(buildDMCall(EwonConsts.DM_CALL_GETEWONS));
+    String body = EwonUtil.httpPost(buildDMCall(EwonConsts.DM_CALL_GETEWONS));
     logResults(start, EwonConsts.DM_CALL_GETEWONS, body);
     return gson.fromJson(body, EwonsData.class);
   }
@@ -139,7 +139,7 @@ public class CommunicationManger {
   public EwonData queryEwon(Integer id) throws Exception {
     long start = System.currentTimeMillis();
     String body =
-        EwonUtil.httpGet(
+        EwonUtil.httpPost(
             buildDMCall(EwonConsts.DM_CALL_GETEWON, EwonConsts.DM_PARAM_ID, id.toString()));
     logResults(start, EwonConsts.DM_CALL_GETEWON, body);
     return gson.fromJson(body, EwonData.class);
@@ -189,7 +189,7 @@ public class CommunicationManger {
 
     // Build and perform DataMailbox call with given parameters
     String body =
-        EwonUtil.httpGet(
+        EwonUtil.httpPost(
             buildDMCall(
                 EwonConsts.DM_CALL_GETDATA,
                 params.size() > 0 ? params.toArray(new String[params.size()]) : null));
@@ -213,7 +213,7 @@ public class CommunicationManger {
 
     // Build and perform DataMailbox call
     String body =
-        EwonUtil.httpGet(
+        EwonUtil.httpPost(
             transactionId == null
                 ? buildDMCall(
                     EwonConsts.DM_CALL_SYNCDATA, EwonConsts.DM_PARAM_CREATE_TRANSACTION, null)
@@ -257,7 +257,7 @@ public class CommunicationManger {
     params.add(authInfo.getDevId());
 
     // Build and perform Talk2M call
-    EwonUtil.httpGet(
+    EwonUtil.httpPost(
         buildT2MCall(
             directory,
             EwonConsts.T2M_CALL_UPDATETAGFORM,
@@ -287,7 +287,7 @@ public class CommunicationManger {
     params.add(EwonConsts.T2M_PARAM_TAGVALUES);
 
     // Execute built Talk2M call
-    return EwonUtil.httpGet(
+    return EwonUtil.httpPost(
         buildT2MCall(
             directory, EwonConsts.T2M_CALL_PARAMFORM, params.toArray(new String[params.size()])));
   }
