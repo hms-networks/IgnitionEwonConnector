@@ -134,7 +134,8 @@ public class GatewayHook extends AbstractGatewayModuleHook {
                     new ProviderConfiguration(settings.getName())
                         .setAllowTagCustomization(true)
                         .setPersistTags(true)
-                        .setPersistValues(true));
+                        .setPersistValues(true)
+                        .setAllowTagDeletion(true));
       } catch (Exception e) {
         logger.error("An error occurred while starting the " + "tag provider.", e);
         tagProvider = null;
