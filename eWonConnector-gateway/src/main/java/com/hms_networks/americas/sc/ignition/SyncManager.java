@@ -744,6 +744,32 @@ public class SyncManager {
         // Add Ewon to registered Ewon list
         registeredEwons.add(device);
 
+        // Configure AllRealtime tag
+        provider.configureTag(ewonRealtimePath, DataType.Boolean);
+
+        // Check if AllRealtime tag value exists, and set if not
+        try {
+          // Attempt to read existing value to check for presence
+          final int firstIndexValueRead = 0;
+          String[] allRealtimeTagPathParts = ewonRealtimePath.split("/", 0);
+          TagPath allRealtimeTagPath =
+              new BasicTagPath(providerName, Arrays.asList(allRealtimeTagPathParts));
+          QualifiedValue isEwonRealtimeOverrideEnabled =
+              gatewayContext
+                  .getTagManager()
+                  .readAsync(Collections.singletonList(allRealtimeTagPath))
+                  .get()
+                  .get(firstIndexValueRead);
+
+          // Add to list of realtime Ewons if enabled
+          if (isEwonRealtimeOverrideEnabled.getValue().equals(Boolean.TRUE)) {
+            realtimeEwons.add(device);
+          }
+        } catch (Exception e) {
+          // Value does not exist, need to set (default: false)
+          provider.updateValue(ewonRealtimePath, Boolean.FALSE, QualityCode.Good);
+        }
+
         // Register all realtime tag write handler with provider
         provider.registerWriteHandler(
             ewonRealtimePath,
@@ -770,8 +796,6 @@ public class SyncManager {
                 return QualityCode.Good;
               }
             });
-        provider.configureTag(ewonRealtimePath, DataType.Boolean);
-        provider.updateValue(ewonRealtimePath, Boolean.FALSE, QualityCode.Good);
       }
 
       // Loop for each tag in given Ewon data
