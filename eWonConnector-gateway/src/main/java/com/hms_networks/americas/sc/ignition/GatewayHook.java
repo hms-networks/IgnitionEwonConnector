@@ -94,6 +94,7 @@ public class GatewayHook extends AbstractGatewayModuleHook {
   @Override
   public void shutdown() {
     EwonConnectorSettings.META.removeRecordListener(settingsListener);
+    shutdownManager();
   }
 
   /**
