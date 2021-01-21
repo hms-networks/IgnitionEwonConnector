@@ -35,13 +35,14 @@ public class GatewayHook extends AbstractGatewayModuleHook {
   private SyncManager mgr = null;
 
   /**
-   * Listener for changes in Ewon Connector settings. Invokes {@link
-   * this#updateSettings(EwonConnectorSettings)}
+   * Listener for changes in Ewon Connector settings. Invokes {@link this#restart()} to restart the
+   * connector.
    */
   private RecordListenerAdapter<EwonConnectorSettings> settingsListener =
       new RecordListenerAdapter<EwonConnectorSettings>() {
         public void recordUpdated(EwonConnectorSettings record) {
-          updateSettings(record);
+          logger.info("Settings have been updated. Restarting module.");
+          restart();
         }
       };
 
@@ -107,15 +108,10 @@ public class GatewayHook extends AbstractGatewayModuleHook {
     return Arrays.asList(EwonConfigPage.CONFIG_TAB);
   }
 
-  /**
-   * Update Ewon Connector settings
-   *
-   * @param settings updated settings
-   */
-  protected void updateSettings(EwonConnectorSettings settings) {
-    logger.info("Settings have been updated. Restarting sync manager");
-    shutdownManager();
-    startupMgr(settings);
+  /** Restarts the Ewon Connector */
+  protected void restart() {
+    shutdown();
+    startup(null);
   }
 
   /**
