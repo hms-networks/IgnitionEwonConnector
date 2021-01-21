@@ -83,6 +83,9 @@ public class SyncManager {
   /** Tag path for historical points processed counter */
   private static final String STATUS_HIST_POINT_CNT = "_Status/HistoricalPointsProcessed";
 
+  /** Tag path for Ewon AllRealtime configuration override flag */
+  private static final String CONFIG_EWON_ALL_REALTIME_TAG_NAME = "_config/AllRealtime";
+
   /** Hash set of registered Ewon Connector tags */
   private static HashSet<String> registeredTags = new HashSet<String>();
 
@@ -736,7 +739,7 @@ public class SyncManager {
       // Add AllRealtime tag under Ewon _config tag folder
       if (!registeredEwons.contains(device)) {
         // Create path to Ewon's all realtime tag
-        String ewonRealtimePath = buildTagPath(device + "/_config/AllRealtime");
+        String ewonRealtimePath = buildTagPath(device + "/" + CONFIG_EWON_ALL_REALTIME_TAG_NAME);
 
         // Add Ewon to registered Ewon list
         registeredEwons.add(device);
