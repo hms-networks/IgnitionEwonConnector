@@ -87,13 +87,13 @@ public class SyncManager {
   private static final String CONFIG_EWON_ALL_REALTIME_TAG_NAME = "_config/AllRealtime";
 
   /** Hash set of registered Ewon Connector tags */
-  private static HashSet<String> registeredTags = new HashSet<String>();
+  private HashSet<String> registeredTags = new HashSet<String>();
 
   /** Hash set of registered Ewon Connector Ewons */
-  private static HashSet<String> registeredEwons = new HashSet<>();
+  private HashSet<String> registeredEwons = new HashSet<>();
 
   /** Hash set of Ewons to be updated in realtime */
-  private static HashSet<String> realtimeEwons = new HashSet<>();
+  private HashSet<String> realtimeEwons = new HashSet<>();
 
   /** Current gateway context */
   GatewayContext gatewayContext;
