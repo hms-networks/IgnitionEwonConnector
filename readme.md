@@ -133,6 +133,7 @@ With the module successfully installed, a new `Ewon Connector` page will be adde
    * **Username** - Your Talk2M user name.
    * **Password** - Your Talk2M password.
    * **Change Password?** - Check this box to change the password stored in Ignition.
+   * **Talk2M Token** - Your Talk2M token generated using eCatcher.
    * **Talk2M Developer ID** - Your Talk2M Developer ID. Include all dashes.
       * If you do not have a Talk2M Developer ID, you may request one here: [https://developer.ewon.biz/registration](https://developer.ewon.biz/registration "https://developer.ewon.biz/registration").
 
@@ -152,6 +153,10 @@ With the module successfully installed, a new `Ewon Connector` page will be adde
 ### Saving Changes
 
 Once all the configuration information has been entered, click `Save Changes`, then restart Ignition.
+
+### Generating a Talk2M Token
+
+To learn more about Talk2M tokens and how to generate them, please refer to Section 4.6 of the DMWeb API reference guide found at: [DMWeb API Reference Guide](https://developer.ewon.biz/system/files_force/rg-0005-00-en-reference-guide-for-dmweb-api.pdf).
 
 <sup>[Back to top](#table-of-contents)</sup>
 
