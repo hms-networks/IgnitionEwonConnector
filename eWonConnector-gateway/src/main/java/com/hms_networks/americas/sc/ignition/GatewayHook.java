@@ -73,9 +73,6 @@ public class GatewayHook extends AbstractGatewayModuleHook {
     } catch (Exception e) {
       logger.error("Error validating internal database tables.", e);
     }
-
-    // Add Ewon Connector settings change listener to Ewon Connector settings
-    EwonConnectorSettings.META.addRecordListener(settingsListener);
   }
 
   /**
@@ -88,6 +85,9 @@ public class GatewayHook extends AbstractGatewayModuleHook {
     EwonConnectorSettings settings =
         gatewayContext.getPersistenceInterface().find(EwonConnectorSettings.META, 0L);
     startupMgr(settings);
+
+    // Add Ewon Connector settings change listener to Ewon Connector settings
+    EwonConnectorSettings.META.addRecordListener(settingsListener);
   }
 
   /** Process shutdown of Ewon Connector */
