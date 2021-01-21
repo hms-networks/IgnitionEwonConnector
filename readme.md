@@ -108,7 +108,7 @@ Once configured, click `Update Tag` on the bottom right of the page.
 
 ### Enable Historical Data In DataMailbox
 
-Open the Ewon webserver and navigate to the `Data Management` page ( On the left hand menu click `Setup` > `System` > `Main` > `Data Management`). Check the `Historical Data` checkbox and set the `Datamailbox upload interval` to a reasonable number for your application. The `Datamailbox upload interval` sets how often the Flexy will send batches of historical data to Datamailbox and does not affect the frequency at which tag values are logged. When done, click `Update` at the bottom of the page.
+Open the Ewon webserver and navigate to the `Data Management` page ( On the left hand menu click `Setup` > `System` > `Main` > `Data Management`). Check the `Historical Data` checkbox and set the `DataMailbox upload interval` to a reasonable number for your application. The `DataMailbox upload interval` sets how often the Flexy will send batches of historical data to DataMailbox and does not affect the frequency at which tag values are logged. When done, click `Update` at the bottom of the page.
 
 <img src="https://raw.githubusercontent.com/hms-networks/IgnitionEwonConnector/Ignition-8-master/images/data_management_page.JPG" alt="Ewon Data Management Page" width="1000"/>
 
@@ -125,7 +125,7 @@ With the module successfully installed, a new `Ewon Connector` page will be adde
    * **Name** - Unique name of the tag provider created in Ignition.
    * **Enabled** - Option to turn on/off the Ewon Connector functionality.
    * **Tag Names Contain Periods** - Check this if any Ewon tag names contain periods. If any tag names of the connected Ewons contain periods ".", tag names on the connected Ewons may not contain the underscore "_" character. HMS suggests not using periods in tag names when using Ignition.
-   * **Poll Rate in Minutes** - Interval for how often data will be pulled from Datamailbox.
+   * **Poll Rate in Minutes** - Interval for how often data will be pulled from DataMailbox.
    * **Realtime Poll Rate in Seconds** - Interval for how often data will be pulled from an Ewon when realtime reads are activated.
 
 * **Talk2M Account Information**
@@ -147,7 +147,7 @@ With the module successfully installed, a new `Ewon Connector` page will be adde
 
 * **Advanced**
     * **Read all values in realtime** - Option to always read values in realtime.
-      * **Note:** This disables Datamailbox reads. Values logged on the Ewon are not logged in Ignition when this option is enabled.
+      * **Note:** This disables DataMailbox reads. Values logged on the Ewon are not logged in Ignition when this option is enabled.
 
 ### Saving Changes
 
@@ -181,7 +181,7 @@ Ewon tag values can be written from Ignition. When attempting to write a tag val
 
 The `Tag Browser` tool in Ignition Designer can be used to write tag values.
 
-After a tag value is written in Ignition, the displayed value my revert back to its previous state. This is because new Datamailbox values were received. Datamailbox values will alway lag the live tag value. This behavior can be avoided by temporarily enabling realtime mode for the tag/Ewon being written to.
+After a tag value is written in Ignition, the displayed value my revert back to its previous state. This is because new DataMailbox values were received. DataMailbox values will alway lag the live tag value. This behavior can be avoided by temporarily enabling realtime mode for the tag/Ewon being written to.
 
 ### **Realtime Values**
 
@@ -217,7 +217,7 @@ _Note: The realtime functionality counts against your Talk2M account's monthly b
 
 ### **Deleting Tags**
 
-Tags can be deleted by right clicking the tag in the `Tag Browser` then selecting `Delete`. If the tag still exists on the Ewon or in Datamailbox the tag will be recreated in Ignition on the next Datamailbox update.
+Tags can be deleted by right clicking the tag in the `Tag Browser` then selecting `Delete`. If the tag still exists on the Ewon or in DataMailbox the tag will be recreated in Ignition on the next DataMailbox update.
 
 <sup>[Back to top](#table-of-contents)</sup>
 
@@ -233,7 +233,7 @@ Tags can be deleted by right clicking the tag in the `Tag Browser` then selectin
 There are several reasons tags may not be populated into Ignition. Please follow the following steps in order.
 
 1. Verify that all steps in the [Ewon Setup](#ewon-setup) section were followed.
-2. If the system has just been configured, wait one hour for data to be registered in Datamailbox.
+2. If the system has just been configured, wait one hour for data to be registered in DataMailbox.
 3. Verify your Talk2M credentials are correctly entered into the Ewon Connector settings in Ignition.
    * If your credentials were incorrectly entered, the Ignition logs will indicate a Authentication Error.  Check the logs on the Ignition webserver by clicking `Status` > `Logs`. If your credentials are incorrect, you will see log entries in this format.
 
@@ -264,6 +264,6 @@ Your Talk2M data usage can be accessed through [eCatcher](https://ewon.biz/cloud
 
 ### If Ignition is not running will my data still be logged?
 
-If Ignition is offline, data will still be logged by the Flexy and stored in Datamailbox. The amount of data points stored in Datamailbox depends on your [account type](https://ewon.biz/cloud-services/talk2m/plan-pricing "https://ewon.biz/cloud-services/talk2m/plan-pricing"). Once Ignition is online again, all logged points will be fetched from Datamailbox by Ignition.
+If Ignition is offline, data will still be logged by the Flexy and stored in DataMailbox. The amount of data points stored in DataMailbox depends on your [account type](https://ewon.biz/cloud-services/talk2m/plan-pricing "https://ewon.biz/cloud-services/talk2m/plan-pricing"). Once Ignition is online again, all logged points will be fetched from DataMailbox by Ignition.
 
 <sup>[Back to top](#table-of-contents)</sup>
