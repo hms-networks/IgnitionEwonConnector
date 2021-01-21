@@ -16,7 +16,11 @@ import org.slf4j.LoggerFactory;
 import java.util.Arrays;
 import java.util.List;
 
-/** Ewon Connector GatewayHook implementation. Processes startup, shutdown and management tasks. */
+/**
+ * Ewon Connector GatewayHook implementation. Processes startup, shutdown and management tasks.
+ *
+ * @author HMS Networks, MU Americas Solution Center
+ */
 public class GatewayHook extends AbstractGatewayModuleHook {
   /** Ewon Connector Logger */
   private final Logger logger = LoggerFactory.getLogger("Ewon.EwonModuleManager");
