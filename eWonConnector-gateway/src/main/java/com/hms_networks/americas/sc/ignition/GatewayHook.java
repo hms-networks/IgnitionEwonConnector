@@ -28,8 +28,8 @@ public class GatewayHook extends AbstractGatewayModuleHook {
   /** Current GatewayContext */
   private GatewayContext gatewayContext;
 
-  /** Tag provider for realtime configured tags */
-  private ManagedTagProvider realtime;
+  /** Tag provider for configured tags */
+  private ManagedTagProvider tagProvider;
 
   /** Tag synchronization manager */
   private SyncManager mgr = null;
@@ -127,7 +127,7 @@ public class GatewayHook extends AbstractGatewayModuleHook {
     if (settings.isEnabled()) {
       try {
         // Create realtime tag provider
-        realtime =
+        tagProvider =
             gatewayContext
                 .getTagManager()
                 .getOrCreateManagedProvider(
@@ -136,11 +136,11 @@ public class GatewayHook extends AbstractGatewayModuleHook {
                         .setPersistTags(true)
                         .setPersistValues(true));
       } catch (Exception e) {
-        logger.error("An error occurred while starting the realtime " + "tag provider.", e);
-        realtime = null;
+        logger.error("An error occurred while starting the " + "tag provider.", e);
+        tagProvider = null;
       }
       // Create sync manager and start it up with given settings
-      mgr = new SyncManager(gatewayContext, realtime, settings.getName());
+      mgr = new SyncManager(gatewayContext, tagProvider, settings.getName());
       mgr.startup(settings);
     } else {
       logger.debug("The Ewon connector has been disabled in its options. " + "Not starting up.");
@@ -155,9 +155,9 @@ public class GatewayHook extends AbstractGatewayModuleHook {
       mgr = null;
     }
     // If realtime provider exists, shut it down and remove
-    if (realtime != null) {
-      realtime.shutdown(false);
-      realtime = null;
+    if (tagProvider != null) {
+      tagProvider.shutdown(false);
+      tagProvider = null;
     }
   }
 
