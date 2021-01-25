@@ -115,10 +115,6 @@ public class EwonUtil {
    * @return ISO 8601 date string from given value
    */
   public static String toString(Date value) {
-    // Calendar c = GregorianCalendar.getInstance();
-    // c.setTime(value);
-    // return javax.xml.bind.DatatypeConverter.printDateTime(c);
-
     TimeZone tz = TimeZone.getTimeZone("UTC");
     DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'");
     df.setTimeZone(tz);
