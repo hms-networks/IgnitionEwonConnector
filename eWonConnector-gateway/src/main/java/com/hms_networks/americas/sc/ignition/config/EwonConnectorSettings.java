@@ -18,7 +18,7 @@ import simpleorm.dataset.SFieldFlags;
  */
 public class EwonConnectorSettings extends PersistentRecord {
   /** Record meta information for Ewon Connector */
-  public static RecordMeta<EwonConnectorSettings> META =
+  public static final RecordMeta<EwonConnectorSettings> META =
       new RecordMeta<>(EwonConnectorSettings.class, "ewonConnectorSettings");
 
   /** Ewon Connector identifier */

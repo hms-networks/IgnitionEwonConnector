@@ -9,7 +9,7 @@ public class EwonsData extends DMResult {
   boolean moreDataAvailable = false;
 
   /** Transaction identifier */
-  Long transactionId = 0L;
+  final Long transactionId = 0L;
 
   /**
    * Get array of every Ewon's data

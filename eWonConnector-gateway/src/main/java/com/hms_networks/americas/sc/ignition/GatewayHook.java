@@ -38,7 +38,7 @@ public class GatewayHook extends AbstractGatewayModuleHook {
    * Listener for changes in Ewon Connector settings. Invokes {@link this#restart()} to restart the
    * connector.
    */
-  private RecordListenerAdapter<EwonConnectorSettings> settingsListener =
+  private final RecordListenerAdapter<EwonConnectorSettings> settingsListener =
       new RecordListenerAdapter<EwonConnectorSettings>() {
         public void recordUpdated(EwonConnectorSettings record) {
           logger.info("Settings have been updated. Restarting module.");
