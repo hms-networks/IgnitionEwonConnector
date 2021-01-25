@@ -131,7 +131,7 @@ public class EwonUtil {
   public static String httpPost(TMHttpRequest tmHttpRequest) throws Exception {
     int connectTimeout = defaultConnectTimeout;
     int readTimeout = defaultReadTimeout;
-    Boolean bypassCertValidation = false;
+    boolean bypassCertValidation = false;
 
     HttpURLConnection con = null;
     try {
