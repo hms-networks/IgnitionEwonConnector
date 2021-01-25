@@ -816,7 +816,7 @@ public class SyncManager {
                     "The tag %s has an unsupported name. "
                         + "Supported tag names must begin with an alphanumeric or underscore, "
                         + "followed by any number of alphanumerics, underscores, spaces, "
-                        + "or the following: \' - : ( )",
+                        + "or the following: ' - : ( )",
                     t.getName()));
           } else if (!tagNameCheckDisabled
               && replaceUnderscore
@@ -826,7 +826,7 @@ public class SyncManager {
                     "The tag %s has an unsupported name. "
                         + "Supported tag names must begin with an alphanumeric or period, "
                         + "followed by any number of alphanumerics, spaces, "
-                        + "or the following: \' . - : ( ) To enable support for tag "
+                        + "or the following: ' . - : ( ) To enable support for tag "
                         + "names containing underscores, disable the \"Tag Names Contain Periods?\" "
                         + "option",
                     t.getName()));
