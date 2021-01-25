@@ -29,7 +29,7 @@ public class TMResult {
    */
   public TMResult(String data) {
     String line = "";
-    TagValues = new HashMap<String, String>();
+    TagValues = new HashMap<>();
 
     try (BufferedReader br = new BufferedReader(new StringReader(data))) {
 
