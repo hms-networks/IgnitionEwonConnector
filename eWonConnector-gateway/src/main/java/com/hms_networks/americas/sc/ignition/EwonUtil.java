@@ -37,7 +37,7 @@ public class EwonUtil {
   private static final int defaultReadTimeout = 60000;
 
   /** Log handler */
-  private static Logger logger = LoggerFactory.getLogger("Ewon.EwonUtil");
+  private static final Logger logger = LoggerFactory.getLogger("Ewon.EwonUtil");
 
   /** Trust manager used for HTTP connections. Note: Bypasses trust verification. */
   private static final TrustManager[] BYPASS_TRUST_MGR =

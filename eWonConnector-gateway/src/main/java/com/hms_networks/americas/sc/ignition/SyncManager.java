@@ -87,25 +87,25 @@ public class SyncManager {
   private static final String CONFIG_EWON_ALL_REALTIME_TAG_NAME = "_config/AllRealtime";
 
   /** Hash set of registered Ewon Connector tags */
-  private HashSet<String> registeredTags = new HashSet<>();
+  private final HashSet<String> registeredTags = new HashSet<>();
 
   /** Hash set of registered Ewon Connector Ewons */
-  private HashSet<String> registeredEwons = new HashSet<>();
+  private final HashSet<String> registeredEwons = new HashSet<>();
 
   /** Hash set of Ewons to be updated in realtime */
-  private HashSet<String> realtimeEwons = new HashSet<>();
+  private final HashSet<String> realtimeEwons = new HashSet<>();
 
   /** Current gateway context */
-  GatewayContext gatewayContext;
+  final GatewayContext gatewayContext;
 
   /** Log handler */
-  Logger logger = LoggerFactory.getLogger("Ewon.EwonSyncManager");
+  final Logger logger = LoggerFactory.getLogger("Ewon.EwonSyncManager");
 
   /** Current tag provider */
-  ManagedTagProvider provider;
+  final ManagedTagProvider provider;
 
   /** Name of current tag provider */
-  String providerName;
+  final String providerName;
 
   /** Current communication manager */
   CommunicationManger comm;
@@ -114,7 +114,7 @@ public class SyncManager {
   String tagHistoryStore;
 
   /** Cache of last synchronization information, key = ewonId, value = lastSynchroDate */
-  Map<Integer, Date> lastSyncCache = new HashMap<>();
+  final Map<Integer, Date> lastSyncCache = new HashMap<>();
 
   /** Boolean if tag history is enabled */
   boolean historyEnabled = false;

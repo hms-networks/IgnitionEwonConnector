@@ -13,7 +13,7 @@ import com.inductiveautomation.ignition.common.FormatUtil;
 /** Ewon Connector communication manager */
 public class CommunicationManger {
   /** Communication manager logger */
-  private Logger logger = LoggerFactory.getLogger("Ewon.CommManager");
+  private final Logger logger = LoggerFactory.getLogger("Ewon.CommManager");
 
   /** JSON string and object serialization library */
   private final Gson gson = new Gson();

@@ -8,7 +8,7 @@ import java.io.StringReader;
 /** Class representation of a result from Talk2M */
 public class TMResult {
   /** Hash map of tag values in result */
-  HashMap<String, String> TagValues;
+  final HashMap<String, String> TagValues;
 
   /** Number of columns in Talk2M response */
   static final int NUM_COLUMNS = 6;
