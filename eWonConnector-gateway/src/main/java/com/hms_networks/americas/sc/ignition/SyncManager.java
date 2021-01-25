@@ -992,8 +992,8 @@ public class SyncManager {
   /**
    * Convert an unsanitized name to sanitized name
    *
-   * @param name
-   * @return
+   * @param name unsanitized name
+   * @return sanitized name
    */
   protected String sanitizeName(String name) {
     return name.replaceAll("[\\.]", "_");
