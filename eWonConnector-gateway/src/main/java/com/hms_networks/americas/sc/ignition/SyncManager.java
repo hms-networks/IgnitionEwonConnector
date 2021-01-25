@@ -87,7 +87,7 @@ public class SyncManager {
   private static final String CONFIG_EWON_ALL_REALTIME_TAG_NAME = "_config/AllRealtime";
 
   /** Hash set of registered Ewon Connector tags */
-  private HashSet<String> registeredTags = new HashSet<String>();
+  private HashSet<String> registeredTags = new HashSet<>();
 
   /** Hash set of registered Ewon Connector Ewons */
   private HashSet<String> registeredEwons = new HashSet<>();
@@ -341,12 +341,12 @@ public class SyncManager {
    */
   private HashMap<String, ArrayList<String>> fetchRealtimeTags() {
     // Create hashmap to store Ewons and their realtime tags
-    HashMap<String, ArrayList<String>> liveEwonNames = new HashMap<String, ArrayList<String>>();
+    HashMap<String, ArrayList<String>> liveEwonNames = new HashMap<>();
 
     // Create boolean and string realtime properties
     BasicProperty<Boolean> realtimePropBoolean =
-        new BasicProperty<Boolean>("Realtime", boolean.class);
-    BasicProperty<String> realtimePropString = new BasicProperty<String>("Realtime", String.class);
+        new BasicProperty<>("Realtime", boolean.class);
+    BasicProperty<String> realtimePropString = new BasicProperty<>("Realtime", String.class);
 
     // Create list for storing registered tags
     ArrayList<TagPath> tagList = new ArrayList<TagPath>();
@@ -395,7 +395,7 @@ public class SyncManager {
           if (liveEwonNames.containsKey(ewonName)) {
             liveEwonNames.get(ewonName).add(tagName);
           } else {
-            ArrayList<String> tags = new ArrayList<String>();
+            ArrayList<String> tags = new ArrayList<>();
             tags.add(tagName);
             liveEwonNames.put(ewonName, tags);
           }
@@ -859,7 +859,7 @@ public class SyncManager {
               BasicBoundPropertySet readtimeProperty =
                   new BasicBoundPropertySet(
                       new PropertyValue(
-                          new BasicProperty<Boolean>("Realtime", boolean.class), "false"));
+                          new BasicProperty<>("Realtime", boolean.class), "false"));
               provider.configureTag(p, readtimeProperty);
 
               // Register tag write handle with provider
