@@ -55,6 +55,10 @@ This application is supported by HMS Networks' North American offices.
 
 The module can be downloaded from the [releases page](https://github.com/hms-networks/IgnitionEwonConnector/releases).
 
+To run and install the connector, you need to download the latest asset named `EwonConnector-X_Y-A.B.C.zip` where X_Y and A.B.C are the Ignition and module version numbers.
+
+<img src="https://raw.githubusercontent.com/hms-networks/IgnitionEwonConnector/Ignition-8-master/images/release_download.JPG" alt="Release Download Page" width="1000"/>
+
 ## [Installation](#table-of-contents)
 
 1.  On the Gateway Webpage, select `Config` > `SYSTEM` > `Modules` to open the Module Configuration page.
