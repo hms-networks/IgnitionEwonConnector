@@ -1,5 +1,20 @@
 # Ewon Ignition 8 Connector Changelog
 
+## v1.2.0
+
+### Major Changes
+
+* Updated to Ignition 8.1.1 SDK
+* Fixed an issue that caused the AllRealtime tag value to be lost
+* Fixed an issue that caused tag deletion to become disabled
+* Update to HTTP POST requests for DataMailbox and M2Web APIs
+* Update to new Talk2M token authentication for DataMailbox API
+
+### Minor Changes
+
+* Clarify files to download for releases
+* Updated the settings page to automatically restart the connector when applying changes
+
 ## v1.1.12
 
 ### Major Changes
