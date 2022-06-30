@@ -47,7 +47,7 @@
                     <moduleId>com.hms_networks.americas.sc.ignition</moduleId>
                     <moduleName>${project.parent.name}</moduleName>
                     <moduleDescription>${project.description}</moduleDescription>
-                    <moduleVersion>1.2.0</moduleVersion>
+                    <moduleVersion>1.2.1</moduleVersion>
                     <requiredIgnitionVersion>${ignition-sdk-version}</requiredIgnitionVersion>
                     <requiredFrameworkVersion>8</requiredFrameworkVersion>
                     <licenseFile>license.html</licenseFile>
