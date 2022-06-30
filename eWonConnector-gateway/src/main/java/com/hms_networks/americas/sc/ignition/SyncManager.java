@@ -2,7 +2,7 @@ package com.hms_networks.americas.sc.ignition;
 
 import com.inductiveautomation.ignition.common.FormatUtil;
 import com.inductiveautomation.ignition.common.TypeUtilities;
-import com.inductiveautomation.ignition.common.config.BasicBoundPropertySet;
+import com.inductiveautomation.ignition.common.config.BasicProperty;
 import com.inductiveautomation.ignition.common.config.PropertyValue;
 import com.inductiveautomation.ignition.common.model.values.QualifiedValue;
 import com.inductiveautomation.ignition.common.model.values.QualityCode;
@@ -14,7 +14,6 @@ import com.inductiveautomation.ignition.common.sqltags.model.types.DataTypeClass
 import com.inductiveautomation.ignition.common.sqltags.model.types.TagValue;
 import com.inductiveautomation.ignition.common.sqltags.model.types.TimestampSource;
 import com.inductiveautomation.ignition.common.sqltags.parser.TagPathParser;
-import com.inductiveautomation.ignition.common.config.BasicProperty;
 import com.inductiveautomation.ignition.common.tags.config.CollisionPolicy;
 import com.inductiveautomation.ignition.common.tags.config.TagConfigurationModel;
 import com.inductiveautomation.ignition.common.tags.config.properties.WellKnownTagProps;
@@ -50,9 +49,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 /** Manager for synchronization and configuration of Ewon Connector */
 public class SyncManager {
@@ -343,29 +342,32 @@ public class SyncManager {
     // Create hashmap to store Ewons and their realtime tags
     HashMap<String, ArrayList<String>> liveEwonNames = new HashMap<>();
 
-    // Create boolean and string realtime properties
-    BasicProperty<Boolean> realtimePropBoolean =
-        new BasicProperty<>("Realtime", boolean.class);
-    BasicProperty<String> realtimePropString = new BasicProperty<>("Realtime", String.class);
+    // Get tag provider from gateway context
+    TagProvider gwTagProvider = gatewayContext.getTagManager().getTagProvider(providerName);
 
     // Create list for storing registered tags
-    ArrayList<TagPath> tagList = new ArrayList<TagPath>();
+    ArrayList<TagPath> tagList = new ArrayList<>();
 
     // Populate list of registered tags
-    for (String tagPath : registeredTags) {
-      List<String> pathParts = Arrays.asList(tagPath.split("/", 0));
-      BasicTagPath propPath = new BasicTagPath(providerName, pathParts, realtimePropBoolean);
-      tagList.add(propPath);
-      propPath = new BasicTagPath(providerName, pathParts, realtimePropString);
-      tagList.add(propPath);
+    for (String tagPathString : registeredTags) {
+      try {
+        tagList.add(
+            com.inductiveautomation.ignition.common.tags.paths.parser.TagPathParser.parse(
+                tagPathString));
+      } catch (IOException e) {
+        logger.error("Unable to parse a tag path required for realtime data update!");
+        throw new RuntimeException(e);
+      }
     }
 
     // Compile a list of the tags that should be read in "Realtime"
-    CompletableFuture<java.util.List<QualifiedValue>> cf =
-        gatewayContext.getTagManager().readAsync(tagList);
-    List<QualifiedValue> values;
     try {
-      values = cf.get();
+      final int gwTagProviderTimeoutSecs = 5;
+      List<TagConfigurationModel> tagConfigs =
+          gwTagProvider
+              .getTagConfigsAsync(tagList, false, true)
+              .get(gwTagProviderTimeoutSecs, TimeUnit.SECONDS);
+
       // For each tag in list of registered tags
       for (int i = 0; i < tagList.size(); i++) {
         // Indexes for Ewon name and tag name in a tag path
@@ -378,13 +380,16 @@ public class SyncManager {
 
         // Read tag value and mark as realtime if applicable
         boolean isRealtime = false;
-        Object propValue = values.get(i).getValue();
+        TagConfigurationModel tagConfigModel = tagConfigs.get(i);
+        final String realtimePropertyName = "Realtime";
         if (readAllTagsRealtime || realtimeEwons.contains(ewonName)) {
           isRealtime = true;
-        } else if (propValue instanceof Boolean) {
-          isRealtime = (boolean) propValue;
-        } else if (propValue instanceof String) {
-          isRealtime = propValue.equals("true");
+          tagConfigModel.set(
+              new PropertyValue(new BasicProperty<>(realtimePropertyName, Boolean.class), Boolean.FALSE));
+        } else if (tagConfigModel != null) {
+          isRealtime =
+              Boolean.TRUE.equals(
+                  tagConfigModel.get(new BasicProperty<>(realtimePropertyName, Boolean.class)));
         }
 
         // If marked as realtime tag, add to hashmap of Ewons and their realtime tags
@@ -406,6 +411,9 @@ public class SyncManager {
       e.printStackTrace();
     } catch (ExecutionException e) {
       logger.error("Error while reading tag parameters. ExecutionException", e);
+      e.printStackTrace();
+    } catch (TimeoutException e) {
+      logger.error("Error while reading tag parameters. TimeoutException", e);
       e.printStackTrace();
     } catch (NullPointerException e) {
       logger.error(
@@ -856,11 +864,7 @@ public class SyncManager {
               registeredTags.add(p);
 
               // Create a "Realtime" property for the tag, default state is false
-              BasicBoundPropertySet readtimeProperty =
-                  new BasicBoundPropertySet(
-                      new PropertyValue(
-                          new BasicProperty<>("Realtime", boolean.class), "false"));
-              provider.configureTag(p, readtimeProperty);
+              createRealtimePropertyForTag(p);
 
               // Register tag write handle with provider
               provider.registerWriteHandler(
@@ -1038,5 +1042,43 @@ public class SyncManager {
    */
   protected String buildTagPathString(TagPath tagPath) {
     return sanitizeName(tagPath.toStringPartial());
+  }
+
+  /**
+   * Creates a 'realtime' property on the tag at the given tag path.
+   *
+   * @param tagPathString tag path of tag to add realtime property to
+   */
+  protected void createRealtimePropertyForTag(String tagPathString) {
+    // Try to create realtime property on tag path
+    logger.debug("Adding realtime property for tag path {}...", tagPathString);
+    try {
+      // Get tag provider from gateway context
+      TagProvider gwTagProvider = gatewayContext.getTagManager().getTagProvider(providerName);
+
+      // Get path to tag and read config
+      final int gwTagProviderTimeoutSecs = 5;
+      final int tagConfigSingletonIndex = 0;
+      TagPath tagPath =
+          com.inductiveautomation.ignition.common.tags.paths.parser.TagPathParser.parse(
+              tagPathString);
+      List<TagConfigurationModel> tagConfig =
+          gwTagProvider
+              .getTagConfigsAsync(Collections.singletonList(tagPath), false, true)
+              .get(gwTagProviderTimeoutSecs, TimeUnit.SECONDS);
+      TagConfigurationModel tagConfigModel = tagConfig.get(tagConfigSingletonIndex);
+
+      // Create realtime property on tag path
+      tagConfigModel.set(
+          new PropertyValue(new BasicProperty<>("Realtime", Boolean.class), Boolean.FALSE));
+
+      // Save tag config changes (ignore if already exists)
+      gwTagProvider
+          .saveTagConfigsAsync(Collections.singletonList(tagConfigModel), CollisionPolicy.Ignore)
+          .get(gwTagProviderTimeoutSecs, TimeUnit.SECONDS);
+      logger.debug("Added realtime property for tag path {}", tagPathString);
+    } catch (Exception e) {
+      logger.error("Unable to add realtime property for tag path {}", tagPathString, e);
+    }
   }
 }
