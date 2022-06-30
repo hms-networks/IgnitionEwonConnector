@@ -1,5 +1,16 @@
 # Ewon Ignition 8 Connector Changelog
 
+## v1.2.1
+
+### Major Changes
+
+* Fixed an issue that caused the per-tag realtime override option to be missing
+  * Tag provider name customization was removed to ensure consistent and stable connector functionality
+
+### Minor Changes
+
+* Updated GSON dependency version
+
 ## v1.2.0
 
 ### Major Changes
