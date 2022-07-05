@@ -22,6 +22,10 @@ import java.util.List;
  * @author HMS Networks, MU Americas Solution Center
  */
 public class GatewayHook extends AbstractGatewayModuleHook {
+
+  /** Ewon Connector Tag Provider Name */
+  private static final String GATEWAY_TAG_PROVIDER_NAME = "Ewon";
+
   /** Ewon Connector Logger */
   private final Logger logger = LoggerFactory.getLogger("Ewon.EwonModuleManager");
 
@@ -128,7 +132,7 @@ public class GatewayHook extends AbstractGatewayModuleHook {
             gatewayContext
                 .getTagManager()
                 .getOrCreateManagedProvider(
-                    new ProviderConfiguration(settings.getName())
+                    new ProviderConfiguration(GATEWAY_TAG_PROVIDER_NAME)
                         .setAllowTagCustomization(true)
                         .setPersistTags(true)
                         .setPersistValues(true)
@@ -138,7 +142,7 @@ public class GatewayHook extends AbstractGatewayModuleHook {
         tagProvider = null;
       }
       // Create sync manager and start it up with given settings
-      mgr = new SyncManager(gatewayContext, tagProvider, settings.getName());
+      mgr = new SyncManager(gatewayContext, tagProvider, GATEWAY_TAG_PROVIDER_NAME);
       mgr.startup(settings);
     } else {
       logger.debug("The Ewon connector has been disabled in its options. " + "Not starting up.");

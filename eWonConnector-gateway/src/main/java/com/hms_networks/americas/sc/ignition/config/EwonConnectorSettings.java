@@ -24,9 +24,6 @@ public class EwonConnectorSettings extends PersistentRecord {
   /** Ewon Connector identifier */
   public static final IdentityField ID = new IdentityField(META);
 
-  /** Configured tag provider name */
-  public static final StringField Name =
-      new StringField(META, "name", SFieldFlags.SMANDATORY).setDefault("Ewon");
   /** Configured boolean if Ewon Connector enabled */
   public static final BooleanField Enabled = new BooleanField(META, "enabled").setDefault(true);
 
@@ -77,7 +74,7 @@ public class EwonConnectorSettings extends PersistentRecord {
   /** Settings category for general configuration options */
   public static final Category GeneralCategory =
       new Category("EwonConnectorSettings.Category.General", 10)
-          .include(Name, Enabled, ReplaceUnderscore, PollRate, LivePollRate);
+          .include(Enabled, ReplaceUnderscore, PollRate, LivePollRate);
 
   /** Settings category for Talk2M account information */
   public static final Category AccountCategory =
@@ -113,15 +110,6 @@ public class EwonConnectorSettings extends PersistentRecord {
   @Override
   public RecordMeta<?> getMeta() {
     return META;
-  }
-
-  /**
-   * Get Ewon Connector tag provider name
-   *
-   * @return tag provider name
-   */
-  public String getName() {
-    return getString(Name);
   }
 
   /**
