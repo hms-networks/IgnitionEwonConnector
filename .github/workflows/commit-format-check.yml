@@ -1,0 +1,59 @@
+# HMS Networks Solution Center
+# Commit Format Action for Maven-based Ewon ETK Projects
+# Version: 2.1
+#
+# This action is configured to automatically run when a pull
+# request is made to the `main` or `master` branch.
+
+name: Commit Format Check
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  check-commit-message:
+    name: Check Commit Message
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check Title Line Length
+        uses: gsactions/commit-message-checker@v2
+        with:
+          pattern: '^.{0,50}((\r|\n|\r\n)(.*|\r|\n|\r\n)*)?$' # matches if first line (title) less than 50 characters in length, followed by 0 or more additional lines
+          flags: 'y' # y flag indicates "sticky" search that matches starting at beginning (or current location) of string.
+          error: 'The maximum title line length of 50 characters is exceeded.'
+          excludeDescription: 'true' # optional: this excludes the description body of a pull request
+          excludeTitle: 'true' # optional: this excludes the title of a pull request
+          checkAllCommitMessages: 'true' # optional: this checks all commits associated with a pull request
+          accessToken: ${{ secrets.GITHUB_TOKEN }} # github access token is only required if checkAllCommitMessages is true
+      - name: Check Title Does Not End With Period
+        uses: gsactions/commit-message-checker@v2
+        with:
+          pattern: '^.*[^.\r\n]((\r|\n|\r\n)(.*|\r|\n|\r\n)*)?$' # matches if first line (title) does not end with period, followed by 0 or more additional lines
+          flags: 'y' # y flag indicates "sticky" search that matches starting at beginning (or current location) of string.
+          error: 'The title must not end with a period.'
+          excludeDescription: 'true' # optional: this excludes the description body of a pull request
+          excludeTitle: 'true' # optional: this excludes the title of a pull request
+          checkAllCommitMessages: 'true' # optional: this checks all commits associated with a pull request
+          accessToken: ${{ secrets.GITHUB_TOKEN }} # github access token is only required if checkAllCommitMessages is true
+      - name: Check Title Begins With Capital
+        uses: gsactions/commit-message-checker@v2
+        with:
+          pattern: '^[A-Z0-9].*((\r|\n|\r\n)(.*|\r|\n|\r\n)*)?$'  # matches if first line (title) begins with capital letter or number, followed by 0 or more additional lines
+          flags: 'y' # y flag indicates "sticky" search that matches starting at beginning (or current location) of string.
+          error: 'The title must begin with a capitalized first character (or number).'
+          excludeDescription: 'true' # optional: this excludes the description body of a pull request
+          excludeTitle: 'true' # optional: this excludes the title of a pull request
+          checkAllCommitMessages: 'true' # optional: this checks all commits associated with a pull request
+          accessToken: ${{ secrets.GITHUB_TOKEN }} # github access token is only required if checkAllCommitMessages is true
+      - name: Check Body Line Length
+        uses: gsactions/commit-message-checker@v2
+        with:
+          pattern: '^(.{0,72}(\r|\n|\r\n))*.{0,72}?$'  # matches if 0 or more lines are less than or equal to 72 characters in length
+          flags: 'y' # y flag indicates "sticky" search that matches starting at beginning (or current location) of string.
+          error: 'The maximum body line length of 72 characters is exceeded.'
+          excludeDescription: 'true' # optional: this excludes the description body of a pull request
+          excludeTitle: 'true' # optional: this excludes the title of a pull request
+          checkAllCommitMessages: 'true' # optional: this checks all commits associated with a pull request
+          accessToken: ${{ secrets.GITHUB_TOKEN }} # github access token is only required if checkAllCommitMessages is true
