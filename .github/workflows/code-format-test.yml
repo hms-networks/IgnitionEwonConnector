@@ -1,0 +1,26 @@
+# HMS Networks Solution Center
+# Code Format Test Action for Maven-based Ewon ETK Projects
+# Version: 2.1
+#
+# This action is configured to automatically run when a push
+# is made or pull request is merged to the `main` or `master`
+# branch.
+
+name: Code Format Test
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+jobs:
+  formatting:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3 # v2 minimum required
+      - uses: axel-op/googlejavaformat-action@v3
+        with:
+          args: "--dry-run --skip-sorting-imports --set-exit-if-changed"
