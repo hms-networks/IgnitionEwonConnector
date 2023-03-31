@@ -36,6 +36,7 @@ public class EwonConsts {
   public static final String DM_CALL_SYNCDATA = "syncdata";
 
   public static final String DM_PARAM_ID = "id";
+  public static final String DM_PARAM_NAME = "name";
   public static final String DM_PARAM_EWONID = "ewonId";
   public static final String DM_PARAM_TAGID = "tagId";
   public static final String DM_PARAM_LIMIT = "limit";
@@ -47,4 +48,10 @@ public class EwonConsts {
       "\\A[\\p{Alnum}\\_][\\p{Alnum}\\_\\p{Blank}\\`\\-\\:\\(\\)]*\\z";
   public static final String ALLOWED_TAGNAME_REGEX_NO_UNDERSCORE =
       "\\A[\\p{Alnum}\\.][\\p{Alnum}\\.\\p{Blank}\\`\\-\\:\\(\\)]*\\z";
+
+  public static final String T2M_SESSION_ID_KEY = "t2msession";
+  public static final String T2M_TOKEN_KEY = "t2mtoken";
+  public static final String DM_PARAM_EWON_IDS = "ewonIds";
+  public static final String DM_PARAM_TRANSACTIONID = "transactionId";
+  public static final String DM_PARAM_TO = "to";
 }
