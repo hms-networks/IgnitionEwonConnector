@@ -1,17 +1,16 @@
 package com.hms_networks.americas.sc.ignition.comm;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.io.UnsupportedEncodingException;
-import org.apache.commons.lang3.StringUtils;
-import com.hms_networks.americas.sc.ignition.EwonConsts;
 
 /**
  * Object containing authentication information for accessing basic Talk2M features and DataMailbox.
  *
  * @author HMS Networks, MU Americas Solution Center
  */
-public class AuthInfo {
+public class CommunicationAuthInfo {
+
   /** Talk2M account name */
   private final String account;
 
@@ -43,7 +42,8 @@ public class AuthInfo {
    * @param devId Talk2M developer ID
    * @param token Talk2M token
    */
-  public AuthInfo(String account, String username, String password, String devId, String token) {
+  public CommunicationAuthInfo(
+      String account, String username, String password, String devId, String token) {
     this.account = urlEncodeValue(account);
     this.username = urlEncodeValue(username);
     this.password = urlEncodeValue(password);
@@ -65,7 +65,7 @@ public class AuthInfo {
    * @param ewonUsername Ewon device username
    * @param ewonPassword Ewon device password
    */
-  public AuthInfo(
+  public CommunicationAuthInfo(
       String account,
       String username,
       String password,
@@ -143,44 +143,6 @@ public class AuthInfo {
    */
   public String getEwonPassword() {
     return ewonPassword;
-  }
-
-  /**
-   * Generate a string with authentication information for use with the DMWeb API on Talk2M.
-   *
-   * @return DMWeb API authentication information string
-   */
-  public String toDMPostString() {
-    return String.format("%s=%s&%s=%s", EwonConsts.T2M_DEVKEY, devId, EwonConsts.T2M_TOKEN, token);
-  }
-
-  /**
-   * Generate a string with authentication information for use with the M2Web API on Talk2M.
-   *
-   * @return M2Web API authentication information string
-   */
-  public String toM2WPostString() {
-    String ret =
-        String.format(
-            "%s=%s&%s=%s&%s=%s&%s=%s",
-            EwonConsts.T2M_ACCOUNT,
-            account,
-            EwonConsts.T2M_USERNAME,
-            username,
-            EwonConsts.T2M_PASSWORD,
-            password,
-            EwonConsts.T2M_DEVKEY,
-            devId);
-    if (!StringUtils.isBlank(ewonUsername) && !StringUtils.isBlank(ewonPassword)) {
-      ret +=
-          String.format(
-              "&%s=%s&%s=%s",
-              EwonConsts.T2M_DEVICE_USERNAME,
-              ewonUsername,
-              EwonConsts.T2M_DEVICE_PASSWORD,
-              ewonPassword);
-    }
-    return ret;
   }
 
   /**
