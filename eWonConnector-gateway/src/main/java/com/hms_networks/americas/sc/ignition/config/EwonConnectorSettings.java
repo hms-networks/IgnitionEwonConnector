@@ -27,6 +27,10 @@ public class EwonConnectorSettings extends PersistentRecord {
   /** Configured boolean if Ewon Connector enabled */
   public static final BooleanField Enabled = new BooleanField(META, "enabled").setDefault(true);
 
+  /** Configured boolean if Ewon Connector debug mode is enabled */
+  public static final BooleanField DebugEnabled =
+      new BooleanField(META, "debugEnabled").setDefault(false);
+
   /** Configured tag name sanitization choice */
   public static final BooleanField ReplaceUnderscore = new BooleanField(META, "replaceUnderscore");
 
@@ -93,7 +97,7 @@ public class EwonConnectorSettings extends PersistentRecord {
   /** Settings category for advanced configuration */
   public static final Category AdvancedCategory =
       new Category("EwonConnectorSettings.Category.Advanced", 125)
-          .include(ForceLive, TagNameCheckDisabled);
+          .include(ForceLive, TagNameCheckDisabled, DebugEnabled);
 
   // Configure passwords and history provider fields information
   static {
@@ -191,6 +195,15 @@ public class EwonConnectorSettings extends PersistentRecord {
    */
   public boolean isForceLive() {
     return getBoolean(ForceLive);
+  }
+
+  /**
+   * Get boolean if Ewon Connector debug mode is enabled
+   *
+   * @return true/false if Ewon Connector debug mode is enabled
+   */
+  public boolean isDebugEnabled() {
+    return getBoolean(DebugEnabled);
   }
 
   /**
