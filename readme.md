@@ -269,7 +269,7 @@ Your Talk2M data usage can be accessed through [eCatcher](https://ewon.biz/cloud
 1. Open eCatcher and login.
 2. On the left hand menu bar click `Account`.
 3. Once in the account properties click `Reports` near the top of the page.
-4. From here you will be able to download the current or past montly connection log reports.
+4. From here you will be able to download the current or past monthly connection log reports.
 
 ### If Ignition is not running will my data still be logged?
 
