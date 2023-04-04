@@ -24,7 +24,7 @@ Synchronize Ewon Flexy data to Ignition's Tag Historian.
 
 ## [Version](#table-of-contents)
 
-This module version is compatible with Ignition 7.9.  For an Ignition 8 compatible module go to [Ignition-8-master](https://github.com/hms-networks/IgnitionEwonConnector/tree/Ignition-8-master) branch.
+This module version is compatible with Ignition 7.9.  For an Ignition 8 compatible module go to [main](https://github.com/hms-networks/IgnitionEwonConnector/tree/main) branch.
 
 Note: The Ignition 7.9 Ewon module is no longer supported and will not receive future updates.
 
@@ -59,15 +59,15 @@ The module can be downloaded from the [releases page](https://github.com/hms-net
 
 1.  On the Gateway Webpage, select `Config` > `SYSTEM` > `Modules` to open the Module Configuration page.
 
-      <img src="https://raw.githubusercontent.com/hms-networks/IgnitionEwonConnector/Ignition-7.9-master/images/module_config_page.JPG" alt="Ignition Module Page" width="1000"/>
+      <img src="https://raw.githubusercontent.com/hms-networks/IgnitionEwonConnector/Ignition-7.9-main/images/module_config_page.JPG" alt="Ignition Module Page" width="1000"/>
 
 2. Scroll to the bottom on the list, find the blue arrow, and click the `Install or Upgrade a Module` link.
 
-      <img src="https://raw.githubusercontent.com/hms-networks/IgnitionEwonConnector/Ignition-7.9-master/images/module_install_link.JPG" alt="Ignition Module Install Link" width="1000"/>
+      <img src="https://raw.githubusercontent.com/hms-networks/IgnitionEwonConnector/Ignition-7.9-main/images/module_install_link.JPG" alt="Ignition Module Install Link" width="1000"/>
 
 3. Click `Choose File`, select a .modl file that you have previously downloaded.
 
-      <img src="https://raw.githubusercontent.com/hms-networks/IgnitionEwonConnector/Ignition-7.9-master/images/module_install_page.JPG" alt="Ignition Module Install Page" width="1000"/>
+      <img src="https://raw.githubusercontent.com/hms-networks/IgnitionEwonConnector/Ignition-7.9-main/images/module_install_page.JPG" alt="Ignition Module Install Page" width="1000"/>
 
 4. Click Install.
 
@@ -84,7 +84,7 @@ In addition to the standard documentation, follow these additional steps.
 ### Link Ewon to Talk2M
 Open the Ewon webserver and navigate to the VPN Wizard page (At the top right of the page click `Wizards`, then on the right hand menu bar select `VPN`). Select `Configure Talk2M connectivity` and follow the prompts to connect the Ewon to Talk2M.
 
-<img src="https://raw.githubusercontent.com/hms-networks/IgnitionEwonConnector/Ignition-7.9-master/images/vpn_wizard.JPG" alt="Ewon VPN Wizard" width="1000"/>
+<img src="https://raw.githubusercontent.com/hms-networks/IgnitionEwonConnector/Ignition-7.9-main/images/vpn_wizard.JPG" alt="Ewon VPN Wizard" width="1000"/>
 
 ### Setup Historical Logging for Tags
 
@@ -100,13 +100,13 @@ Open the Ewon webserver and navigate to the `Values` page (On the left hand menu
 
 Once configured, click `Update Tag` on the bottom right of the page.
 
-<img src="https://raw.githubusercontent.com/hms-networks/IgnitionEwonConnector/Ignition-7.9-master/images/tag_config_page.JPG" alt="Ewon Tag Configuration Page" width="1000"/>
+<img src="https://raw.githubusercontent.com/hms-networks/IgnitionEwonConnector/Ignition-7.9-main/images/tag_config_page.JPG" alt="Ewon Tag Configuration Page" width="1000"/>
 
 ### Enable Historical Data In DataMailbox
 
 Open the Ewon webserver and navigate to the `Data Management` page ( On the left hand menu click `Setup` > `System` > `Main` > `Data Management`). Check the `Historical Data` checkbox and set the `Datamailbox upload interval` to a reasonable number for your application. The `Datamailbox upload interval` sets how often the Flexy will send batches of historical data to Datamailbox and does not affect the frequency at which tag values are logged. When done, click `Update` at the bottom of the page.
 
-<img src="https://raw.githubusercontent.com/hms-networks/IgnitionEwonConnector/Ignition-7.9-master/images/data_management_page.JPG" alt="Ewon Data Management Page" width="1000"/>
+<img src="https://raw.githubusercontent.com/hms-networks/IgnitionEwonConnector/Ignition-7.9-main/images/data_management_page.JPG" alt="Ewon Data Management Page" width="1000"/>
 
 <sup>[Back to top](#table-of-contents)</sup>
 
@@ -114,7 +114,7 @@ Open the Ewon webserver and navigate to the `Data Management` page ( On the left
 
 With the module successfully installed, a new `Ewon Connector` page will be added to your Ignition Gateway webpages. Navigate to this page by selecting `Config` > `TAGS` > `Ewon Connector`.
 
-   <img src="https://raw.githubusercontent.com/hms-networks/IgnitionEwonConnector/Ignition-7.9-master/images/config_page.JPG" alt="Ewon Module Configuration Page" width="1000"/>
+   <img src="https://raw.githubusercontent.com/hms-networks/IgnitionEwonConnector/Ignition-7.9-main/images/config_page.JPG" alt="Ewon Module Configuration Page" width="1000"/>
 
 
 * **Main**
@@ -155,7 +155,7 @@ Once all the configuration information has been entered, click `Save Changes`, t
 
 Tags will be created automatically in Ignition on startup. Tags will be visible under the provider name assigned during the configuration process. Each Ewon tied to the Talk2M account will be a unique tag directory.
 
-<img src="https://raw.githubusercontent.com/hms-networks/IgnitionEwonConnector/Ignition-7.9-master/images/tag_browser.JPG" alt="Ignition Tag Browser" width="600"/>
+<img src="https://raw.githubusercontent.com/hms-networks/IgnitionEwonConnector/Ignition-7.9-main/images/tag_browser.JPG" alt="Ignition Tag Browser" width="600"/>
 
 ### **Allowed Tag Names**
 
@@ -224,7 +224,7 @@ There are several reasons tags may not be populated into Ignition. Please follow
 3. Verify your Talk2M credentials are correctly entered into the Ewon Connector settings in Ignition.
    * If your credentials were incorrectly entered, the Ignition logs will indicate a Authentication Error.  Check the logs on the Ignition webserver by clicking `Status` > `Logs`. If your credentials are incorrect, you will see log entries in this format.
 
-   <img src="https://raw.githubusercontent.com/hms-networks/IgnitionEwonConnector/Ignition-7.9-master/images/auth_error.JPG" alt="Ignition Authentication Error" width="1000"/>
+   <img src="https://raw.githubusercontent.com/hms-networks/IgnitionEwonConnector/Ignition-7.9-main/images/auth_error.JPG" alt="Ignition Authentication Error" width="1000"/>
 
    * If you see this log error, check your Talk2M Account information entered on the `Ewon Connector` configuration page. _Note: Any changes done on this page require a restart of the connector module or Ignition. You can restart the module by navigating to `Config` > `Modules` and clicking `restart` next to the module._
 4. If tag values are still not populated in Ignition, please contact [support](#support).
