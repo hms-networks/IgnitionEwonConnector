@@ -24,7 +24,7 @@ Synchronize Ewon Flexy data to Ignition's Tag Historian.
 
 ## [Version](#table-of-contents)
 
-This module version is compatible with Ignition 7.9.  For an Ignition 8 compatible module go to [Ignition-8-master](https://github.com/hms-networks/IgnitionEwonConnector/tree/Ignition-8-master) branch.
+This module version is compatible with Ignition 7.9, but is no longer supported and does not receive updates. For an Ignition 8 compatible module go to [Ignition-8-master](https://github.com/hms-networks/IgnitionEwonConnector/tree/Ignition-8-master) branch.
 
 <sup>[Back to top](#table-of-contents)</sup>
 
