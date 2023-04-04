@@ -190,7 +190,7 @@ Ewon tag values can be written from Ignition. When attempting to write a tag val
 
 The `Tag Browser` tool in Ignition Designer can be used to write tag values.
 
-After a tag value is written in Ignition, the displayed value my revert back to its previous state. This is because new DataMailbox values were received. DataMailbox values will alway lag the live tag value. This behavior can be avoided by temporarily enabling realtime mode for the tag/Ewon being written to.
+After a tag value is written in Ignition, the displayed value my revert back to its previous state. This is because new DataMailbox values were received. DataMailbox values will always lag the live tag value. This behavior can be avoided by temporarily enabling realtime mode for the tag/Ewon being written to.
 
 ### **Realtime Values**
 
