@@ -1,5 +1,6 @@
 package com.hms_networks.americas.sc.ignition.config;
 
+import com.hms_networks.americas.sc.ignition.comm.AuthInfo;
 import com.inductiveautomation.ignition.gateway.localdb.persistence.BooleanField;
 import com.inductiveautomation.ignition.gateway.localdb.persistence.Category;
 import com.inductiveautomation.ignition.gateway.localdb.persistence.EncodedStringField;
@@ -9,8 +10,6 @@ import com.inductiveautomation.ignition.gateway.localdb.persistence.PersistentRe
 import com.inductiveautomation.ignition.gateway.localdb.persistence.RecordMeta;
 import com.inductiveautomation.ignition.gateway.localdb.persistence.StringField;
 import com.inductiveautomation.ignition.gateway.web.components.editors.PasswordEditorSource;
-import com.hms_networks.americas.sc.ignition.comm.AuthInfo;
-import simpleorm.dataset.SFieldFlags;
 
 /**
  * The main settings for the eWon connector, containing auth data, and settings that dictate update
