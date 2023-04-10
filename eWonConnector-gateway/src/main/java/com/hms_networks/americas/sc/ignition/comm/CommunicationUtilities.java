@@ -1,5 +1,9 @@
 package com.hms_networks.americas.sc.ignition.comm;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 
@@ -46,5 +50,18 @@ public class CommunicationUtilities {
     request.setHeader(CommunicationConstants.HTTP_HEADER_KEY_CONTENT_TYPE, httpPostContentType);
     request.setHeader(CommunicationConstants.HTTP_HEADER_KEY_CHARSET, httpPostCharset);
     return request;
+  }
+
+  /**
+   * Converts the specified {@link Date} object to an ISO 8601-compatible date string (UTC).
+   *
+   * @param value {@link Date} object to convert
+   * @return resulting ISO 8601-compatible date string (UTC)
+   */
+  public static String convertDateToIso8601String(Date value) {
+    final TimeZone utcTimeZone = TimeZone.getTimeZone("UTC");
+    final DateFormat iso8601DateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'");
+    iso8601DateFormat.setTimeZone(utcTimeZone);
+    return iso8601DateFormat.format(value);
   }
 }
