@@ -9,7 +9,7 @@ import java.nio.charset.StandardCharsets;
  *
  * @author HMS Networks, MU Americas Solution Center
  */
-public class AuthInfo {
+public class CommunicationAuthInfo {
   /** Talk2M account name */
   private final String account;
 
@@ -41,7 +41,8 @@ public class AuthInfo {
    * @param devId Talk2M developer ID
    * @param token Talk2M token
    */
-  public AuthInfo(String account, String username, String password, String devId, String token) {
+  public CommunicationAuthInfo(
+      String account, String username, String password, String devId, String token) {
     this.account = urlEncodeValue(account);
     this.username = urlEncodeValue(username);
     this.password = urlEncodeValue(password);
@@ -63,7 +64,7 @@ public class AuthInfo {
    * @param ewonUsername Ewon device username
    * @param ewonPassword Ewon device password
    */
-  public AuthInfo(
+  public CommunicationAuthInfo(
       String account,
       String username,
       String password,
