@@ -1,6 +1,6 @@
 package com.hms_networks.americas.sc.ignition.config;
 
-import com.hms_networks.americas.sc.ignition.comm.AuthInfo;
+import com.hms_networks.americas.sc.ignition.comm.CommunicationAuthInfo;
 import com.inductiveautomation.ignition.gateway.localdb.persistence.BooleanField;
 import com.inductiveautomation.ignition.gateway.localdb.persistence.Category;
 import com.inductiveautomation.ignition.gateway.localdb.persistence.EncodedStringField;
@@ -246,13 +246,13 @@ public class EwonConnectorSettings extends PersistentRecord {
    *
    * @return created AuthInfo object
    */
-  public AuthInfo getAuthInfo() {
+  public CommunicationAuthInfo getAuthInfo() {
 
-    AuthInfo authInfo;
+    CommunicationAuthInfo communicationAuthInfo;
     try {
       // Try fetching the credentials from the configuration page
-      authInfo =
-          new AuthInfo(
+      communicationAuthInfo =
+          new CommunicationAuthInfo(
               getAccount(),
               getUserName(),
               getPassword(),
@@ -263,9 +263,9 @@ public class EwonConnectorSettings extends PersistentRecord {
     } catch (NullPointerException e) {
       // Some of the configuration page credentials are empty, force empty strings
       // Ignition logs will indicate incorrect user credentials
-      authInfo = new AuthInfo("", "", "", "", "", "", "");
+      communicationAuthInfo = new CommunicationAuthInfo("", "", "", "", "", "", "");
     }
-    return authInfo;
+    return communicationAuthInfo;
   }
 
   /**
