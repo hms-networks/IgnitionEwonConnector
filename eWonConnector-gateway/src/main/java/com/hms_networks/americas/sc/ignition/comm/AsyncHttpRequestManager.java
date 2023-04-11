@@ -1,13 +1,13 @@
 package com.hms_networks.americas.sc.ignition.comm;
 
 import java.util.concurrent.Future;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.methods.HttpRequestBase;
-import org.apache.http.concurrent.FutureCallback;
-import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
-import org.apache.http.impl.nio.client.HttpAsyncClients;
-import org.apache.http.impl.nio.reactor.IOReactorConfig;
+import java.util.concurrent.TimeUnit;
+import org.apache.hc.client5.http.async.methods.SimpleHttpRequest;
+import org.apache.hc.client5.http.async.methods.SimpleHttpResponse;
+import org.apache.hc.client5.http.config.RequestConfig;
+import org.apache.hc.client5.http.impl.async.CloseableHttpAsyncClient;
+import org.apache.hc.client5.http.impl.async.HttpAsyncClients;
+import org.apache.hc.core5.concurrent.FutureCallback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,14 +45,6 @@ public class AsyncHttpRequestManager {
   private static final int SOCKET_TIMEOUT = 10000;
 
   /**
-   * Maximum number of concurrent connections to the various Talk2M APIs. This value is used to
-   * initialize the asynchronous HTTP client with a connection pool.
-   *
-   * @since 1.0.0
-   */
-  private static final int MAX_CONCURRENT_CONNECTIONS = 8;
-
-  /**
    * Asynchronous HTTP client for sending requests to the various Talk2M APIs.
    *
    * @since 1.0.0
@@ -79,20 +71,12 @@ public class AsyncHttpRequestManager {
       LOGGER.info("Initializing Asynchronous HTTP manager...");
 
       // Initialize the asynchronous HTTP client
-      IOReactorConfig ioConfig =
-          IOReactorConfig.custom().setIoThreadCount(MAX_CONCURRENT_CONNECTIONS).build();
       RequestConfig requestConfig =
           RequestConfig.custom()
-              .setConnectTimeout(CONNECT_TIMEOUT)
-              .setSocketTimeout(SOCKET_TIMEOUT)
+              .setConnectionRequestTimeout(CONNECT_TIMEOUT, TimeUnit.MILLISECONDS)
+              .setResponseTimeout(SOCKET_TIMEOUT, TimeUnit.MILLISECONDS)
               .build();
-      httpAsyncClient =
-          HttpAsyncClients.custom()
-              .setMaxConnTotal(MAX_CONCURRENT_CONNECTIONS)
-              .setMaxConnPerRoute(MAX_CONCURRENT_CONNECTIONS)
-              .setDefaultIOReactorConfig(ioConfig)
-              .setDefaultRequestConfig(requestConfig)
-              .build();
+      httpAsyncClient = HttpAsyncClients.custom().setDefaultRequestConfig(requestConfig).build();
       httpAsyncClient.start();
 
       // Store debug logging enabled status
@@ -143,17 +127,17 @@ public class AsyncHttpRequestManager {
    * @return {@link Future} object representing the request
    * @since 1.0.0
    */
-  public static Future<HttpResponse> sendAsyncRequest(
-      final HttpRequestBase request, final FutureCallback<HttpResponse> callback) {
+  public static Future<SimpleHttpResponse> sendAsyncRequest(
+      final SimpleHttpRequest request, final FutureCallback<SimpleHttpResponse> callback) {
     // Throw IllegalStateException if asynchronous HTTP manager not initialized
     if (isNotInitialized()) {
       throw new IllegalStateException("Asynchronous HTTP manager has not been initialized.");
     }
 
     // Create wrapped callback to log the request
-    FutureCallback<HttpResponse> wrappedCallback =
-        new FutureCallback<HttpResponse>() {
-          public void completed(HttpResponse response) {
+    FutureCallback<SimpleHttpResponse> wrappedCallback =
+        new FutureCallback<>() {
+          public void completed(SimpleHttpResponse response) {
             // Log the request completion (debug only)
             if (AsyncHttpRequestManager.isDebugEnabled) {
               LOGGER.debug(
@@ -216,7 +200,18 @@ public class AsyncHttpRequestManager {
    * @return {@link Future} object representing the request
    * @since 1.0.0
    */
-  public static Future<HttpResponse> sendAsyncRequest(HttpRequestBase request) {
+  public static Future<SimpleHttpResponse> sendAsyncRequest(SimpleHttpRequest request) {
     return sendAsyncRequest(request, null);
+  }
+
+  /**
+   * Returns a boolean indicating if debug logging is enabled. This value corresponds with the
+   * configured debug setting for the connector.
+   *
+   * @return {@code true} if debug logging is enabled, {@code false} otherwise
+   * @since 1.0.0
+   */
+  public static boolean isDebugEnabled() {
+    return isDebugEnabled;
   }
 }

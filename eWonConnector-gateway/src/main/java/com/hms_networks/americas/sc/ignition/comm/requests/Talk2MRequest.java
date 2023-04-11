@@ -3,9 +3,10 @@ package com.hms_networks.americas.sc.ignition.comm.requests;
 import com.hms_networks.americas.sc.ignition.comm.AsyncHttpRequestManager;
 import com.hms_networks.americas.sc.ignition.comm.CommunicationUtilities;
 import java.util.concurrent.Future;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.concurrent.FutureCallback;
+import org.apache.hc.client5.http.async.methods.SimpleHttpRequest;
+import org.apache.hc.client5.http.async.methods.SimpleHttpResponse;
+import org.apache.hc.core5.concurrent.FutureCallback;
+import org.apache.hc.core5.http.NameValuePair;
 
 /**
  * An abstract class for performing an HTTP POST request to a Talk2M API. This class performs any
@@ -19,19 +20,15 @@ public abstract class Talk2MRequest {
   /**
    * Performs the HTTP POST request to a Talk2M API using the request URL and body defined by the
    * implementation of the {@link Talk2MRequest#getRequestUrl()} and {@link
-   * Talk2MRequest#getRequestBody()} methods.
+   * Talk2MRequest#getRequestParams()} methods.
    *
    * @param callback The callback to be executed when the request is completed.
-   * @param contentType The content type of the request body.
-   * @param charset The charset of the request body.
    * @return The {@link Future} object for the request.
    */
-  public Future<HttpResponse> doRequest(
-      FutureCallback<HttpResponse> callback, String contentType, String charset) {
+  public Future<SimpleHttpResponse> doRequest(FutureCallback<SimpleHttpResponse> callback) {
     // Build HTTP POST request
-    HttpPost request =
-        CommunicationUtilities.createPostRequest(
-            getRequestUrl(), getRequestBody(), contentType, charset);
+    SimpleHttpRequest request =
+        CommunicationUtilities.createPostRequest(getRequestUrl(), getRequestParams());
 
     // Perform HTTP POST request
     return AsyncHttpRequestManager.sendAsyncRequest(request, callback);
@@ -46,10 +43,10 @@ public abstract class Talk2MRequest {
   public abstract String getRequestUrl();
 
   /**
-   * Gets the body of the request to a Talk2M API which is defined by the implementation of this
-   * method.
+   * Gets the parameters of the request to a Talk2M API which is defined by the implementation of
+   * this method.
    *
-   * @return The body of the request to a Talk2M API.
+   * @return The parameters of the request to a Talk2M API.
    */
-  public abstract String getRequestBody();
+  public abstract NameValuePair[] getRequestParams();
 }
