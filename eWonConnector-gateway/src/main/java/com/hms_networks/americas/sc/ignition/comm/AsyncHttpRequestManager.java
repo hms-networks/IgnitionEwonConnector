@@ -31,18 +31,18 @@ public class AsyncHttpRequestManager {
   private static final Logger LOGGER = LoggerFactory.getLogger(AsyncHttpRequestManager.class);
 
   /**
-   * Default connect timeout for HTTP connections.
+   * Default connect timeout for HTTP connections (in milliseconds).
    *
    * @since 1.0.0
    */
-  private static final int CONNECT_TIMEOUT = 5000;
+  private static final int CONNECT_TIMEOUT_MILLIS = 5000;
 
   /**
-   * Default socket timeout for HTTP connections.
+   * Default socket timeout for HTTP connections (in milliseconds).
    *
    * @since 1.0.0
    */
-  private static final int SOCKET_TIMEOUT = 10000;
+  private static final int SOCKET_TIMEOUT_MILLIS = 10000;
 
   /**
    * Asynchronous HTTP client for sending requests to the various Talk2M APIs.
@@ -73,8 +73,8 @@ public class AsyncHttpRequestManager {
       // Initialize the asynchronous HTTP client
       RequestConfig requestConfig =
           RequestConfig.custom()
-              .setConnectionRequestTimeout(CONNECT_TIMEOUT, TimeUnit.MILLISECONDS)
-              .setResponseTimeout(SOCKET_TIMEOUT, TimeUnit.MILLISECONDS)
+              .setConnectionRequestTimeout(CONNECT_TIMEOUT_MILLIS, TimeUnit.MILLISECONDS)
+              .setResponseTimeout(SOCKET_TIMEOUT_MILLIS, TimeUnit.MILLISECONDS)
               .build();
       httpAsyncClient = HttpAsyncClients.custom().setDefaultRequestConfig(requestConfig).build();
       httpAsyncClient.start();
