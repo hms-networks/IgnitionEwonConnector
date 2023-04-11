@@ -4,8 +4,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
+import org.apache.hc.client5.http.async.methods.SimpleHttpRequest;
+import org.apache.hc.client5.http.async.methods.SimpleRequestBuilder;
+import org.apache.hc.core5.http.NameValuePair;
 
 /**
  * Class containing utility methods for performing communication tasks, such as creating HTTP post
@@ -17,39 +18,17 @@ import org.apache.http.entity.StringEntity;
 public class CommunicationUtilities {
 
   /**
-   * Sets the request body of an HTTP post request using the given string body and the default
-   * encoding.
-   *
-   * @param httpPost HTTP post request to set the body of
-   * @param httpPostRequestBody string body to set the request body to (i.e.
-   *     "param1=value1&param2=value2")
-   * @param httpPostCharset charset of the request (i.e. "utf-8")
-   */
-  public static void setPostRequestBody(
-      HttpPost httpPost, String httpPostRequestBody, String httpPostCharset) {
-    httpPost.setEntity(new StringEntity(httpPostRequestBody, httpPostCharset));
-  }
-
-  /**
-   * Creates an HTTP post request with the given URL and body.
+   * Creates an HTTP post request with the given URL and parameters.
    *
    * @param httpPostRequestUrl URL of the request
-   * @param httpPostRequestBody string body of the request (i.e. "param1=value1&param2=value2")
-   * @param httpPostContentType content type of the request (i.e.
-   *     "application/x-www-form-urlencoded")
-   * @param httpPostCharset charset of the request (i.e. "utf-8")
-   * @return HTTP post request with the given URL and body
+   * @param httpPostRequestParams parameters of the request
+   * @return HTTP post request with the given URL and parameters
    */
-  public static HttpPost createPostRequest(
-      String httpPostRequestUrl,
-      String httpPostRequestBody,
-      String httpPostContentType,
-      String httpPostCharset) {
-    HttpPost request = new HttpPost(httpPostRequestUrl);
-    setPostRequestBody(request, httpPostRequestBody, httpPostCharset);
-    request.setHeader(CommunicationConstants.HTTP_HEADER_KEY_CONTENT_TYPE, httpPostContentType);
-    request.setHeader(CommunicationConstants.HTTP_HEADER_KEY_CHARSET, httpPostCharset);
-    return request;
+  public static SimpleHttpRequest createPostRequest(
+      String httpPostRequestUrl, NameValuePair[] httpPostRequestParams) {
+    return SimpleRequestBuilder.post(httpPostRequestUrl)
+        .addParameters(httpPostRequestParams)
+        .build();
   }
 
   /**
