@@ -55,7 +55,7 @@
                     <hooks>
                         <hook>
                             <scope>G</scope>
-                            <hookClass>com.hms_networks.americas.sc.ignition.GatewayHook</hookClass>
+                            <hookClass>com.hms_networks.americas.sc.ignition.IgnitionEwonConnectorHook</hookClass>
                         </hook>
                     </hooks>
 
