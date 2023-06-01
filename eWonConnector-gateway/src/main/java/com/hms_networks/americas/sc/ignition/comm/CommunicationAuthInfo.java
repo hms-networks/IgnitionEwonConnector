@@ -8,27 +8,58 @@ import java.nio.charset.StandardCharsets;
  * Object containing authentication information for accessing basic Talk2M features and DataMailbox.
  *
  * @author HMS Networks, MU Americas Solution Center
+ * @version 2.0.0
+ * @since 1.0.0
  */
 public class CommunicationAuthInfo {
-  /** Talk2M account name */
+
+  /**
+   * Talk2M account name
+   *
+   * @since 1.0.0
+   */
   private final String account;
 
-  /** Talk2M account username */
+  /**
+   * Talk2M account username
+   *
+   * @since 1.0.0
+   */
   private final String username;
 
-  /** Talk2M account password */
+  /**
+   * Talk2M account password
+   *
+   * @since 1.0.0
+   */
   private final String password;
 
-  /** Talk2M developer ID */
+  /**
+   * Talk2M developer ID
+   *
+   * @since 1.0.0
+   */
   private final String devId;
 
-  /** Talk2M token */
+  /**
+   * Talk2M token
+   *
+   * @since 1.0.0
+   */
   private final String token;
 
-  /** Ewon device username */
+  /**
+   * Ewon device username
+   *
+   * @since 1.0.0
+   */
   private final String ewonUsername;
 
-  /** Ewon device password */
+  /**
+   * Ewon device password
+   *
+   * @since 1.0.0
+   */
   private final String ewonPassword;
 
   /**
@@ -40,6 +71,7 @@ public class CommunicationAuthInfo {
    * @param password Talk2M account password
    * @param devId Talk2M developer ID
    * @param token Talk2M token
+   * @since 1.0.0
    */
   public CommunicationAuthInfo(
       String account, String username, String password, String devId, String token) {
@@ -63,6 +95,7 @@ public class CommunicationAuthInfo {
    * @param token Talk2M token
    * @param ewonUsername Ewon device username
    * @param ewonPassword Ewon device password
+   * @since 1.0.0
    */
   public CommunicationAuthInfo(
       String account,
@@ -85,6 +118,7 @@ public class CommunicationAuthInfo {
    * Get Talk2M account name
    *
    * @return Talk2M account name
+   * @since 1.0.0
    */
   public String getAccount() {
     return account;
@@ -94,6 +128,7 @@ public class CommunicationAuthInfo {
    * Get Talk2M account username
    *
    * @return Talk2M account username
+   * @since 1.0.0
    */
   public String getUsername() {
     return username;
@@ -103,6 +138,7 @@ public class CommunicationAuthInfo {
    * Get Talk2M account password
    *
    * @return Talk2M account password
+   * @since 1.0.0
    */
   public String getPassword() {
     return password;
@@ -112,6 +148,7 @@ public class CommunicationAuthInfo {
    * Get Talk2M developer ID
    *
    * @return Talk2M developer ID
+   * @since 1.0.0
    */
   public String getDevId() {
     return devId;
@@ -121,6 +158,7 @@ public class CommunicationAuthInfo {
    * Get Talk2M token
    *
    * @return Talk2M token
+   * @since 1.0.0
    */
   public String getToken() {
     return token;
@@ -130,6 +168,7 @@ public class CommunicationAuthInfo {
    * Get Ewon device username
    *
    * @return Ewon device username
+   * @since 1.0.0
    */
   public String getEwonUsername() {
     return ewonUsername;
@@ -139,6 +178,7 @@ public class CommunicationAuthInfo {
    * Get Ewon device password
    *
    * @return Ewon device password
+   * @since 1.0.0
    */
   public String getEwonPassword() {
     return ewonPassword;
@@ -149,6 +189,7 @@ public class CommunicationAuthInfo {
    *
    * @param value input string to be made url safe
    * @return The URL safe string
+   * @since 1.0.0
    */
   private String urlEncodeValue(String value) {
     try {
