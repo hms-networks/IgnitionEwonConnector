@@ -1,6 +1,5 @@
 package com.hms_networks.americas.sc.ignition.comm;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
@@ -192,11 +191,6 @@ public class CommunicationAuthInfo {
    * @since 1.0.0
    */
   private String urlEncodeValue(String value) {
-    try {
-      return URLEncoder.encode(value, StandardCharsets.UTF_8.toString());
-    } catch (UnsupportedEncodingException e) {
-      // Return the passed in string, the string could not be encoded
-      return value;
-    }
+    return URLEncoder.encode(value, StandardCharsets.UTF_8);
   }
 }
