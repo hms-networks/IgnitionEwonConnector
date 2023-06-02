@@ -1,0 +1,52 @@
+---
+id: development-environment
+title: Development Environment Information
+sidebar_label: Development Environment Information
+---
+
+import ScDocusaurusConfig from "@site/ScDocusaurusConfig.js";
+import SysReqIgnitionPartial from '@site/docs/_partial/_sys_req_ignition.mdx';
+import SysReqHardwarePartial from '@site/docs/_partial/_sys_req_hardware.mdx';
+
+## IDEs
+
+This project uses the Maven build system to automatically download libraries and dependencies, and
+to ensure consistent build behavior. As such, this project can be imported into any IDE that
+supports the Maven build system.
+
+## Command-Line
+
+Maven includes extensive support for the command-line interface (CLI). For more information about
+Maven command-line interface support, please refer
+to [https://maven.apache.org/run.html](https://maven.apache.org/run.html).
+
+## Requirements
+
+### Required Ignition Version
+
+<SysReqIgnitionPartial />
+
+#### Java and Maven Versions
+
+Ignition 8.1 and later requires the Java 11 JDK for module development. Any supported version(s) of Maven for Java 11
+may be used.
+
+### Required Hardware
+
+<SysReqHardwarePartial />
+
+## Contributing
+
+Detailed information about contributing to this project can be found in
+the [Contribution Guidelines](03-CONTRIBUTION_GUIDELINES.mdx).
+
+## Support Notice
+
+The development environment information provided in this document is provided for informational purposes only. The
+development environment is provided by Inductive Automation on GitHub via examples and archetypes, and is subject to
+change at any time. HMS Networks is not responsible for the development environment, and does not provide support for
+the development environment.
+
+For more information about the development environment, please refer to
+the [inductiveautomation/ignition-sdk-examples](https://github.com/inductiveautomation/ignition-sdk-examples)
+repository on GitHub.

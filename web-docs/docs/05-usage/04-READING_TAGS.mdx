@@ -1,0 +1,63 @@
+---
+id: reading-tags
+title: Reading Tags
+sidebar_label: Reading Tags
+---
+
+import ScDocusaurusConfig from "@site/ScDocusaurusConfig.js";
+import AccessingTagsPartial from '@site/docs/_partial/_accessing_tags.mdx';
+
+### Realtime (Live) Values
+
+Realtime (live) tag data functionality is supported by the connector, allowing for the reading of tag values in
+realtime. This functionality may be enabled connector-wide, per Ewon Flexy, or per tag.
+
+#### Connector-Wide
+
+To enable realtime (live) tag data functionality connector-wide, set the `Read all values in realtime` field to `true`
+in the connector configuration.
+
+1. From the Ignition Gateway webpage, navigate to the `Config` section.
+2. Select the `Ewon Connector` option from the left-hand menu.
+3. Enable the `Read all values in realtime` option.
+4. Click the `Save Changes` button, then restart Ignition.
+
+#### Per Ewon Flexy
+
+To enable realtime (live) tag data functionality per Ewon Flexy, set the `_STATUS/ForceRealtimeData` tag to `true` in
+each Ewon Flexy's tag folder.
+
+1. From the Ignition Designer, navigate to the `Tag Browser` tool.
+2. Expand the `All Providers` directory.
+3. Expand the `Ewon` directory (associated with the Ewon Connector).
+4. Expand the Ewon Flexy's directory.
+5. Expand the `_STATUS` tag folder.
+6. Set the `_STATUS/ForceRealtimeData` tag to `true`.
+
+:::note
+
+If you are not in read/write mode, you will need to switch to read/write mode to set the tag value.
+
+:::
+
+#### Per Tag
+
+To enable realtime (live) tag data functionality per tag, set the `ForceRealtimeData` property to `true` in the tag's
+properties.
+
+1. From the Ignition Designer, navigate to the `Tag Browser` tool.
+2. Expand the `All Providers` directory.
+3. Expand the `Ewon` directory (associated with the Ewon Connector).
+4. Expand the Ewon Flexy's directory.
+5. Select the tag and expand it to view its properties.
+6. Set the `ForceRealtimeData` property to `true`.
+
+:::note
+
+If you are not in read/write mode, you will need to switch to read/write mode to set the tag value.
+
+:::
+
+### Where to Access Tags
+
+<AccessingTagsPartial />
