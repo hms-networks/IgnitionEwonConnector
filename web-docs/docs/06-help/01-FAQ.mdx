@@ -1,0 +1,58 @@
+---
+id: faq
+title: Frequently Asked Questions
+sidebar_label: Frequently Asked Questions
+---
+
+import AccessingTagsPartial from '@site/docs/_partial/_accessing_tags.mdx';
+
+## 1. How can I check my Talk2M data usage?
+
+Your Talk2M data usage can be checked through the [eCatcher](https://ewon.biz/cloud-services/talk2m/ecatcher) software.
+
+1. Open eCatcher and log in to your Talk2M account.
+2. Click the **Account** option in the left-hand menu.
+3. In the **Account Properties** menu, click **Reports** near the top of the page.
+4. In the **Reports** menu, you may download current or past monthly reports for your Talk2M account.
+
+## 2. If Ignition is not running, will my data still be logged?
+
+If Ignition is not running, or is offline, data will still be logged by the Flexy and stored in DataMailbox. Once
+Ignition is running again, all logged historical data points will be fetched from DataMailbox by Ignition, unless the
+device or tag is configured for realtime (live) data only.
+
+:::note
+
+The number of data points stored in DataMailbox is limited, and depends on the Talk2M account type. For information
+about Talk2M account types, please refer to the [Talk2M Pricing](https://ewon.biz/cloud-services/talk2m/plan-pricing)
+page.
+
+:::
+
+## 3. Where can I find my tags in Ignition?
+
+<AccessingTagsPartial/>
+
+:::tip
+
+If the module has just started up or loaded recently, it may take a few minutes for initial metadata to be cached before
+tags will be available in Ignition.
+
+:::
+
+## 4. What happened to the Ignition 7.9 version of this module?
+
+The Ignition 7.9 version of this module is no longer being actively developed, maintained, or supported.
+To access and learn more about the previous, Ignition 7.9 compatible version of this module, please see the
+[Ignition 7.9 Branch (Ignition-7.9-main)](https://github.com/hms-networks/IgnitionEwonConnector/tree/Ignition-7.9-main).
+
+## 5. Where did the 'Tag Names Contain Periods' setting go?
+
+The 'Tag Names Contain Periods' setting has been removed from the module as of version 2.0.0.
+Previously, this setting was used to determine whether the module should attempt to convert periods in tag names, which
+are not valid in Ignition, to underscore(s) instead.
+
+As of version 2.0.0, this functionality has been merged with the 'Disable Tag Name Checking' setting.
+By default, the 'Disable Tag Name Checking' setting is disabled, which means that the module will attempt to convert
+any illegal tag names to valid tag names by replacing illegal characters with underscores.
+If you wish to disable this functionality, you may enable the 'Disable Tag Name Checking' setting.
