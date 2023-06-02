@@ -1,0 +1,80 @@
+---
+id: troubleshooting
+title: Troubleshooting
+sidebar_label: Troubleshooting
+---
+
+import ScDocusaurusConfig from "@site/ScDocusaurusConfig.js";
+import RestartingModulePartial from '../_partial/_restarting_module.mdx';
+
+## Disclaimer
+
+<>The information provided in this section is intended to assist with troubleshooting common issues
+that may be encountered when using the {ScDocusaurusConfig.title}. This information is provided
+as-is, and is not intended to be a comprehensive troubleshooting guide.</><br/><br/>
+
+If you are unable to resolve an issue using the information provided in this section, please
+visit the [Support](03-SUPPORT.mdx) page for additional support options.
+
+## 1. Tags do not appear in Ignition
+
+### Symptom
+
+All, or some, of the expected tags do not appear in Ignition.
+
+### Cause
+
+There are several reasons tags may not be populated into Ignition. The most common reasons are:
+
+- The system has just been configured, and data has not yet been registered in DataMailbox.
+- The Talk2M credentials are incorrectly entered into the Ewon Connector settings in Ignition.
+- The Ewon Connector module is not running.
+
+### Solution
+
+To resolve this issue, try the following:
+
+1. Ensure that the module has been installed and configured correctly.
+    * For more information, please refer to the
+      [Installation](../04-setup/02-INSTALLATION_UPGRADE.mdx) and [Configuration](../04-setup/03-CONFIGURATION.mdx)
+      pages.
+2. If the system has just been configured, wait for an upload interval (usually 1 hour) for data to be registered in
+   DataMailbox.
+3. Verify that the [configured credentials](../04-setup/03-CONFIGURATION.mdx) are correct.
+    * The Ignition logs will indicate an Authentication Error if the credentials are incorrect.
+      Check the logs on the Ignition webserver by clicking `Status` > `Logs`. If your credentials are incorrect, you
+      will see log entries in this format.
+
+      <img src="https://raw.githubusercontent.com/hms-networks/IgnitionEwonConnector/main/images/auth_error.JPG" alt="Ignition Authentication Error" width="1000"/>
+
+    * If you see this log error, check your configured Talk2M Account information. For more information, please refer to
+      the [Configuration](../04-setup/03-CONFIGURATION.mdx) page.
+
+   :::note
+
+   <>Any changes made to the configuration of the {ScDocusaurusConfig.title} require a restart of the module or
+   Ignition.
+   </><br/><br/>
+   <RestartingModulePartial/>
+
+   :::
+
+### 2. Changes on the Ewon Connector page do not take effect
+
+### Symptom
+
+Configuration changes made on the Ewon Connector page do not take effect or result in an error.
+
+### Cause
+
+<>The {ScDocusaurusConfig.title} may have not been restarted after configuration changes were made, which is preventing
+the changes from taking effect, or in some cases, causing an error.
+</><br/>
+
+If the configuration is changed, the module must be restarted for the changes to take effect.
+If the module is not restarted, the changes will not take effect, or may partially take effect, which can result in an
+error.
+
+### Solution
+
+<RestartingModulePartial/>

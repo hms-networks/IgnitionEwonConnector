@@ -1,0 +1,191 @@
+import ScDocusaurusConfig from "@site/ScDocusaurusConfig.js";
+import GreenCheckMark from '@site/static/img/green-check-icon-cc0v1.webp';
+import EwonWebPageHome from '@site/static/img/ewon-web-page-home.webp';
+import EwonWebPageVpnWizardBtn from '@site/static/img/ewon-web-page-vpn-wizard-btn.webp';
+import EwonWebPageVpnWizard from '@site/static/img/ewon-web-page-vpn-wizard.webp';
+import EwonTagConfigPageHistLogging from '@site/static/img/ewon-tag-config-page-hist-logging.webp';
+import EwonWebPageDataMgmt from '@site/static/img/ewon-web-page-data-mgmt.webp';
+import IgnitionWebPageConnectorConfig from '@site/static/img/ignition-web-page-connector-config.webp';
+import ConfigurationIgnitionPageDetailsPartial from '../_partial/_configuration_ignition_page_details.mdx';
+
+#### Ewon Configuration
+
+When setting up an Ewon, follow all standard Ewon Flexy documentation and installation
+guides.
+Documentation, installation guides, and more for the Ewon Flexy can be found
+at [https://websupport.ewon.biz/support](https://websupport.ewon.biz/support).
+
+<>In addition to the standard Ewon Flexy documentation, follow these additional steps to prepare the Ewon for use with
+the {ScDocusaurusConfig.title}.</><br/>
+
+##### I. Link Ewon to Talk2M
+
+###### Step 1
+
+Open the Ewon web page.
+
+<img src={EwonWebPageHome} alt="Ewon web page home" width="750"/>
+
+###### Step 2
+
+Navigate to the VPN Wizard page by clicking `Wizards` at the top right of the page, and select `VPN`.
+
+<img src={EwonWebPageVpnWizardBtn} alt="Ewon VPN Wizard button" width="100"/>
+
+###### Step 3
+
+Select the `Configure Talk2M connectivity` option.
+
+<img src={EwonWebPageVpnWizard} alt="Ewon VPN Wizard page with Configure Talk2M connectivity button" width="750"/>
+
+###### Step 4
+
+Follow the prompts to connect the Ewon to Talk2M.
+
+###### Step 5
+
+Once the VPN Wizard is complete, you may proceed to the [next section](#ii-setup-historical-logging-for-tags).
+
+<img src={GreenCheckMark} alt="Green completion checkmark" width="100"/>
+
+##### II. Setup Historical Logging for Tags
+
+###### Step 1
+
+Open the Ewon web page.
+
+<img src={EwonWebPageHome} alt="Ewon web page home" width="750"/>
+
+###### Step 2
+
+Navigate to the `Values` page (On the left-hand menu, click `Tags` > `Values`).
+
+###### Step 3
+
+Change the `MODE` to `Setup`.
+
+###### Step 4
+
+For each tag that requires logged data, double-click the tag to open the `Tag configuration` menu.
+
+###### Step 4a
+
+Scroll down to the `Historical Logging` section and check the `Historical Logging Enabled` checkbox.
+
+###### Step 4b
+
+In the same `Historical Logging` section, enable either deadband or interval logging.
+
+:::info Deadband Logging
+
+The Logging Deadband field triggers logging when the tag's value changes by a particular amount.
+For example, a logging deadband of 2 means that a tag will be logged when the value changes by 2 or more.
+A negative value in the logging deadband field disables logging on value change.
+
+:::
+:::info Interval Logging
+
+The Logging Interval field triggers time-based logging.
+For example, a logging interval of 60 means that the tag will be logged every 60 seconds.
+A logging interval of zero (0) disables time-based logging.
+
+:::
+
+###### Step 4c
+
+Once configured, click `Update Tag` on the bottom right of the page.
+
+<img src={EwonTagConfigPageHistLogging} alt="Ewon Tag Configuration Page" width="750"/>
+
+###### Step 5
+
+Once all tags have been configured, you may proceed to the [next section](#iii-enable-historical-data-in-datamailbox).
+
+<img src={GreenCheckMark} alt="Green completion checkmark" width="100"/>
+
+:::tip
+
+You may change the `MODE` back to `View` to see the tag values once you are done configuring the tags.
+
+:::
+
+##### III. Enable Historical Data In DataMailbox
+
+###### Step 1
+
+Open the Ewon web page.
+
+<img src={EwonWebPageHome} alt="Ewon web page home" width="750"/>
+
+###### Step 2
+
+Navigate to the `Data Management` page (On the left-hand menu, click `Setup` > `System` > `Main` > `Data Management`).
+
+<img src={EwonWebPageDataMgmt} alt="Ewon Data Management Page" width="750"/>
+
+###### Step 3
+
+Check the `Historical Data` checkbox.
+
+###### Step 4
+
+Set the `DataMailbox upload interval` to a reasonable number for your application.
+
+:::info
+
+The `DataMailbox upload interval` sets how often the Flexy will send batches of historical data to DataMailbox and does
+not affect the frequency at which tag values are logged.
+
+:::
+
+###### Step 5
+
+Click `Update` at the bottom of the page to save the changes.
+
+###### Step 6
+
+Once the changes have been saved, you may proceed to the [next section](#connector-configuration).
+
+<img src={GreenCheckMark} alt="Green completion checkmark" width="100"/>
+
+#### Connector Configuration
+
+##### Step 1
+
+Open the Ignition Gateway web page.
+
+##### Step 2
+
+Navigate to the `Config` page (On the left-hand menu, click `Config`).
+
+##### Step 3
+
+Under the `Tags` section, click `Ewon Connector`.
+
+:::tip
+
+If the `Ewon Connector` page is not visible, verify that the Ewon Connector module has been installed correctly.
+
+:::
+
+<img src={IgnitionWebPageConnectorConfig} alt="Ewon Module Configuration Page" width="750"/>
+
+##### Step 4
+
+Populate the fields on the `Ewon Connector` page.
+
+<ConfigurationIgnitionPageDetailsPartial/>
+
+##### Step 5
+
+Click `Save Changes` at the bottom of the page to save the changes.
+
+##### Step 6
+
+Restart Ignition.
+
+##### Step 7
+
+<>Once Ignition has restarted, you may begin using the {ScDocusaurusConfig.title} module.</><br/>
+
+<img src={GreenCheckMark} alt="Green completion checkmark" width="100"/>

@@ -1,0 +1,26 @@
+---
+id: writing-tags
+title: Writing Tags
+sidebar_label: Writing Tags
+---
+
+import ScDocusaurusConfig from "@site/ScDocusaurusConfig.js";
+import AccessingTagsPartial from '@site/docs/_partial/_accessing_tags.mdx';
+
+Writing tag values is supported by the connector, allowing for the modification of tag values on the Ewon Flexy. This
+functionality is automatically enabled for all tags.
+
+:::info
+
+After writing a tag value, the displayed value may revert to the previous value. This is due to new historical (
+DataMailbox) tag data being received, which will always lag behind the realtime (live) value. To avoid this behavior,
+you may enable realtime (live) tag data functionality for the tag (or Ewon Flexy, if desired).
+
+For more information, see the [Realtime (Live) Values](04-READING_TAGS.mdx#realtime-live-values) section of the
+[Reading Tags](04-READING_TAGS.mdx) page.
+
+:::
+
+### Where to Access Tags
+
+<AccessingTagsPartial />

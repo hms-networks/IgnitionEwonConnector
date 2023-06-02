@@ -1,0 +1,48 @@
+---
+id: libraries-and-dependencies
+title: Libraries and Dependencies
+sidebar_label: Libraries and Dependencies
+---
+
+import ScDocusaurusConfig from "@site/ScDocusaurusConfig.js";
+
+## Libraries and Dependencies
+
+<>The {ScDocusaurusConfig.title} comes pre-bundled with all of its required libraries and dependencies. When developing,
+these libraries will automatically be downloaded and managed by the Maven build system.</><br/>
+
+### Adding Libraries and Dependencies
+
+As required, you can include additional libraries or dependencies using the Maven build system. To
+include a new library or dependency, add a new `<dependency></dependency>` block in
+the `<dependencies></dependencies>` section of your `pom.xml`. For example,
+
+```xml
+
+<dependencies>
+    ...
+    <dependency>
+        <groupId>commons-lang</groupId>
+        <artifactId>commons-lang</artifactId>
+        <version>2.6</version>
+    </dependency>
+    ...
+</dependencies>
+```
+
+:::caution
+
+<>Additional libraries or dependencies must support Java 11, and shall not conflict with Ignition, the&nbsp;
+{ScDocusaurusConfig.title}, or its libraries and dependencies.</><br/>
+
+:::
+
+### Current Libraries and Dependencies
+
+<>The following libraries and dependencies are currently included in the {ScDocusaurusConfig.title}:</><br/><br/>
+
+| Library/Dependency                                                                 | License                                                           |
+|------------------------------------------------------------------------------------|-------------------------------------------------------------------|
+| [Apache HttpClient5](https://hc.apache.org/httpcomponents-client-5.0.x/index.html) | [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0) |
+| [Google Gson](https://github.com/google/gson)                                      | [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0) |
+| [OpenCSV](http://opencsv.sourceforge.net/)                                         | [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0) |
