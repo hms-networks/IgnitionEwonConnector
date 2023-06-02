@@ -14,6 +14,7 @@ import org.apache.hc.core5.http.NameValuePair;
  *
  * @author HMS Networks, MU Americas Solution Center
  * @since 2.0.0
+ * @version 1.0.0
  */
 public class CommunicationUtilities {
 
@@ -23,6 +24,7 @@ public class CommunicationUtilities {
    * @param httpPostRequestUrl URL of the request
    * @param httpPostRequestParams parameters of the request
    * @return HTTP post request with the given URL and parameters
+   * @since 1.0.0
    */
   public static SimpleHttpRequest createPostRequest(
       String httpPostRequestUrl, NameValuePair[] httpPostRequestParams) {
@@ -36,6 +38,7 @@ public class CommunicationUtilities {
    *
    * @param value {@link Date} object to convert
    * @return resulting ISO 8601-compatible date string (UTC)
+   * @since 1.0.0
    */
   public static String convertDateToIso8601String(Date value) {
     final TimeZone utcTimeZone = TimeZone.getTimeZone("UTC");
