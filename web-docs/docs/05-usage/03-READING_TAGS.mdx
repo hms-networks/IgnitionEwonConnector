@@ -1,0 +1,46 @@
+---
+id: reading-tags
+title: Reading Tags
+sidebar_label: Reading Tags
+---
+
+# Ignition Ewon® Connector Module - Reading Tags
+
+### Reading Values
+
+The tags created by the connector are native Ignition tags and are updated cyclically by the connector based on the
+polling rates set during the [Setup](#setup) step.
+
+The `Tag Browser` tool in Ignition Designer can be used to read tag values.
+
+### Realtime Values
+
+The realtime value functionality allows Ignition to read live tag values from an Ewon up to once per second.
+
+This functionality can be enabled in three ways.
+
+**1. Individual Tag**
+
+* Open Designer and navigate to the `Tag Browser`
+* Expand the `All Providers` directory.
+* Expand the directory associated with your Ewon Connector Tag Provider.
+* Expand the directory associated with the Ewon you want to read a live tag value from.
+* Expand the tag name to show the tag's properties.
+* Find the `Realtime` property and enable it.
+
+**2. Individual Ewon**
+
+* Open Designer and navigate to the `Tag Browser`
+* Expand the `All Providers` directory.
+* Expand the directory associated with your Ewon Connector Tag Provider.
+* Expand the directory associated with the Ewon you want to read live tag values from.
+* Expand the `_config` directory.
+* Find the `AllRealtime` tag and enable it.
+
+**3. All Ewons**
+
+* Navigate to the Ewon Connector Configuration webpage discussed in the [Setup](#setup) section.
+* Enable the `Read all values in realtime` option.
+* Click `Save Changes`, then restart Ignition.
+
+_Note: The realtime functionality counts against your Talk2M account's monthly bandwidth._

@@ -1,0 +1,111 @@
+---
+id: usage-configuring
+title: Configuring
+sidebar_label: Configuring
+---
+
+# Ignition Ewon® Connector Module - Configuring
+
+## Ewon Setup
+
+When setting up an Ewon, follow all standard Ewon Flexy documentation and Install
+guides. [https://websupport.ewon.biz/support](https://websupport.ewon.biz/support "https://websupport.ewon.biz/support")
+
+In addition to the standard documentation, follow these additional steps.
+
+### Link Ewon to Talk2M
+
+Open the Ewon webserver and navigate to the VPN Wizard page (At the top right of the page click `Wizards`, then on the
+right hand menu bar select `VPN`). Select `Configure Talk2M connectivity` and follow the prompts to connect the Ewon to
+Talk2M.
+
+<img src="https://raw.githubusercontent.com/hms-networks/IgnitionEwonConnector/main/images/vpn_wizard.JPG" alt="Ewon VPN Wizard" width="1000"/>
+
+### Setup Historical Logging for Tags
+
+Open the Ewon webserver and navigate to the `Values` page (On the left hand menu click `Tags` > `Values`). Change
+the `MODE` to `SETUP`. For each tag that requires logged data, double click the tag to open the `Tag configuration`
+menu. Scroll down to the `Historical Logging` section and check the `Historical Logging Enabled` checkbox. Enable either
+deadband or interval logging.
+
+> **Deadband Logging**
+>
+>The Logging Deadband field triggers logging when the tags value changes by a particular amount. For example, a logging
+> deadband of 2 means that a tag will be logged when the value changes by 2 or more. A negative value in the logging
+> deadband field disables logging on value change.
+>
+>**Interval Logging**
+>
+>The Logging Interval field triggers time based logging. For example, a logging interval of 60 means that the tag will
+> be logged every 60 seconds. A logging interval of 0 disables time based logging.
+
+Once configured, click `Update Tag` on the bottom right of the page.
+
+<img src="https://raw.githubusercontent.com/hms-networks/IgnitionEwonConnector/main/images/tag_config_page.JPG" alt="Ewon Tag Configuration Page" width="1000"/>
+
+### Enable Historical Data In DataMailbox
+
+Open the Ewon webserver and navigate to the `Data Management` page ( On the left hand menu
+click `Setup` > `System` > `Main` > `Data Management`). Check the `Historical Data` checkbox and set
+the `DataMailbox upload interval` to a reasonable number for your application. The `DataMailbox upload interval` sets
+how often the Flexy will send batches of historical data to DataMailbox and does not affect the frequency at which tag
+values are logged. When done, click `Update` at the bottom of the page.
+
+<img src="https://raw.githubusercontent.com/hms-networks/IgnitionEwonConnector/main/images/data_management_page.JPG" alt="Ewon Data Management Page" width="1000"/>
+
+<sup>[Back to top](#table-of-contents)</sup>
+
+## [Connector Setup](#table-of-contents)
+
+With the module successfully installed, a new `Ewon Connector` page will be added to your Ignition Gateway webpages.
+Navigate to this page by selecting `Config` > `TAGS` > `Ewon Connector`.
+
+   <img src="https://raw.githubusercontent.com/hms-networks/IgnitionEwonConnector/main/images/config_page.JPG" alt="Ewon Module Configuration Page" width="1000"/>
+
+* **Main**
+    * **Name** - Unique name of the tag provider created in Ignition.
+    * **Enabled** - Option to turn on/off the Ewon Connector functionality.
+    * **Tag Names Contain Periods** - Check this if any Ewon tag names contain periods. If any tag names of the
+      connected Ewons contain periods ".", tag names on the connected Ewons may not contain the underscore "_"
+      character. HMS suggests not using periods in tag names when using Ignition.
+    * **Poll Rate in Minutes** - Interval for how often data will be pulled from DataMailbox.
+    * **Realtime Poll Rate in Seconds** - Interval for how often data will be pulled from an Ewon when realtime reads
+      are activated.
+
+* **Talk2M Account Information**
+    * **Account** - Your Talk2M account name.
+    * **Username** - Your Talk2M user name.
+    * **Password** - Your Talk2M password.
+    * **Change Password?** - Check this box to change the password stored in Ignition.
+    * **Talk2M Token** - Your Talk2M token generated using eCatcher.
+    * **Talk2M Developer ID** - Your Talk2M Developer ID. Include all dashes.
+        * If you do not have a Talk2M Developer ID, you may request one
+          here: [https://developer.ewon.biz/registration](https://developer.ewon.biz/registration "https://developer.ewon.biz/registration").
+
+* **Ewon Device Information** - All Ewons must have at least once common user account to enable realtime and write
+  functionality. The username and password for this account must be identical for all linked Ewons.
+    * **Ewon Username** - Common Ewon username.
+    * **Ewon Password** - Common Ewon password.
+    * **Change Password?** - Check this box to change the password stored in Ignition.
+
+* **History**
+    * **History Enabled** - Option to turn off historical logging.
+    * **Target History Provider** - Ignition History Provider used to log Ewon data.
+
+* **Advanced**
+    * **Read all values in realtime** - Option to always read values in realtime.
+        * **Note:** This disables DataMailbox reads. Values logged on the Ewon are not logged in Ignition when this
+          option is enabled.
+
+### Saving Changes
+
+Once all the configuration information has been entered, click `Save Changes`, then restart Ignition.
+
+### Generating a Talk2M Token
+
+To learn more about Talk2M tokens and how to generate them, please refer to Section 4.6 of the DMWeb API reference guide
+found
+at: [DMWeb API Reference Guide](https://developer.ewon.biz/system/files_force/rg-0005-00-en-reference-guide-for-dmweb-api.pdf).
+
+<sup>[Back to top](#table-of-contents)</sup>
+

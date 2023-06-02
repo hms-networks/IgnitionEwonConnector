@@ -1,0 +1,40 @@
+# HMS Networks Solution Center
+# Test Docusaurus Deploy Action for Maven-based Ewon ETK Projects,
+# Adapted for the Ignition Ewon Connector Project
+#
+# Version: 1.0
+#
+# This action is configured to automatically run when a pull request
+# is opened for the `main` branch.
+name: Test Docusaurus Build
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test-deploy:
+    name: Test Docusaurus Build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: web-docs
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: yarn
+          cache-dependency-path: web-docs/yarn.lock
+
+      - name: Install Dependencies
+        working-directory: ./web-docs
+        run: yarn install --frozen-lockfile
+
+      - name: Test Build Website
+        working-directory: ./web-docs
+        run: yarn build
