@@ -14,6 +14,7 @@ import org.apache.hc.core5.http.NameValuePair;
  *
  * @author HMS Networks, MU Americas Solution Center
  * @since 2.0.0
+ * @version 1.0.0
  */
 public abstract class Talk2MRequest {
 
@@ -24,6 +25,7 @@ public abstract class Talk2MRequest {
    *
    * @param callback The callback to be executed when the request is completed.
    * @return The {@link Future} object for the request.
+   * @since 1.0.0
    */
   public Future<SimpleHttpResponse> doRequest(FutureCallback<SimpleHttpResponse> callback) {
     // Build HTTP POST request
@@ -39,6 +41,7 @@ public abstract class Talk2MRequest {
    * method.
    *
    * @return The URL of the request to a Talk2M API.
+   * @since 1.0.0
    */
   public abstract String getRequestUrl();
 
@@ -47,6 +50,7 @@ public abstract class Talk2MRequest {
    * this method.
    *
    * @return The parameters of the request to a Talk2M API.
+   * @since 1.0.0
    */
   public abstract NameValuePair[] getRequestParams();
 }
