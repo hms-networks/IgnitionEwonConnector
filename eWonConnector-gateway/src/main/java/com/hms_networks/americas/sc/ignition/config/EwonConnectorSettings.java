@@ -64,6 +64,9 @@ public class EwonConnectorSettings extends PersistentRecord {
   /** Configured override for enabling realtime on all tags */
   public static final BooleanField ForceLive = new BooleanField(META, "forceLive");
 
+  /** Configured override for enabling tag sorting by group. */
+  public static final BooleanField SortTagsByGroup = new BooleanField(META, "sortTagsByGroup");
+
   /** Configured boolean if tag history is enabled */
   public static final BooleanField HistoryEnabled = new BooleanField(META, "historyEnabled");
 
@@ -96,7 +99,7 @@ public class EwonConnectorSettings extends PersistentRecord {
   /** Settings category for advanced configuration */
   public static final Category AdvancedCategory =
       new Category("EwonConnectorSettings.Category.Advanced", 125)
-          .include(ForceLive, TagNameCheckDisabled, DebugEnabled);
+          .include(ForceLive, SortTagsByGroup, TagNameCheckDisabled, DebugEnabled);
 
   // Configure passwords and history provider fields information
   static {
@@ -194,6 +197,15 @@ public class EwonConnectorSettings extends PersistentRecord {
    */
   public boolean isForceLive() {
     return getBoolean(ForceLive);
+  }
+
+  /**
+   * Get boolean if sort tags by group is enabled
+   *
+   * @return true/false if sort tags by group is enabled
+   */
+  public boolean isSortTagsByGroup() {
+    return getBoolean(SortTagsByGroup);
   }
 
   /**
