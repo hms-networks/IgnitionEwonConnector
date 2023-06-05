@@ -1,6 +1,11 @@
 
 # Ignition Ewon® Connector
 
+## [NOTICE]
+
+The Ignition Ewon Connector is currently undergoing development for Version 2.0.0.
+During this time, documentation and source code may be relocated, unavailable, or incomplete.
+
 ## [Table of Contents](#table-of-contents)
 
 1. [Description](#description)
