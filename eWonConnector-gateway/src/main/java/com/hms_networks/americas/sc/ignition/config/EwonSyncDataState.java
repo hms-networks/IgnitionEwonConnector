@@ -1,39 +1,100 @@
 package com.hms_networks.americas.sc.ignition.config;
 
+import com.inductiveautomation.ignition.gateway.localdb.persistence.*;
 import java.util.Date;
-import com.inductiveautomation.ignition.gateway.localdb.persistence.IdentityField;
-import com.inductiveautomation.ignition.gateway.localdb.persistence.LongField;
-import com.inductiveautomation.ignition.gateway.localdb.persistence.PersistentRecord;
-import com.inductiveautomation.ignition.gateway.localdb.persistence.RecordMeta;
 
 /**
- * This is a persistent record to keep track of the last transaction id synchronized, along with a
- * few other stats.
+ * This is a persistent record to keep track of the last transaction id synchronized, as well as
+ * other stats related to M2Web and DMWeb synchronization state.
+ *
+ * @author HMS Networks, MU Americas Solution Center
+ * @author Inductive Automation/Travis Cox
+ * @since 1.0.0
+ * @version 2.0.0
  */
 public class EwonSyncDataState extends PersistentRecord {
-  /** Record meta information for Ewon sync data */
-  public static final RecordMeta<EwonSyncDataState> META =
-      new RecordMeta<>(EwonSyncDataState.class, "ewonsyncdata");
-
-  /** Internal identifier */
-  public static final IdentityField Id = new IdentityField(META); //
-
-  /** Ewon reported <code>lastSyncro</code> field used to track changes across reboots. */
-  public static final LongField LastRemoteSync = new LongField(META, "lastremotesync");
-
-  /** Timestamp for last local data update from Talk2M/DataMailbox */
-  public static final LongField LastLocalSync = new LongField(META, "lastlocalsync");
-
-  /** Timestamp for last historical data update. */
-  public static final LongField LastHistoryTimestamp = new LongField(META, "lasthistorytimestamp");
-
-  /** The last TXID returned from syncdata. */
-  public static final LongField LastTXID = new LongField(META, "lasttxid").setDefault(0L);
 
   /**
-   * Get meta information for Ewon sync data
+   * The name of the table to store {@link EwonSyncDataState} records in.
    *
-   * @return Ewon sync data meta information
+   * @since 2.0.0
+   */
+  public static final String RECORD_TABLE_NAME = "ewonSyncDataState";
+
+  /**
+   * The default value for time fields.
+   *
+   * @since 2.0.0
+   */
+  public static final long TIME_VALUE_DEFAULT = 0L;
+
+  /**
+   * The default value for the last DMWeb transaction ID.
+   *
+   * @since 2.0.0
+   */
+  public static final long LAST_DMWEB_TRANSACTION_ID_DEFAULT = 0L;
+
+  /**
+   * Meta information for the {@link EwonSyncDataState} record.
+   *
+   * @since 1.0.0
+   */
+  public static final RecordMeta<EwonSyncDataState> META =
+      new RecordMeta<>(EwonSyncDataState.class, RECORD_TABLE_NAME);
+
+  /**
+   * Internal identifier
+   *
+   * @since 1.0.0
+   */
+  public static final IdentityField ID = new IdentityField(META);
+
+  /**
+   * The timestamp of the latest DMWeb data point processed by the Ewon Connector.
+   *
+   * @since 2.0.0
+   */
+  public static final LongField LATEST_DMWEB_DATA_POINT_TIME_STAMP =
+      new LongField(META, "latestDMWebDataPointTimeStamp").setDefault(TIME_VALUE_DEFAULT);
+
+  /**
+   * The timestamp for the last M2Web sync operation.
+   *
+   * @since 2.0.0
+   */
+  public static final LongField LAST_M2WEB_SYNC_TIME =
+      new LongField(META, "lastM2WebSyncTime").setDefault(TIME_VALUE_DEFAULT);
+
+  /**
+   * The timestamp for the last M2Web metadata sync operation.
+   *
+   * @since 2.0.0
+   */
+  public static final LongField LAST_M2WEB_METADATA_SYNC_TIME =
+      new LongField(META, "lastM2WebMetadataSyncTime").setDefault(TIME_VALUE_DEFAULT);
+
+  /**
+   * The timestamp for the last DMWeb sync operation.
+   *
+   * @since 2.0.0
+   */
+  public static final LongField LAST_DMWEB_SYNC_TIME =
+      new LongField(META, "lastDMWebSyncTime").setDefault(TIME_VALUE_DEFAULT);
+
+  /**
+   * The last transaction ID from the last DMWeb sync operation.
+   *
+   * @since 1.0.0
+   */
+  public static final LongField LAST_DMWEB_TRANSACTION_ID =
+      new LongField(META, "lastDMWebTransactionId").setDefault(LAST_DMWEB_TRANSACTION_ID_DEFAULT);
+
+  /**
+   * Gets the meta information for the {@link EwonSyncDataState} record.
+   *
+   * @return meta information for the {@link EwonSyncDataState} record
+   * @since 1.0.0
    */
   @Override
   public RecordMeta<?> getMeta() {
@@ -41,74 +102,104 @@ public class EwonSyncDataState extends PersistentRecord {
   }
 
   /**
-   * Get transaction identifier
+   * Gets the timestamp of the latest DMWeb data point processed by the Ewon Connector.
    *
-   * @return transaction identifier
+   * @return the timestamp of the latest DMWeb data point processed by the Ewon Connector
+   * @since 1.0.0
    */
-  public Long getTransactionId() {
-    return isNull(LastTXID) ? 0L : getLong(LastTXID);
+  public Date getLatestDMWebDataPointTimeStamp() {
+    return new Date(getLong(LATEST_DMWEB_DATA_POINT_TIME_STAMP));
   }
 
   /**
-   * Set transaction identifier
+   * Sets the timestamp of the latest DMWeb data point processed by the Ewon Connector.
    *
-   * @param value new transaction identifier
+   * @param value the new timestamp of the latest DMWeb data point processed by the Ewon Connector
+   * @since 1.0.0
    */
-  public void setTransactionId(Long value) {
-    setLong(LastTXID, value == null ? 0L : value);
+  public void setLatestDMWebDataPointTimeStamp(Date value) {
+    setLong(LATEST_DMWEB_DATA_POINT_TIME_STAMP, value.getTime());
   }
 
   /**
-   * Get last remote synchronization timestamp
+   * Gets the timestamp for the last M2Web sync operation.
    *
-   * @return last remote synchronization timestamp
+   * @return the timestamp for the last M2Web sync operation
+   * @since 1.0.0
    */
-  public Date getLastRemoteSync() {
-    return new Date(getLong(LastRemoteSync));
+  public Date getLastM2WebSyncTime() {
+    return new Date(getLong(LAST_M2WEB_SYNC_TIME));
   }
 
   /**
-   * Set last remote synchronization timestamp
+   * Sets the timestamp for the last M2Web sync operation.
    *
-   * @param value new remote synchronization timestamp
+   * @param value the new timestamp for the last M2Web sync operation
+   * @since 1.0.0
    */
-  public void setLastRemoteSync(Date value) {
-    setLong(LastRemoteSync, value.getTime());
+  public void setLastM2WebSyncTime(Date value) {
+    setLong(LAST_M2WEB_SYNC_TIME, value.getTime());
   }
 
   /**
-   * Get last local synchronization timestamp
+   * Gets the timestamp for the last M2Web metadata sync operation.
    *
-   * @return last local synchronization timestamp
+   * @return the timestamp for the last M2Web metadata sync operation
+   * @since 1.0.0
    */
-  public Date getLastLocalSync() {
-    return new Date(getLong(LastLocalSync));
+  public Date getLastM2WebMetadataSyncTime() {
+    return new Date(getLong(LAST_M2WEB_METADATA_SYNC_TIME));
   }
 
   /**
-   * Set last local synchronization timestamp
+   * Sets the timestamp for the last M2Web metadata sync operation.
    *
-   * @param value new local synchronization timestamp
+   * @param value the new timestamp for the last M2Web metadata sync operation
+   * @since 1.0.0
    */
-  public void setLastLocalSync(Date value) {
-    setLong(LastLocalSync, value.getTime());
+  public void setLastM2WebMetadataSyncTime(Date value) {
+    setLong(LAST_M2WEB_METADATA_SYNC_TIME, value.getTime());
   }
 
   /**
-   * Get last historical synchronization timestamp
+   * Gets the timestamp for the last DMWeb sync operation.
    *
-   * @return last historical synchronization timestamp
+   * @return the timestamp for the last DMWeb sync operation
+   * @since 1.0.0
    */
-  public Date getLastHistoryTimestamp() {
-    return new Date(getLong(LastHistoryTimestamp));
+  public Date getLastDMWebSyncTime() {
+    return new Date(getLong(LAST_DMWEB_SYNC_TIME));
   }
 
   /**
-   * Set last historical synchronization timestamp
+   * Sets the timestamp for the last DMWeb sync operation.
    *
-   * @param value last historical synchronization timestamp
+   * @param value the new timestamp for the last DMWeb sync operation
+   * @since 1.0.0
    */
-  public void setLastHistoryTimestamp(Date value) {
-    setLong(LastHistoryTimestamp, value.getTime());
+  public void setLastDMWebSyncTime(Date value) {
+    setLong(LAST_DMWEB_SYNC_TIME, value.getTime());
+  }
+
+  /**
+   * Gets the last transaction ID from the last DMWeb sync data operation.
+   *
+   * @return the last transaction ID from the last DMWeb sync data operation
+   * @since 1.0.0
+   */
+  public Long getLastDMWebTransactionId() {
+    return isNull(LAST_DMWEB_TRANSACTION_ID)
+        ? LAST_DMWEB_TRANSACTION_ID_DEFAULT
+        : getLong(LAST_DMWEB_TRANSACTION_ID);
+  }
+
+  /**
+   * Sets the last transaction ID from the last DMWeb sync data operation.
+   *
+   * @param value the new last transaction ID from the last DMWeb sync data operation
+   * @since 1.0.0
+   */
+  public void setLastDMWebTransactionId(Long value) {
+    setLong(LAST_DMWEB_TRANSACTION_ID, value == null ? LAST_DMWEB_TRANSACTION_ID_DEFAULT : value);
   }
 }
