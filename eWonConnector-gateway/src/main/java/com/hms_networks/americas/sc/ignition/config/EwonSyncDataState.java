@@ -10,10 +10,10 @@ import com.inductiveautomation.ignition.gateway.localdb.persistence.RecordMeta;
  * This is a persistent record to keep track of the last transaction id synchronized, along with a
  * few other stats.
  */
-public class EwonSyncData extends PersistentRecord {
+public class EwonSyncDataState extends PersistentRecord {
   /** Record meta information for Ewon sync data */
-  public static final RecordMeta<EwonSyncData> META =
-      new RecordMeta<>(EwonSyncData.class, "ewonsyncdata");
+  public static final RecordMeta<EwonSyncDataState> META =
+      new RecordMeta<>(EwonSyncDataState.class, "ewonsyncdata");
 
   /** Internal identifier */
   public static final IdentityField Id = new IdentityField(META); //
