@@ -18,16 +18,16 @@ import java.util.Date;
 public class Talk2MResponse {
 
   /**
-   * The success status of the logout request.
+   * The success status of the Talk2M request.
    *
    * @since 1.0.0
    */
   private boolean success;
 
   /**
-   * Gets the success status of the login request.
+   * Gets the success status of the Talk2M request.
    *
-   * @return The success status of the login request.
+   * @return The success status of the Talk2M request.
    * @since 1.0.0
    */
   public boolean getSuccess() {
