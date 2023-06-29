@@ -1,8 +1,5 @@
 package com.hms_networks.americas.sc.ignition.comm;
 
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-
 /**
  * Object containing authentication information for accessing basic Talk2M features and DataMailbox.
  *
@@ -74,11 +71,11 @@ public class CommunicationAuthInfo {
    */
   public CommunicationAuthInfo(
       String account, String username, String password, String devId, String token) {
-    this.account = urlEncodeValue(account);
-    this.username = urlEncodeValue(username);
-    this.password = urlEncodeValue(password);
-    this.devId = urlEncodeValue(devId);
-    this.token = urlEncodeValue(token);
+    this.account = (account);
+    this.username = (username);
+    this.password = (password);
+    this.devId = (devId);
+    this.token = (token);
     this.ewonUsername = null;
     this.ewonPassword = null;
   }
@@ -104,13 +101,13 @@ public class CommunicationAuthInfo {
       String token,
       String ewonUsername,
       String ewonPassword) {
-    this.account = urlEncodeValue(account);
-    this.username = urlEncodeValue(username);
-    this.password = urlEncodeValue(password);
-    this.devId = urlEncodeValue(devId);
-    this.token = urlEncodeValue(token);
-    this.ewonUsername = urlEncodeValue(ewonUsername);
-    this.ewonPassword = urlEncodeValue(ewonPassword);
+    this.account = (account);
+    this.username = (username);
+    this.password = (password);
+    this.devId = (devId);
+    this.token = (token);
+    this.ewonUsername = (ewonUsername);
+    this.ewonPassword = (ewonPassword);
   }
 
   /**
@@ -181,16 +178,5 @@ public class CommunicationAuthInfo {
    */
   public String getEwonPassword() {
     return ewonPassword;
-  }
-
-  /**
-   * Creates a URL safe string from the passed in value
-   *
-   * @param value input string to be made url safe
-   * @return The URL safe string
-   * @since 1.0.0
-   */
-  private String urlEncodeValue(String value) {
-    return URLEncoder.encode(value, StandardCharsets.UTF_8);
   }
 }
