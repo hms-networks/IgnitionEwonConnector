@@ -32,7 +32,7 @@ public class M2WebEwonEBDTag {
    *
    * @since 1.0.0
    */
-  @CsvBindByName(column = "Description", required = true)
+  @CsvBindByName(column = "Description", required = false)
   private String description;
 
   /**
@@ -65,7 +65,7 @@ public class M2WebEwonEBDTag {
    * @since 1.0.0
    */
   @CsvBindByName(column = "Coef", required = true)
-  private int coef;
+  private double coef;
 
   /**
    * The value of the {@code Offset} column for a tag in the M2Web EBD tag list response.
@@ -73,7 +73,7 @@ public class M2WebEwonEBDTag {
    * @since 1.0.0
    */
   @CsvBindByName(column = "Offset", required = true)
-  private int offset;
+  private double offset;
 
   /**
    * The value of the {@code LogEnabled} column for a tag in the M2Web EBD tag list response.
@@ -176,7 +176,7 @@ public class M2WebEwonEBDTag {
    *
    * @since 1.0.0
    */
-  @CsvBindByName(column = "AlHint", required = true)
+  @CsvBindByName(column = "AlHint")
   private String alHint;
 
   /**
@@ -185,7 +185,7 @@ public class M2WebEwonEBDTag {
    * @since 1.0.0
    */
   @CsvBindByName(column = "AlHigh", required = true)
-  private int alHigh;
+  private double alHigh;
 
   /**
    * The value of the {@code AlLow} column for a tag in the M2Web EBD tag list response.
@@ -193,7 +193,7 @@ public class M2WebEwonEBDTag {
    * @since 1.0.0
    */
   @CsvBindByName(column = "AlLow", required = true)
-  private int alLow;
+  private double alLow;
 
   /**
    * The value of the {@code AlTimeDB} column for a tag in the M2Web EBD tag list response.
@@ -209,7 +209,7 @@ public class M2WebEwonEBDTag {
    * @since 1.0.0
    */
   @CsvBindByName(column = "AlLevelDB", required = true)
-  private int alLevelDb;
+  private double alLevelDb;
 
   /**
    * The value of the {@code IVGroupA} column for a tag in the M2Web EBD tag list response.
@@ -273,7 +273,7 @@ public class M2WebEwonEBDTag {
    * @since 1.0.0
    */
   @CsvBindByName(column = "LogDB", required = true)
-  private int logDB;
+  private double logDB;
 
   /**
    * The value of the {@code LogTimer} column for a tag in the M2Web EBD tag list response.
@@ -288,7 +288,7 @@ public class M2WebEwonEBDTag {
    *
    * @since 1.0.0
    */
-  @CsvBindByName(column = "AlLoLo", required = true)
+  @CsvBindByName(column = "AlLoLo")
   private int alLoLo;
 
   /**
@@ -296,7 +296,7 @@ public class M2WebEwonEBDTag {
    *
    * @since 1.0.0
    */
-  @CsvBindByName(column = "AlHiHi", required = true)
+  @CsvBindByName(column = "AlHiHi")
   private int alHiHi;
 
   /**
@@ -313,7 +313,7 @@ public class M2WebEwonEBDTag {
    * @since 1.0.0
    */
   @CsvBindByName(column = "MbsTcpCoef", required = true)
-  private int mbsTcpCoef;
+  private double mbsTcpCoef;
 
   /**
    * The value of the {@code MbsTcpOffset} column for a tag in the M2Web EBD tag list response.
@@ -321,7 +321,7 @@ public class M2WebEwonEBDTag {
    * @since 1.0.0
    */
   @CsvBindByName(column = "MbsTcpOffset", required = true)
-  private int mbsTcpOffset;
+  private double mbsTcpOffset;
 
   /**
    * The value of the {@code EEN} column for a tag in the M2Web EBD tag list response.
@@ -345,7 +345,7 @@ public class M2WebEwonEBDTag {
    * @since 1.0.0
    */
   @CsvBindByName(column = "ECC")
-  private int ecc;
+  private String ecc;
 
   /**
    * The value of the {@code ESU} column for a tag in the M2Web EBD tag list response.
@@ -361,7 +361,7 @@ public class M2WebEwonEBDTag {
    * @since 1.0.0
    */
   @CsvBindByName(column = "EAT")
-  private int eat;
+  private String eat;
 
   /**
    * The value of the {@code ESH} column for a tag in the M2Web EBD tag list response.
@@ -369,7 +369,7 @@ public class M2WebEwonEBDTag {
    * @since 1.0.0
    */
   @CsvBindByName(column = "ESH")
-  private int esh;
+  private String esh;
 
   /**
    * The value of the {@code SEN} column for a tag in the M2Web EBD tag list response.
@@ -385,7 +385,7 @@ public class M2WebEwonEBDTag {
    * @since 1.0.0
    */
   @CsvBindByName(column = "STO")
-  private int sto;
+  private String sto;
 
   /**
    * The value of the {@code SSU} column for a tag in the M2Web EBD tag list response.
@@ -393,7 +393,7 @@ public class M2WebEwonEBDTag {
    * @since 1.0.0
    */
   @CsvBindByName(column = "SSU")
-  private int ssu;
+  private String ssu;
 
   /**
    * The value of the {@code TEN} column for a tag in the M2Web EBD tag list response.
@@ -409,7 +409,7 @@ public class M2WebEwonEBDTag {
    * @since 1.0.0
    */
   @CsvBindByName(column = "TSU")
-  private int tsu;
+  private String tsu;
 
   /**
    * The value of the {@code FEN} column for a tag in the M2Web EBD tag list response.
@@ -425,7 +425,7 @@ public class M2WebEwonEBDTag {
    * @since 1.0.0
    */
   @CsvBindByName(column = "FFN")
-  private int ffn;
+  private String ffn;
 
   /**
    * The value of the {@code FCO} column for a tag in the M2Web EBD tag list response.
@@ -433,14 +433,14 @@ public class M2WebEwonEBDTag {
    * @since 1.0.0
    */
   @CsvBindByName(column = "FCO")
-  private int fco;
+  private String fco;
 
   /**
    * The value of the {@code KPI} column for a tag in the M2Web EBD tag list response.
    *
    * @since 1.0.0
    */
-  @CsvBindByName(column = "KPI", required = true)
+  @CsvBindByName(column = "KPI")
   private int kpi;
 
   /**
@@ -448,7 +448,7 @@ public class M2WebEwonEBDTag {
    *
    * @since 1.0.0
    */
-  @CsvBindByName(column = "UseCustomUnit", required = true)
+  @CsvBindByName(column = "UseCustomUnit")
   private int useCustomUnit;
 
   /**
@@ -488,7 +488,7 @@ public class M2WebEwonEBDTag {
    *
    * @since 1.0.0
    */
-  @CsvBindByName(column = "TagValue", required = true)
+  @CsvBindByName(column = "TagValue")
   private String tagValue;
 
   /**
@@ -575,7 +575,7 @@ public class M2WebEwonEBDTag {
    * @return The value of the {@code Coef} column for a tag in the M2Web EBD tag list response.
    * @since 1.0.0
    */
-  public int getCoef() {
+  public double getCoef() {
     return coef;
   }
 
@@ -585,7 +585,7 @@ public class M2WebEwonEBDTag {
    * @return The value of the {@code Offset} column for a tag in the M2Web EBD tag list response.
    * @since 1.0.0
    */
-  public int getOffset() {
+  public double getOffset() {
     return offset;
   }
 
@@ -731,7 +731,7 @@ public class M2WebEwonEBDTag {
    * @return The value of the {@code AlHigh} column for a tag in the M2Web EBD tag list response.
    * @since 1.0.0
    */
-  public int getAlHigh() {
+  public double getAlHigh() {
     return alHigh;
   }
 
@@ -741,7 +741,7 @@ public class M2WebEwonEBDTag {
    * @return The value of the {@code AlLow} column for a tag in the M2Web EBD tag list response.
    * @since 1.0.0
    */
-  public int getAlLow() {
+  public double getAlLow() {
     return alLow;
   }
 
@@ -751,7 +751,7 @@ public class M2WebEwonEBDTag {
    * @return The value of the {@code AlTimeDB} column for a tag in the M2Web EBD tag list response.
    * @since 1.0.0
    */
-  public int getAlTimeDb() {
+  public double getAlTimeDb() {
     return alTimeDb;
   }
 
@@ -761,7 +761,7 @@ public class M2WebEwonEBDTag {
    * @return The value of the {@code AlLevelDB} column for a tag in the M2Web EBD tag list response.
    * @since 1.0.0
    */
-  public int getAlLevelDb() {
+  public double getAlLevelDb() {
     return alLevelDb;
   }
 
@@ -843,7 +843,7 @@ public class M2WebEwonEBDTag {
    * @return The value of the {@code LogDB} column for a tag in the M2Web EBD tag list response.
    * @since 1.0.0
    */
-  public int getLogDB() {
+  public double getLogDB() {
     return logDB;
   }
 
@@ -896,7 +896,7 @@ public class M2WebEwonEBDTag {
    *     response.
    * @since 1.0.0
    */
-  public int getMbsTcpCoef() {
+  public double getMbsTcpCoef() {
     return mbsTcpCoef;
   }
 
@@ -907,7 +907,7 @@ public class M2WebEwonEBDTag {
    *     response.
    * @since 1.0.0
    */
-  public int getMbsTcpOffset() {
+  public double getMbsTcpOffset() {
     return mbsTcpOffset;
   }
 
@@ -937,7 +937,7 @@ public class M2WebEwonEBDTag {
    * @return The value of the {@code ECC} column for a tag in the M2Web EBD tag list response.
    * @since 1.0.0
    */
-  public int getEcc() {
+  public String getEcc() {
     return ecc;
   }
 
@@ -957,7 +957,7 @@ public class M2WebEwonEBDTag {
    * @return The value of the {@code EAT} column for a tag in the M2Web EBD tag list response.
    * @since 1.0.0
    */
-  public int getEat() {
+  public String getEat() {
     return eat;
   }
 
@@ -967,7 +967,7 @@ public class M2WebEwonEBDTag {
    * @return The value of the {@code ESH} column for a tag in the M2Web EBD tag list response.
    * @since 1.0.0
    */
-  public int getEsh() {
+  public String getEsh() {
     return esh;
   }
 
@@ -987,7 +987,7 @@ public class M2WebEwonEBDTag {
    * @return The value of the {@code STO} column for a tag in the M2Web EBD tag list response.
    * @since 1.0.0
    */
-  public int getSto() {
+  public String getSto() {
     return sto;
   }
 
@@ -997,7 +997,7 @@ public class M2WebEwonEBDTag {
    * @return The value of the {@code SSU} column for a tag in the M2Web EBD tag list response.
    * @since 1.0.0
    */
-  public int getSsu() {
+  public String getSsu() {
     return ssu;
   }
 
@@ -1017,7 +1017,7 @@ public class M2WebEwonEBDTag {
    * @return The value of the {@code TSU} column for a tag in the M2Web EBD tag list response.
    * @since 1.0.0
    */
-  public int getTsu() {
+  public String getTsu() {
     return tsu;
   }
 
@@ -1037,7 +1037,7 @@ public class M2WebEwonEBDTag {
    * @return The value of the {@code FFN} column for a tag in the M2Web EBD tag list response.
    * @since 1.0.0
    */
-  public int getFfn() {
+  public String getFfn() {
     return ffn;
   }
 
@@ -1047,7 +1047,7 @@ public class M2WebEwonEBDTag {
    * @return The value of the {@code FCO} column for a tag in the M2Web EBD tag list response.
    * @since 1.0.0
    */
-  public int getFco() {
+  public String getFco() {
     return fco;
   }
 
