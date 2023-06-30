@@ -32,7 +32,7 @@ public class M2WebEwonEBDInstantValue {
    *
    * @since 1.0.0
    */
-  @CsvBindByName(column = "Value", required = true)
+  @CsvBindByName(column = "Value")
   private String value;
 
   /**
