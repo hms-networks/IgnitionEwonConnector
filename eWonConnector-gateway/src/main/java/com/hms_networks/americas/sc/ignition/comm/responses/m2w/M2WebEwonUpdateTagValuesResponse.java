@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
  * @since 2.0.0
  * @version 1.0.0
  */
-public class M2WebEwonUpdateTagValuesResponse {
+public class M2WebEwonUpdateTagValuesResponse extends M2WebEwonEBDResponse {
 
   /**
    * The string value used when an error table cell value returned by the M2Web server cannot be
@@ -57,7 +57,7 @@ public class M2WebEwonUpdateTagValuesResponse {
    *
    * @since 1.0.0
    */
-  private final boolean success;
+  private final boolean updateTagValuesSuccess;
 
   /**
    * The error text returned by the M2Web server when a tag update request fails.
@@ -69,23 +69,27 @@ public class M2WebEwonUpdateTagValuesResponse {
   /**
    * Private constructor for an M2Web Ewon update tag values response.
    *
-   * @param success The success status of the Ewon update tag values request.
+   * @param updateTagValuesSuccess The success status of the Ewon update tag values request.
    * @param errorText The error text returned by the M2Web server when a tag update request fails.
    * @since 1.0.0
    */
-  private M2WebEwonUpdateTagValuesResponse(boolean success, String errorText) {
-    this.success = success;
+  private M2WebEwonUpdateTagValuesResponse(boolean updateTagValuesSuccess, String errorText) {
+    this.updateTagValuesSuccess = updateTagValuesSuccess;
     this.errorText = errorText;
   }
 
   /**
    * Gets the success status of the Ewon update tag values request.
    *
+   * @apiNote This method is different from {@link #getSuccess()}. This method returns the success
+   *     status of the Ewon update tag values request at the Ewon device level, whereas {@link
+   *     #getSuccess()} returns the success status of the Ewon update tag values request at the
+   *     M2Web server level.
    * @return The success status of the Ewon update tag values request.
    * @since 1.0.0
    */
-  public boolean getSuccess() {
-    return success;
+  public boolean getUpdateTagValuesSuccess() {
+    return updateTagValuesSuccess;
   }
 
   /**
@@ -107,26 +111,38 @@ public class M2WebEwonUpdateTagValuesResponse {
    * @since 1.0.0
    */
   public static M2WebEwonUpdateTagValuesResponse getFromString(String responseString) {
-    // Check for success string
-    boolean responseContainsSuccess = responseString.contains(SUCCESS_STRING);
+    // Parse response string
+    M2WebEwonUpdateTagValuesResponse response;
+    try {
+      // Check for success string
+      boolean responseContainsSuccess = responseString.contains(SUCCESS_STRING);
 
-    // If response does not contain success string, check for error string
-    String errorString = null;
-    if (!responseContainsSuccess) {
-      // Check for error string with Javascript enabled
-      Matcher errorTableCellRegexJsEnabledMatcher =
-          Pattern.compile(ERROR_TABLE_CELL_REGEX_JS_ENABLED).matcher(responseString);
-      Matcher errorTableCellRegexJsDisabledMatcher =
-          Pattern.compile(ERROR_TABLE_CELL_REGEX_JS_DISABLED).matcher(responseString);
-      if (errorTableCellRegexJsEnabledMatcher.matches()) {
-        errorString = errorTableCellRegexJsEnabledMatcher.group(ERROR_TABLE_CELL_REGEX_GROUP);
-      } else if (errorTableCellRegexJsDisabledMatcher.matches()) {
-        errorString = errorTableCellRegexJsDisabledMatcher.group(ERROR_TABLE_CELL_REGEX_GROUP);
-      } else {
-        errorString = UNKNOWN_ERROR_STRING;
+      // If response does not contain success string, check for error string
+      String errorString = null;
+      if (!responseContainsSuccess) {
+        // Check for error string with Javascript enabled
+        Matcher errorTableCellRegexJsEnabledMatcher =
+            Pattern.compile(ERROR_TABLE_CELL_REGEX_JS_ENABLED).matcher(responseString);
+        Matcher errorTableCellRegexJsDisabledMatcher =
+            Pattern.compile(ERROR_TABLE_CELL_REGEX_JS_DISABLED).matcher(responseString);
+        if (errorTableCellRegexJsEnabledMatcher.matches()) {
+          errorString = errorTableCellRegexJsEnabledMatcher.group(ERROR_TABLE_CELL_REGEX_GROUP);
+        } else if (errorTableCellRegexJsDisabledMatcher.matches()) {
+          errorString = errorTableCellRegexJsDisabledMatcher.group(ERROR_TABLE_CELL_REGEX_GROUP);
+        } else {
+          errorString = UNKNOWN_ERROR_STRING;
+        }
+      }
+
+      response = new M2WebEwonUpdateTagValuesResponse(responseContainsSuccess, errorString);
+    } catch (Exception e1) {
+      try {
+        response = getFromJson(responseString, M2WebEwonUpdateTagValuesResponse.class);
+      } catch (Exception e2) {
+        throw e1;
       }
     }
 
-    return new M2WebEwonUpdateTagValuesResponse(responseContainsSuccess, errorString);
+    return response;
   }
 }
