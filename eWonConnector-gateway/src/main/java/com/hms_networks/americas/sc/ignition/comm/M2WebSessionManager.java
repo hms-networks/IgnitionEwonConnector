@@ -4,16 +4,15 @@ import com.hms_networks.americas.sc.ignition.comm.requests.m2w.M2WebLoginRequest
 import com.hms_networks.americas.sc.ignition.comm.requests.m2w.M2WebLogoutRequest;
 import com.hms_networks.americas.sc.ignition.comm.responses.m2w.M2WebLoginResponse;
 import com.hms_networks.americas.sc.ignition.comm.responses.m2w.M2WebLogoutResponse;
-import org.apache.hc.client5.http.async.methods.SimpleHttpResponse;
-import org.apache.hc.core5.concurrent.FutureCallback;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+import org.apache.hc.client5.http.async.methods.SimpleHttpResponse;
+import org.apache.hc.core5.concurrent.FutureCallback;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Utility class for managing sessions with the M2Web APIs across one or multiple Talk2M servers.
