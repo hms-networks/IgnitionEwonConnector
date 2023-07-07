@@ -11,7 +11,7 @@ import java.util.List;
  * @since 2.0.0
  * @version 1.0.0
  */
-public class M2WebEwonEBDInstantValuesResponse {
+public class M2WebEwonEBDInstantValuesResponse extends M2WebEwonEBDResponse {
 
   /**
    * The separator character used to separate columns/fields in the EBD instant values response.
@@ -53,7 +53,7 @@ public class M2WebEwonEBDInstantValuesResponse {
    * @param responseString The response string to parse.
    * @return An instance of {@link M2WebEwonEBDInstantValuesResponse} parsed from the response
    *     string.
-   * @throws IllegalStateException If a necessary parameter was not specified. Currently this means
+   * @throws IllegalStateException If a necessary parameter was not specified. Currently, this means
    *     that both the mapping strategy and the bean type are not set, so it is impossible to
    *     determine a mapping strategy.
    * @since 1.0.0
@@ -61,13 +61,23 @@ public class M2WebEwonEBDInstantValuesResponse {
   public static M2WebEwonEBDInstantValuesResponse getFromString(String responseString)
       throws IllegalStateException {
     // Parse CSV response into list of tag objects
-    List<M2WebEwonEBDInstantValue> instantValues =
-        new CsvToBeanBuilder<M2WebEwonEBDInstantValue>(new StringReader(responseString))
-            .withSeparator(EWON_EBD_INSTANTVALUES_SEPARATOR_CHAR)
-            .withType(M2WebEwonEBDInstantValue.class)
-            .build()
-            .parse();
+    M2WebEwonEBDInstantValuesResponse response;
+    try {
+      List<M2WebEwonEBDInstantValue> instantValues =
+          new CsvToBeanBuilder<M2WebEwonEBDInstantValue>(new StringReader(responseString))
+              .withSeparator(EWON_EBD_INSTANTVALUES_SEPARATOR_CHAR)
+              .withType(M2WebEwonEBDInstantValue.class)
+              .build()
+              .parse();
+      response = new M2WebEwonEBDInstantValuesResponse(instantValues);
+    } catch (Exception e1) {
+      try {
+        response = getFromJson(responseString, M2WebEwonEBDInstantValuesResponse.class);
+      } catch (Exception e2) {
+        throw e1;
+      }
+    }
 
-    return new M2WebEwonEBDInstantValuesResponse(instantValues);
+    return response;
   }
 }

@@ -11,7 +11,7 @@ import java.util.List;
  * @since 2.0.0
  * @version 1.0.0
  */
-public class M2WebEwonEBDTagListResponse {
+public class M2WebEwonEBDTagListResponse extends M2WebEwonEBDResponse {
 
   /**
    * The separator character used to separate columns/fields in the EBD tag list response.
@@ -60,13 +60,24 @@ public class M2WebEwonEBDTagListResponse {
   public static M2WebEwonEBDTagListResponse getFromString(String responseString)
       throws IllegalStateException {
     // Parse CSV response into list of tag objects
-    List<M2WebEwonEBDTag> tags =
-        new CsvToBeanBuilder<M2WebEwonEBDTag>(new StringReader(responseString))
-            .withSeparator(EWON_EBD_TAGLIST_SEPARATOR_CHAR)
-            .withType(M2WebEwonEBDTag.class)
-            .build()
-            .parse();
+    M2WebEwonEBDTagListResponse response;
+    try {
+      List<M2WebEwonEBDTag> tags =
+          new CsvToBeanBuilder<M2WebEwonEBDTag>(new StringReader(responseString))
+              .withSeparator(EWON_EBD_TAGLIST_SEPARATOR_CHAR)
+              .withType(M2WebEwonEBDTag.class)
+              .build()
+              .parse();
 
-    return new M2WebEwonEBDTagListResponse(tags);
+      response = new M2WebEwonEBDTagListResponse(tags);
+    } catch (Exception e1) {
+      try {
+        response = getFromJson(responseString, M2WebEwonEBDTagListResponse.class);
+      } catch (Exception e2) {
+        throw e1;
+      }
+    }
+
+    return response;
   }
 }
