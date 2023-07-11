@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <artifactId>EwonConnector</artifactId>
+        <artifactId>IgnitionEwonConnector</artifactId>
         <groupId>com.hms_networks.americas.sc</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
@@ -25,7 +25,7 @@
             <plugin>
                 <groupId>com.inductiveautomation.ignitionsdk</groupId>
                 <artifactId>ignition-maven-plugin</artifactId>
-                <version>1.1.0</version>
+                <version>1.2.0</version>
 
                 <executions>
                     <execution>
@@ -45,9 +45,9 @@
                     </projectScopes>
 
                     <moduleId>com.hms_networks.americas.sc.ignition</moduleId>
-                    <moduleName>${project.parent.name}</moduleName>
-                    <moduleDescription>${project.description}</moduleDescription>
-                    <moduleVersion>1.2.1</moduleVersion>
+                    <moduleName>${module-name}</moduleName>
+                    <moduleDescription>${module-description}</moduleDescription>
+                    <moduleVersion>${module-full-version}</moduleVersion>
                     <requiredIgnitionVersion>${ignition-sdk-version}</requiredIgnitionVersion>
                     <licenseFile>license.html</licenseFile>
                     <freeModule>true</freeModule>
