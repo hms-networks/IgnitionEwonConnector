@@ -2,7 +2,6 @@ package com.hms_networks.americas.sc.ignition.comm.responses;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
-
 import java.time.Instant;
 import java.time.format.DateTimeParseException;
 import java.util.Date;
