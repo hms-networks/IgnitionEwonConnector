@@ -127,6 +127,16 @@ public class DMWebEwonTag {
   }
 
   /**
+   * Gets the (raw/{@link Object}) value of the Ewon tag.
+   *
+   * @return The (raw/{@link Object}) value of the Ewon tag.
+   * @since 1.0.0
+   */
+  public Object getValue() {
+    return value;
+  }
+
+  /**
    * Gets the float value of the Ewon tag.
    *
    * @return The float value of the Ewon tag.
