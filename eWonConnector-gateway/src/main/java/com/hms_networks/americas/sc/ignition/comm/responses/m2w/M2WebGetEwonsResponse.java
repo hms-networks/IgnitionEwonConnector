@@ -2,7 +2,6 @@ package com.hms_networks.americas.sc.ignition.comm.responses.m2w;
 
 import com.google.gson.JsonSyntaxException;
 import com.hms_networks.americas.sc.ignition.comm.responses.Talk2MResponse;
-
 import java.util.List;
 
 /**

@@ -2,7 +2,6 @@ package com.hms_networks.americas.sc.ignition.comm.responses.dmw;
 
 import com.google.gson.JsonSyntaxException;
 import com.hms_networks.americas.sc.ignition.comm.responses.Talk2MResponse;
-
 import java.time.format.DateTimeParseException;
 import java.util.Date;
 import java.util.List;
