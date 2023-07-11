@@ -4,7 +4,6 @@ import com.hms_networks.americas.sc.ignition.comm.CommunicationAuthInfo;
 import com.hms_networks.americas.sc.ignition.comm.CommunicationConstants;
 import com.hms_networks.americas.sc.ignition.comm.CommunicationUtilities;
 import com.hms_networks.americas.sc.ignition.comm.requests.Talk2MRequest;
-
 import java.util.ArrayList;
 import java.util.Date;
 import org.apache.hc.core5.http.NameValuePair;
