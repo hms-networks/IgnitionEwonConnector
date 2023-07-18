@@ -15,11 +15,24 @@ import java.util.Date;
 public class DMWebEwonTagHistoryEntry {
 
   /**
+   * The fallback/default quality for a history entry. The DMWeb API documentation indicates that
+   * the quality field is optional, and if not present, the quality is assumed to be good.
+   */
+  private static final String FALLBACK_DEFAULT_QUALITY = "good";
+
+  /**
    * The timestamp of the history entry.
    *
    * @since 1.0.0
    */
   private String date;
+
+  /**
+   * The quality of the history entry.
+   *
+   * @since 1.0.0
+   */
+  private String quality;
 
   /**
    * The value of the history entry.
@@ -37,6 +50,16 @@ public class DMWebEwonTagHistoryEntry {
    */
   public Date getDate() throws DateTimeParseException {
     return Talk2MResponse.toDate(date);
+  }
+
+  /**
+   * Gets the quality of the history entry.
+   *
+   * @return The quality of the history entry.
+   * @since 1.0.0
+   */
+  public String getQuality() {
+    return quality != null ? quality : FALLBACK_DEFAULT_QUALITY;
   }
 
   /**
