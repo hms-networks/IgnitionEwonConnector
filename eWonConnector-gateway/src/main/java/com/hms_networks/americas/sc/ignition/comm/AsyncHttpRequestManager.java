@@ -4,10 +4,14 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import org.apache.hc.client5.http.async.methods.SimpleHttpRequest;
 import org.apache.hc.client5.http.async.methods.SimpleHttpResponse;
+import org.apache.hc.client5.http.config.ConnectionConfig;
 import org.apache.hc.client5.http.config.RequestConfig;
 import org.apache.hc.client5.http.impl.async.CloseableHttpAsyncClient;
 import org.apache.hc.client5.http.impl.async.HttpAsyncClients;
+import org.apache.hc.client5.http.impl.nio.PoolingAsyncClientConnectionManager;
 import org.apache.hc.core5.concurrent.FutureCallback;
+import org.apache.hc.core5.io.CloseMode;
+import org.apache.hc.core5.reactor.IOReactorConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,18 +35,50 @@ public class AsyncHttpRequestManager {
   private static final Logger LOGGER = LoggerFactory.getLogger(AsyncHttpRequestManager.class);
 
   /**
-   * Default connect timeout for HTTP connections (in milliseconds).
+   * Connection request timeout for HTTP requests (in seconds). This value is the timeout for
+   * requesting a connection from the connection manager, not for the HTTP request connection
+   * itself. When there are no connections available in the connection pool, this is the timeout for
+   * waiting for a connection to become available. Connections may be unavailable if there are API
+   * throttling limits in place, or if the connection pool is full.
+   *
+   * @since 1.0.0
+   */
+  private static final int CONNECTION_REQUEST_QUEUE_TIMEOUT_SECS = 900;
+
+  /**
+   * Connect timeout for HTTP connections (in milliseconds).
    *
    * @since 1.0.0
    */
   private static final int CONNECT_TIMEOUT_MILLIS = 5000;
 
   /**
-   * Default socket timeout for HTTP connections (in milliseconds).
+   * Response timeout for HTTP connections (in milliseconds).
    *
    * @since 1.0.0
    */
-  private static final int SOCKET_TIMEOUT_MILLIS = 10000;
+  private static final int RESPONSE_TIMEOUT_MILLIS = (int) TimeUnit.MINUTES.toMillis(15);
+
+  /**
+   * Socket timeout for HTTP connections (in milliseconds).
+   *
+   * @since 1.0.0
+   */
+  private static final int SOCKET_TIMEOUT_MILLIS = RESPONSE_TIMEOUT_MILLIS;
+
+  /**
+   * Maximum connections at once in the HTTP connection pool.
+   *
+   * @since 1.0.0
+   */
+  private static final int HTTP_CXN_POOL_MAX_REQUESTS = 1000;
+
+  /**
+   * Maximum connections per route in the HTTP connection pool.
+   *
+   * @since 1.0.0
+   */
+  private static final int HTTP_CXN_POOL_MAX_REQUESTS_PER_ROUTE = 250;
 
   /**
    * Asynchronous HTTP client for sending requests to the various Talk2M APIs.
@@ -50,6 +86,13 @@ public class AsyncHttpRequestManager {
    * @since 1.0.0
    */
   private static CloseableHttpAsyncClient httpAsyncClient = null;
+
+  /**
+   * Asynchronous HTTP client connection manager backing the {@link #httpAsyncClient}.
+   *
+   * @since 1.0.0
+   */
+  private static PoolingAsyncClientConnectionManager asyncClientConnectionManager = null;
 
   /**
    * Boolean indicating if debug logging is enabled. This value is used to prevent unnecessary debug
@@ -70,14 +113,44 @@ public class AsyncHttpRequestManager {
     if (isNotInitialized()) {
       LOGGER.info("Initializing Asynchronous HTTP manager...");
 
-      // Initialize the asynchronous HTTP client
-      RequestConfig requestConfig =
-          RequestConfig.custom()
-              .setConnectionRequestTimeout(CONNECT_TIMEOUT_MILLIS, TimeUnit.MILLISECONDS)
-              .setResponseTimeout(SOCKET_TIMEOUT_MILLIS, TimeUnit.MILLISECONDS)
-              .build();
-      httpAsyncClient = HttpAsyncClients.custom().setDefaultRequestConfig(requestConfig).build();
-      httpAsyncClient.start();
+      // Create connection manager
+      try {
+        asyncClientConnectionManager = new PoolingAsyncClientConnectionManager();
+        asyncClientConnectionManager.setMaxTotal(HTTP_CXN_POOL_MAX_REQUESTS);
+        asyncClientConnectionManager.setDefaultMaxPerRoute(HTTP_CXN_POOL_MAX_REQUESTS_PER_ROUTE);
+
+        // Create IO reactor configuration
+        IOReactorConfig ioReactorConfig =
+            IOReactorConfig.custom()
+                .setIoThreadCount(Runtime.getRuntime().availableProcessors() * 2)
+                .setSoTimeout(SOCKET_TIMEOUT_MILLIS, TimeUnit.MILLISECONDS)
+                .setSoKeepAlive(false)
+                .build();
+
+        // Create connection configuration
+        ConnectionConfig connectionConfig =
+            ConnectionConfig.custom()
+                .setConnectTimeout(CONNECT_TIMEOUT_MILLIS, TimeUnit.MILLISECONDS)
+                .build();
+        asyncClientConnectionManager.setDefaultConnectionConfig(connectionConfig);
+
+        // Initialize the asynchronous HTTP client
+        RequestConfig requestConfig =
+            RequestConfig.custom()
+                .setConnectionRequestTimeout(
+                    CONNECTION_REQUEST_QUEUE_TIMEOUT_SECS, TimeUnit.SECONDS)
+                .setResponseTimeout(RESPONSE_TIMEOUT_MILLIS, TimeUnit.MILLISECONDS)
+                .build();
+        httpAsyncClient =
+            HttpAsyncClients.custom()
+                .setDefaultRequestConfig(requestConfig)
+                .setIOReactorConfig(ioReactorConfig)
+                .setConnectionManager(asyncClientConnectionManager)
+                .build();
+        httpAsyncClient.start();
+      } catch (Exception e) {
+        LOGGER.error("Failed to create HTTP connection manager.", e);
+      }
 
       // Store debug logging enabled status
       AsyncHttpRequestManager.isDebugEnabled = isDebugEnabled;
@@ -110,8 +183,10 @@ public class AsyncHttpRequestManager {
   public static void shutdown() {
     if (httpAsyncClient != null) {
       try {
-        httpAsyncClient.close();
+        httpAsyncClient.close(CloseMode.IMMEDIATE);
         httpAsyncClient = null;
+        asyncClientConnectionManager.close(CloseMode.IMMEDIATE);
+        asyncClientConnectionManager = null;
       } catch (Exception e) {
         LOGGER.error("Error shutting down asynchronous HTTP manager.", e);
       }
