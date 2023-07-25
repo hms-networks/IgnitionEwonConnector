@@ -103,6 +103,18 @@ public class M2WebSessionManager {
   }
 
   /**
+   * Logs out of all logged in Talk2M servers using the specified authentication information.
+   *
+   * @param communicationAuthInfo the authentication information to use for the request
+   * @since 1.0.0
+   */
+  public static void logoutAll(CommunicationAuthInfo communicationAuthInfo) {
+    for (String server : m2wSessionIdMap.keySet()) {
+      logout(server, communicationAuthInfo);
+    }
+  }
+
+  /**
    * Logs out of the specified Talk2M server using the specified authentication information.
    *
    * @param server the Talk2M server to logout of
