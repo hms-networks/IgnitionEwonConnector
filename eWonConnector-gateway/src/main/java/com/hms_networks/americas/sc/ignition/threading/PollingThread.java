@@ -1,6 +1,7 @@
 package com.hms_networks.americas.sc.ignition.threading;
 
 import com.hms_networks.americas.sc.ignition.config.EwonConnectorSettings;
+import com.inductiveautomation.ignition.gateway.model.AbstractGatewayModuleHook;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -62,6 +63,13 @@ public abstract class PollingThread implements Runnable {
   private ScheduledFuture<?> scheduledFuture = null;
 
   /**
+   * The gateway module hook.
+   *
+   * @since 1.0.0
+   */
+  protected final AbstractGatewayModuleHook gatewayHook;
+
+  /**
    * The Ewon connector settings.
    *
    * @since 1.0.0
@@ -74,17 +82,20 @@ public abstract class PollingThread implements Runnable {
    *
    * @param pollingInterval The thread polling interval.
    * @param pollingIntervalTimeUnit The thread polling interval time unit.
+   * @param gatewayHook The gateway module hook.
    * @param connectorSettings The Ewon connector settings.
    * @since 1.0.0
    */
   public PollingThread(
       long pollingInterval,
       TimeUnit pollingIntervalTimeUnit,
+      AbstractGatewayModuleHook gatewayHook,
       EwonConnectorSettings connectorSettings) {
     this(
         pollingInterval,
         DEFAULT_POLLING_INTERVAL_START_DELAY,
         pollingIntervalTimeUnit,
+        gatewayHook,
         connectorSettings);
   }
 
@@ -96,6 +107,7 @@ public abstract class PollingThread implements Runnable {
    * @param pollingInterval The thread polling interval.
    * @param pollingIntervalStartDelay The thread polling interval start delay.
    * @param pollingIntervalTimeUnit The thread polling interval time unit.
+   * @param gatewayHook The gateway module hook.
    * @param connectorSettings The Ewon connector settings.
    * @since 1.0.0
    */
@@ -103,10 +115,12 @@ public abstract class PollingThread implements Runnable {
       long pollingInterval,
       long pollingIntervalStartDelay,
       TimeUnit pollingIntervalTimeUnit,
+      AbstractGatewayModuleHook gatewayHook,
       EwonConnectorSettings connectorSettings) {
     this.pollingInterval = pollingInterval;
     this.pollingIntervalStartDelay = pollingIntervalStartDelay;
     this.pollingIntervalTimeUnit = pollingIntervalTimeUnit;
+    this.gatewayHook = gatewayHook;
     this.connectorSettings = connectorSettings;
     executorService = Executors.newSingleThreadScheduledExecutor();
   }
