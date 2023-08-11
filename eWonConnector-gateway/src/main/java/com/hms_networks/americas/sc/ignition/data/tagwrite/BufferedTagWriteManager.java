@@ -34,6 +34,14 @@ public class BufferedTagWriteManager {
   private static final Logger LOGGER = LoggerFactory.getLogger(BufferedTagWriteManager.class);
 
   /**
+   * The minimum buffer length (in milliseconds) for tag writes. If the buffer length is set to a
+   * value less than this, tag write buffering will be disabled.
+   *
+   * @since 1.0.0
+   */
+  private static final long MINIMUM_WRITE_BUFFER_LENGTH_MS = 100;
+
+  /**
    * The buffer length (in milliseconds) for tag writes. If the buffer length is set to {@link
    * EwonConnectorSettings#TAG_WRITE_BUFFER_LENGTH_MS_DISABLED}, tag writes will not be buffered.
    *
@@ -64,6 +72,9 @@ public class BufferedTagWriteManager {
    * Processes a tag write using the specified parameters. If the tag write buffer length is
    * disabled, the tag will be written immediately. Otherwise, the tag write will be buffered.
    *
+   * <p>If the tag write buffer length is below the minimum buffer length defined in {@link
+   * #MINIMUM_WRITE_BUFFER_LENGTH_MS}, the tag write buffer length will be disabled.
+   *
    * @param managedTagProvider the managed tag provider where the tag is located
    * @param connectorSettings the connector settings
    * @param m2WebEwon the M2Web Ewon object for the Ewon where the tag is located
@@ -81,6 +92,10 @@ public class BufferedTagWriteManager {
       Object tagValue) {
     // Update write buffer length
     writeBufferLengthMilliseconds = connectorSettings.getTagWriteBufferLengthMs();
+    if (writeBufferLengthMilliseconds != EwonConnectorSettings.TAG_WRITE_BUFFER_LENGTH_MS_DISABLED
+        && writeBufferLengthMilliseconds < MINIMUM_WRITE_BUFFER_LENGTH_MS) {
+      writeBufferLengthMilliseconds = EwonConnectorSettings.TAG_WRITE_BUFFER_LENGTH_MS_DISABLED;
+    }
 
     // Write tag immediately if buffer length is disabled, otherwise buffer tag write
     if (writeBufferLengthMilliseconds
