@@ -12,6 +12,7 @@ on:
   push:
     branches:
       - main
+      - docs-staging
   workflow_dispatch:
 
 jobs:
