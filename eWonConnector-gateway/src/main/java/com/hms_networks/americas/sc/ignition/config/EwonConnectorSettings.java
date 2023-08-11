@@ -37,7 +37,7 @@ public class EwonConnectorSettings extends PersistentRecord {
   public static final int DEFAULT_POLL_RATE = 1;
 
   /**
-   * Default value for the {@link #LIVE_POLL_RATE} setting (minutes).
+   * Default value for the {@link #LIVE_POLL_RATE} setting (seconds).
    *
    * @since 2.0.0
    */
