@@ -783,7 +783,8 @@ public class TagManager {
             tagName, historyTagValue, ewonTagQuality.getQualityCode(), historyTagTimestamp);
 
         // Set tag historical value(s) in history database, if enabled
-        if (!StringUtils.isBlank(connectorSettings.getHistoryProvider())) {
+        if (connectorSettings.isHistoryEnabled()
+            && !StringUtils.isBlank(connectorSettings.getHistoryProvider())) {
           HistoricalTagValue historicalTagValue =
               TagManagerUtilities.buildHistoricalTagValue(
                   GATEWAY_TAG_PROVIDER_NAME,
