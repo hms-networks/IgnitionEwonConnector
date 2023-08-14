@@ -109,7 +109,8 @@ public class AsyncHttpRequestManager {
    * @param isDebugEnabled boolean indicating if debug logging is enabled.
    * @since 1.0.0
    */
-  public static void initialize(boolean isDebugEnabled) {
+  public static boolean initialize(boolean isDebugEnabled) {
+    boolean initializeSuccess = true;
     if (isNotInitialized()) {
       LOGGER.info("Initializing Asynchronous HTTP manager...");
 
@@ -150,6 +151,7 @@ public class AsyncHttpRequestManager {
         httpAsyncClient.start();
       } catch (Exception e) {
         LOGGER.error("Failed to create HTTP connection manager.", e);
+        initializeSuccess = false;
       }
 
       // Store debug logging enabled status
@@ -162,6 +164,7 @@ public class AsyncHttpRequestManager {
             "Asynchronous HTTP manager already initialized. Skipping duplicate initialization.");
       }
     }
+    return initializeSuccess;
   }
 
   /**
