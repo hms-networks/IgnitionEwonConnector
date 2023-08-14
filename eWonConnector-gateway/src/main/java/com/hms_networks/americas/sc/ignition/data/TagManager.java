@@ -401,7 +401,8 @@ public class TagManager {
     try {
       // Attempt to read existing value (if it exists)
       final int firstIndexValueRead = 0;
-      TagPath realtimeOverrideTagPath = TagPathParser.parse(realtimeOverridePropertyTagName);
+      TagPath realtimeOverrideTagPath =
+          TagPathParser.parse(GATEWAY_TAG_PROVIDER_NAME, realtimeOverridePropertyTagName);
       QualifiedValue isEwonRealtimeOverrideEnabled =
           gatewayContext
               .getTagManager()
