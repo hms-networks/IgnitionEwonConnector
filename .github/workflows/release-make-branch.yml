@@ -1,0 +1,37 @@
+# HMS Networks; Americas
+# Make Branch Action for Maven-based Ewon ETK Project Releases
+# Version: 3.0.0
+# Date: February 8, 2024
+#
+# This action is configured to automatically run when a release
+# tag is created in the following syntax: `v*`.
+
+name: Release (Make Branch)
+
+on:
+  push:
+    tags:
+      - 'v*' # Push events to matching v*, i.e. v1.0
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  make-branch:
+    name: Create Release Branch
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Branch name # Build a branch name from tag (vX.Y) in release/X.Y format
+        id: branch_name
+        run: |
+          tag="${GITHUB_REF#refs/tags/}"
+          tagRevision="${tag:1}"
+          branchPrefix="release/"
+          branchName="$branchPrefix$tagRevision"
+          echo "SOURCE_TAG=$branchName" >> $GITHUB_ENV
+
+      - name: Create Branch
+        uses: peterjgrainger/action-create-branch@v2.3.0
+        with:
+          branch: ${{ env.SOURCE_TAG }}
