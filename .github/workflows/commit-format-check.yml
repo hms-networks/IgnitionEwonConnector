@@ -1,9 +1,10 @@
-# HMS Networks Solution Center
+# HMS Networks; Americas
 # Commit Format Action for Maven-based Ewon ETK Projects
-# Version: 2.1
+# Version: 3.0.0
+# Date: February 8, 2024
 #
-# This action is configured to automatically run when a pull
-# request is made to the `main` or `master` branch.
+# This action is configured to automatically run when a push
+# is made to a pull request for the `main` branch.
 
 name: Commit Format Check
 
@@ -13,9 +14,10 @@ on:
       - main
 
 jobs:
-  check-commit-message:
+  commit-format-check:
     name: Check Commit Message
     runs-on: ubuntu-latest
+    if: ${{ github.actor != 'dependabot[bot]' }}
     steps:
       - name: Check Title Line Length
         uses: gsactions/commit-message-checker@v2
@@ -27,6 +29,7 @@ jobs:
           excludeTitle: 'true' # optional: this excludes the title of a pull request
           checkAllCommitMessages: 'true' # optional: this checks all commits associated with a pull request
           accessToken: ${{ secrets.GITHUB_TOKEN }} # github access token is only required if checkAllCommitMessages is true
+
       - name: Check Title Does Not End With Period
         uses: gsactions/commit-message-checker@v2
         with:
@@ -37,6 +40,7 @@ jobs:
           excludeTitle: 'true' # optional: this excludes the title of a pull request
           checkAllCommitMessages: 'true' # optional: this checks all commits associated with a pull request
           accessToken: ${{ secrets.GITHUB_TOKEN }} # github access token is only required if checkAllCommitMessages is true
+
       - name: Check Title Begins With Capital
         uses: gsactions/commit-message-checker@v2
         with:
@@ -47,6 +51,7 @@ jobs:
           excludeTitle: 'true' # optional: this excludes the title of a pull request
           checkAllCommitMessages: 'true' # optional: this checks all commits associated with a pull request
           accessToken: ${{ secrets.GITHUB_TOKEN }} # github access token is only required if checkAllCommitMessages is true
+
       - name: Check Body Line Length
         uses: gsactions/commit-message-checker@v2
         with:
