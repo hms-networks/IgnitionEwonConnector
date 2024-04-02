@@ -1,0 +1,43 @@
+# HMS Networks; Americas
+# Artifact Build Action for Maven-based Ewon ETK Projects
+# Version: 3.0.1
+# Date: April 2, 2024
+# Modifications:
+# - Changed the JDK version to 11 (for Ignition SDK projects)
+#
+# This action is configured to automatically run when a push
+# is made to the `main` branch.
+
+name: Build Artifacts
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-artifacts:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Project
+        uses: actions/checkout@v4
+
+      - name: Set Up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'corretto'
+          java-version: 11
+          cache: 'maven'
+
+      - name: Compile Java Files With Maven
+        run: mvn package -f pom.xml
+
+      - name: Get Current Time for Artifact Identification (Ubuntu)
+        run: echo "CURRENT_TIME=$(date +%Y-%m-%d_%H-%M-%S)" >> $GITHUB_ENV
+
+      - name: Upload Maven Artifacts (Ubuntu)
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ github.event.repository.name }}-ARTIFACTS-BUILD${{ env.CURRENT_TIME }}UTC
+          path: |
+           eWonConnector-build/target/
