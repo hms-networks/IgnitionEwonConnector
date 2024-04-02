@@ -1,3 +1,11 @@
+# HMS Networks; Americas
+# Build Outputs Action for Maven-based Ewon ETK Project Releases
+# Version: 3.0.0
+# Date: February 8, 2024
+#
+# This action is configured to automatically run when a release
+# tag is created in the following syntax: `v*`.
+
 name: Add Issue to Project
 on:
   issues:
