@@ -1,0 +1,95 @@
+# HMS Networks; Americas
+# Build Outputs Action for Maven-based Ewon ETK Project Releases
+# Version: 3.0.2
+# Date: April 2, 2024
+# Modifications:
+# - Changed the JDK version to 11 (for Ignition SDK projects)
+# - Removed irrelevant steps
+#
+# This action is configured to automatically run when a release
+# tag is created in the following syntax: `v*`.
+
+name: Release (Build Outputs)
+
+on:
+  push:
+    tags:
+      - 'v*' # Push events to matching v*, i.e. v1.0
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  CHANGELOG_FILE_NAME: web-docs/docs/02-CHANGELOG.mdx
+  RELEASE_ZIP_INCLUDED: README.md LICENSE pom.xml eWonConnector-gateway/src eWonConnector-gateway/pom.xml eWonConnector-gateway/src eWonConnector-build/pom.xml eWonConnector-build/license.html
+  RELEASE_MODL_UNSIGNED_NAME_REGEX: '*-unsigned.modl'
+  RELEASE_BODY_FILE: RELEASE-BODY.md
+
+
+jobs:
+  build-outputs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Project
+        uses: actions/checkout@v4
+
+      - name: Set Up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'corretto'
+          java-version: 11
+          cache: 'maven'
+
+      - name: Compile Java Files With Maven
+        run: mvn package -f pom.xml
+
+      - name: Build Release Archive
+        run: |
+          zip release -r $RELEASE_ZIP_INCLUDED $(find target -name $RELEASE_MODL_UNSIGNED_NAME_REGEX)
+
+      - name: Extract version number from tag name
+        run: echo "VERSION_NUMBER=$(cut -d 'v' -f2- <<< ${{ github.ref }})" >> $GITHUB_ENV
+        # gets substring of github.ref after and including 'v', for example refs/tags/v1.0.0 results in v1.0.0
+
+      - name: Extract version-specific change list from CHANGELOG.md
+        run: |
+          grep -Pzo "(?<=##\sVersion\s$VERSION_NUMBER[\r\n])((.|\r|\n|\r\n)*?(?=##\sVersion.*)|(.|\r|\n|\r\z)*)"  $CHANGELOG_FILE_NAME >> $RELEASE_BODY_FILE.tmp
+          tr -d '\0' < $RELEASE_BODY_FILE.tmp > $RELEASE_BODY_FILE
+        # gets section of changelog between (not including) version-specific header and next version header using regex look-back and look-ahead and removes trailing NULL characters
+
+      - name: Get Name of Artifact
+        run: |
+          ARTIFACT_PATHNAME=$(ls eWonConnector-build/target/*-unsigned.modl | head -n 1)
+          echo "ARTIFACT_PATHNAME=${ARTIFACT_PATHNAME}" >> $GITHUB_ENV
+
+      - name: Get Name of Release (RepoName-Version)
+        run: echo "RELEASE_NAME=${{ github.event.repository.name }}-${{ env.VERSION_NUMBER }}" >> $GITHUB_ENV
+
+      - name: Rename Release File(s) (Append Repo Name and Version Number)
+        run: |
+          mv release.zip ${{ env.RELEASE_NAME }}.zip
+          mv ${{ env.ARTIFACT_PATHNAME }} ${{ env.RELEASE_NAME }}-unsigned.modl
+
+      - name: Check if Tag SEMVER indicates a Pre-Release Build
+        id: check_pre_release
+        run: |
+          # Check if SEMVER indicates a pre-release (has a hyphen after MAJOR.MINOR.PATCH)
+          if [[ "${{ env.VERSION_NUMBER }}" =~ ^[0-9]+\.[0-9]+\.[0-9]+-(0|[1-9]\d*|([0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*))(\+[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?$ ]]; then
+              echo "IS_PRE_RELEASE=true" >> $GITHUB_ENV
+          else
+              echo "IS_PRE_RELEASE=false" >> $GITHUB_ENV
+          fi
+
+      - name: Create Release in Repository Releases
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          target_commitish: ${{ github.sha }}
+          name: Ignition 8.1 Module v${{ env.VERSION_NUMBER }}
+          draft: false
+          prerelease: ${{ env.IS_PRE_RELEASE }}
+          generate_release_notes: false
+          body_path: ${{ env.RELEASE_BODY_FILE }}
+          files: |
+            ${{ env.RELEASE_NAME }}-unsigned.modl
+            ${{ env.RELEASE_NAME }}.zip
