@@ -5,6 +5,25 @@ sidebar_label: Change Log
 toc_max_heading_level: 2
 ---
 
+## Version 2.0.0-pre1
+This version of the module is a near-complete rewrite to bring new features, improved performance, and support for the
+latest SDKs.
+### Major Changes
+* Updated to Java 11 and Ignition 8.1 SDK
+* Ewon metadata (i.e., tag names, descriptions, data types) is now updated on module startup, and at a configurable
+  interval.
+  * After module startup, the Ewon metadata is updated in the background at the configured interval.
+  * Ewon metadata is now retrieved from the Ewon device directly, using M2Web API requests, instead of relying on the
+    DataMailbox API.
+* Added support for buffered tag writes to Ewon devices (i.e., write multiple tags in a single request)
+* Added support for tag groups to organize tags in Ignition
+* Implemented asynchronous Talk2M/M2Web API requests to improve performance
+### Minor Changes
+* Improved documentation
+* Improved logging output
+* Implemented stateful authentication for Talk2M/M2Web API requests to reduce connection overhead
+* Resolved a long-standing issue with pre-tag realtime properties being lost
+
 ## Version 1.2.1
 ### Major Changes
 * Tag provider name customization was removed to ensure consistent and stable connector functionality
