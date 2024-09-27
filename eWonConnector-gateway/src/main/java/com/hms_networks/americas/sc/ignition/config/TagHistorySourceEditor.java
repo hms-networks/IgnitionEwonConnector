@@ -1,6 +1,5 @@
 package com.hms_networks.americas.sc.ignition.config;
 
-import java.util.List;
 import com.inductiveautomation.ignition.gateway.history.HistoryFlavor;
 import com.inductiveautomation.ignition.gateway.localdb.persistence.FormMeta;
 import com.inductiveautomation.ignition.gateway.model.GatewayContext;
@@ -9,6 +8,7 @@ import com.inductiveautomation.ignition.gateway.web.components.RecordEditMode;
 import com.inductiveautomation.ignition.gateway.web.components.editors.AbstractEditor;
 import com.inductiveautomation.ignition.gateway.web.models.IRecordFieldComponent;
 import com.inductiveautomation.ignition.gateway.web.models.LenientResourceModel;
+import java.util.List;
 import org.apache.wicket.Application;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import simpleorm.dataset.SFieldMeta;
