@@ -80,6 +80,27 @@ public class M2WebEwonUpdateTagValuesRequest extends M2WebEwonGetRequest {
   }
 
   /**
+   * Special conversion for tag values to string. Booleans must be converted to 1 or 0. Null values
+   * are converted to empty strings.
+   *
+   * @param obj - Tag value object that should be converted to a string
+   * @return string representation of the tag value
+   */
+  public static String tagValToString(Object obj) {
+
+    if (obj instanceof Boolean) {
+      if ((Boolean) obj) {
+        return "1";
+      }
+      return "0";
+    }
+    if (obj != null) {
+      return obj.toString();
+    }
+    return "";
+  }
+
+  /**
    * Gets the Ewon update tag values request path for the specified tag name and (updated) value
    * pairs.
    *
@@ -115,7 +136,7 @@ public class M2WebEwonUpdateTagValuesRequest extends M2WebEwonGetRequest {
           .append("TagValue")
           .append(tagIndex)
           .append("=")
-          .append(tagNameValuePair.getValue().toString());
+          .append(tagValToString(tagNameValuePair.getValue()));
     }
 
     return requestPath.toString();
