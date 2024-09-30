@@ -47,39 +47,42 @@ public class EwonTagQuality {
   private static final String DMWEB_QUALITY_UNKNOWN_STRING = "unknown";
 
   /**
-   * The integer representation of 'good' tag quality from the DMWeb API.
+   * The integer representation of 'good' tag quality from the DMWeb API. Major quality = 3 -> Good.
    *
    * @since 1.0.0
    */
-  private static final int DMWEB_QUALITY_GOOD = 0;
+  private static final int DMWEB_QUALITY_GOOD = 0xC0;
 
   /**
-   * The integer representation of 'bad' tag quality from the DMWeb API.
+   * The integer representation of 'bad' tag quality from the DMWeb API. Major quality = 0 -> Bad.
    *
    * @since 1.0.0
    */
-  private static final int DMWEB_QUALITY_BAD = 1;
+  private static final int DMWEB_QUALITY_BAD = 0;
 
   /**
-   * The integer representation of 'uncertain' tag quality from the DMWeb API.
+   * The integer representation of 'uncertain' tag quality from the DMWeb API. Major quality = 1 ->
+   * Uncertain.
    *
    * @since 1.0.0
    */
-  private static final int DMWEB_QUALITY_UNCERTAIN = 2;
+  private static final int DMWEB_QUALITY_UNCERTAIN = 0x40;
 
   /**
-   * The integer representation of 'initialGood' tag quality from the DMWeb API.
+   * The integer representation of 'initialGood' tag quality from the DMWeb API. There is no bit
+   * enumeration for 'initial good' so major quality = 3 -> Good is used
    *
    * @since 1.0.0
    */
-  private static final int DMWEB_QUALITY_INITIAL_GOOD = 3;
+  private static final int DMWEB_QUALITY_INITIAL_GOOD = 0xC0;
 
   /**
-   * The integer representation of 'unknown' tag quality from the DMWeb API.
+   * The integer representation of 'unknown' tag quality from the DMWeb API. There is no bit
+   * enumeration for 'unknown, so major quality = 1 -> Uncertain is used.
    *
    * @since 1.0.0
    */
-  private static final int DMWEB_QUALITY_UNKNOWN = 4;
+  private static final int DMWEB_QUALITY_UNKNOWN = 0x40;
 
   /**
    * The 16-bit value containing the Ewon tag quality and its information bits.
