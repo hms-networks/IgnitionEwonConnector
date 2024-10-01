@@ -116,7 +116,16 @@ public class DMWebPollingThread extends PollingThread {
                           if (!TagManager.isEwonTagForcedM2Web(syncDataEwon, syncDataTag)
                               || connectorSettings.isCombineLiveData()) {
                             // Update tag data for applicable tags
-                            TagManager.updateDMWebEwonTag(syncDataEwon, syncDataTag);
+                            try {
+                              TagManager.updateDMWebEwonTag(syncDataEwon, syncDataTag);
+                            } catch (Exception e) {
+                              LOGGER.error(
+                                  "Failed to update tag data for tag: "
+                                      + syncDataTag.getName()
+                                      + " on Ewon: "
+                                      + syncDataEwon.getName());
+                              LOGGER.error("Error: " + e.getMessage());
+                            }
                           }
                         }
                       }
