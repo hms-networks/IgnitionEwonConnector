@@ -42,6 +42,26 @@ public class TagManagerUtilities {
   public static final String ILLEGAL_TAG_NAME_CHARACTER_REPLACEMENT = "_";
 
   /**
+   * This function defensively accepts Strings, Booleans, and Numbers and returns a Boolean value
+   * making a best effort to convert the input to a Boolean. String that are not ['0', 'false',
+   * 'False'] are considered true. Numbers that are not 0 are considered true.
+   *
+   * <p>Talk2M APIs and Flexy devices encode booleans as 0 and 1.
+   *
+   * @param value - Object to be converted to Boolean
+   * @return Boolean value of the input
+   */
+  public static Boolean getBooleanValue(Object value) {
+    if (value instanceof String) {
+      return Boolean.valueOf(
+          !(value.equals("0") || value.equals("false") || value.equals("False")));
+    } else if (value instanceof Boolean) {
+      return (Boolean) value;
+    }
+    return Boolean.valueOf(((Number) value).intValue() != 0);
+  }
+
+  /**
    * Converts the specified {@link Object} tag value to its corresponding {@link Object} (i.e.
    * Integer, Boolean, etc.) class using the specified {@link EwonTagType} value.
    *
@@ -57,7 +77,7 @@ public class TagManagerUtilities {
     Object tagValue;
     switch (tagType) {
       case BOOLEAN:
-        tagValue = Boolean.parseBoolean(value.toString());
+        tagValue = getBooleanValue(value);
         break;
       case INTEGER:
         tagValue = Integer.parseInt(value.toString());
