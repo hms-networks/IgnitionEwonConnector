@@ -18,7 +18,7 @@
         <module-id>com.hms_networks.americas.sc.ignition</module-id>
         <module-name>Ignition Ewon Connector</module-name>
         <module-description>Ignition module for streaming Ewon tag data to Ignition tags using the Ewon DMWeb and M2Web APIs.</module-description>
-        <module-version>2.0.0</module-version>
+        <module-version>2.0.1</module-version>
         <module-full-version>${module-version}.${maven.build.timestamp}</module-full-version>
         <module-author>HMS Networks, MU Americas Solution Center</module-author>
         <module-website>https://github.com/hms-networks/IgnitionEwonConnector</module-website>
