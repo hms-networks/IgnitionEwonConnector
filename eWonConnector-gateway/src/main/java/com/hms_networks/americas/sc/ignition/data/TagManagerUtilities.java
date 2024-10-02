@@ -80,13 +80,19 @@ public class TagManagerUtilities {
         tagValue = getBooleanValue(value);
         break;
       case INTEGER:
-        tagValue = Integer.parseInt(value.toString());
+        tagValue =
+            value instanceof String
+                ? Integer.parseInt(value.toString())
+                : Integer.valueOf(((Number) value).intValue());
         break;
       case FLOAT:
         tagValue = Float.parseFloat(value.toString());
         break;
       case DWORD:
-        tagValue = Long.parseLong(value.toString());
+        tagValue =
+            value instanceof String
+                ? Long.parseLong(value.toString())
+                : Long.valueOf(((Number) value).longValue());
         break;
       case STRING:
         tagValue = Objects.requireNonNullElse(value, "");
