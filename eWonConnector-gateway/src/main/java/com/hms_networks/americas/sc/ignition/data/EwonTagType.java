@@ -113,6 +113,13 @@ public enum EwonTagType {
   public static final String DWORD_STRING = "dword";
 
   /**
+   * Ewon string value for DWORD type from DataMailbox.
+   *
+   * @since 1.0.0
+   */
+  public static final String DWORD_STRING_DM = "uint";
+
+  /**
    * Ewon string value for string type.
    *
    * @since 1.0.0
@@ -168,10 +175,12 @@ public enum EwonTagType {
       ewonTagType = INTEGER;
     } else if (tagType.equalsIgnoreCase(DWORD_STRING)) {
       ewonTagType = DWORD;
+    } else if (tagType.equalsIgnoreCase(DWORD_STRING_DM)) {
+      ewonTagType = DWORD;
     } else if (tagType.equalsIgnoreCase(STRING_STRING)) {
       ewonTagType = STRING;
     } else {
-      throw new IllegalArgumentException("Invalid tag type string");
+      throw new IllegalArgumentException("Invalid tag type string" + tagType);
     }
     return ewonTagType;
   }
